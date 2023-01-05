@@ -4,19 +4,23 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 using UnityEngine.Events;
 using TMPro;
+using DG.Tweening;
 
 public class Manager : MonoBehaviour
 {
     [Header("Main Menu/InGame")]
-    public GameObject saveMenu;
-    public GameObject pauseMenu;
+
     public GameObject settingsMenu;
     public GameObject quitMenu;
     public GameObject mainMenuQ;
     public Toggle fullscreen;
     public Toggle fps;
+    public AudioSource uiSound;
+
+    public AudioClip buttonSound;
 
     [Header("MainMenu")]
     public GameObject creditsMenu;
@@ -26,7 +30,9 @@ public class Manager : MonoBehaviour
     public GameObject saveFile1;
     public GameObject saveFile2;
     public GameObject saveFile3;
-    
+    public GameObject saveMenu;
+    public GameObject pauseMenu;
+
     public Canvas optionsCanvas;
 
     private GameObject saveFiles;
@@ -36,7 +42,7 @@ public class Manager : MonoBehaviour
     private TextMeshProUGUI savedTimeDate;
     private TMP_InputField fileName;
 
-
+    public bool sceneSwitch = false;
 
     private Vector2 playerPos;
 
@@ -52,8 +58,15 @@ public class Manager : MonoBehaviour
 
     public void QuitGame()
     {
-        //Closes the application
-        Application.Quit();
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("QuitGame"));
+        }
+        else if (sceneSwitch)
+        {
+            //Closes the application
+            Application.Quit();
+        }
     }
 
     private void Start()
@@ -160,28 +173,81 @@ public class Manager : MonoBehaviour
         }
     }
 
+    IEnumerator DelaySwitchScene(string function)
+    {
+        ButtonSound();
+
+        yield return new WaitForSeconds(.3f);
+        
+        sceneSwitch = true;
+        SendMessage(function);
+    }
+
+    private void ButtonSound()
+    {
+        uiSound.PlayOneShot(buttonSound);
+        uiSound.pitch = Random.Range(.8f, 1.2f);
+    }
+
+    public void ButtonAnimation(Button button)
+    {
+        button.transform.DOScale(0.8f, 0.15f).OnComplete(() => {
+            // Scale the button back to normal
+            button.transform.DOScale(1f, 0.15f);
+        });
+    }
+
     public void SaveMenu()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            pauseMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("SaveMenu"));
+        }
+        else if (sceneSwitch)
+        {
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                pauseMenu.SetActive(false);
+            }
+
+
+            saveMenu.SetActive(true);
         }
         
 
-        saveMenu.SetActive(true);
+    }
 
+    public void LoadGame()
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("LoadGame"));
+        }
+        else if (sceneSwitch)
+        {
+            SceneManager.LoadScene("LoadGame");
+        }
     }
 
     public void BackToMainMenu()
     {
-        settingsMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        mainMenuQ.SetActive(false);
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("BackToMainMenu"));
+        }
+        else if (sceneSwitch)
+        {
+            settingsMenu.SetActive(false);
+            creditsMenu.SetActive(false);
+            mainMenuQ.SetActive(false);
+            sceneSwitch = false;
+        }
     }
 
     public void PauseMenu()
     {
         pauseMenu.SetActive(true);
+        
 
         saveMenu.SetActive(false);
         settingsMenu.SetActive(false);
@@ -198,32 +264,58 @@ public class Manager : MonoBehaviour
 
     public void SettingsMenu()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            pauseMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("SettingsMenu"));
         }
+        else if(sceneSwitch)
+        {
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                pauseMenu.SetActive(false);
+            }
 
-        settingsMenu.SetActive(true);
+            settingsMenu.SetActive(true);
+            sceneSwitch = false;
+        }
+        
     }
 
     public void QuitMenu()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            pauseMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("QuitMenu"));
         }
+        else if (sceneSwitch)
+        {
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                pauseMenu.SetActive(false);
+            }
 
-        quitMenu.SetActive(true);
+            quitMenu.SetActive(true);
+        }
+        
     }
 
     public void CreditsMenu()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            pauseMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("CreditsMenu"));
         }
+        else if (sceneSwitch)
+        {
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                pauseMenu.SetActive(false);
+            }
 
-        creditsMenu.SetActive(true);
+            creditsMenu.SetActive(true);
+            sceneSwitch = false;
+        }
+        
     }
 
     public void MainMenuQMenu()
@@ -234,19 +326,35 @@ public class Manager : MonoBehaviour
         }
 
         mainMenuQ.SetActive(true);
+        
     }
 
     public void ResumeButton()
     {
-        //Returns to the GameScene and unpauses the game
-        optionsCanvas.enabled = false;
-        Time.timeScale = 1;
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("ResumeButton"));
+        }
+        else if (sceneSwitch)
+        {
+            //Returns to the GameScene and unpauses the game
+            optionsCanvas.enabled = false;
+            Time.timeScale = 1;
+        }
+        
     }
 
     public void MainMenuButton()
     {
-        //Returns to the Main Menu
-        SceneManager.LoadScene("MainMenu");
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("MainMenuButton"));
+        }
+        else if (sceneSwitch)
+        {
+            //Returns to the Main Menu
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public void NewGame()
