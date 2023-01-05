@@ -9,31 +9,34 @@ using TMPro;
 
 public class Manager : MonoBehaviour
 {
-    private GameObject player;
-    private GameObject saveFiles;
-    private GameSettings gameSettings;
-    private EggHealthRadiation eggHealthRadiation;
-
-    public Canvas optionsCanvas;
-
-    [Header("Main Menu")]
+    [Header("Main Menu/InGame")]
     public GameObject saveMenu;
     public GameObject pauseMenu;
     public GameObject settingsMenu;
     public GameObject quitMenu;
-    public GameObject creditsMenu;
     public GameObject mainMenuQ;
+    public Toggle fullscreen;
+    public Toggle fps;
+
+    [Header("MainMenu")]
+    public GameObject creditsMenu;
+
 
     [Header("InGame")]
     public GameObject saveFile1;
     public GameObject saveFile2;
     public GameObject saveFile3;
+    
+    public Canvas optionsCanvas;
 
+    private GameObject saveFiles;
+    private GameSettings gameSettings;
+    private EggHealthRadiation eggHealthRadiation;
+    private GameObject player;
     private TextMeshProUGUI savedTimeDate;
     private TMP_InputField fileName;
 
-    public Toggle fullscreen;
-    public Toggle fps;
+
 
     private Vector2 playerPos;
 
@@ -159,67 +162,76 @@ public class Manager : MonoBehaviour
 
     public void SaveMenu()
     {
-        pauseMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        quitMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        mainMenuQ.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            pauseMenu.SetActive(false);
+        }
+        
 
         saveMenu.SetActive(true);
 
     }
+
+    public void BackToMainMenu()
+    {
+        settingsMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+        mainMenuQ.SetActive(false);
+    }
+
     public void PauseMenu()
     {
+        pauseMenu.SetActive(true);
+
         saveMenu.SetActive(false);
         settingsMenu.SetActive(false);
-        quitMenu.SetActive(false);
         creditsMenu.SetActive(false);
         mainMenuQ.SetActive(false);
 
-        pauseMenu.SetActive(true);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            quitMenu.SetActive(false);
+        }
+        
 
     }
 
     public void SettingsMenu()
     {
-        saveMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        quitMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        mainMenuQ.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            pauseMenu.SetActive(false);
+        }
 
         settingsMenu.SetActive(true);
     }
 
     public void QuitMenu()
     {
-        saveMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        quitMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        settingsMenu.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            pauseMenu.SetActive(false);
+        }
 
         quitMenu.SetActive(true);
     }
 
     public void CreditsMenu()
     {
-        saveMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        quitMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        mainMenuQ.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            pauseMenu.SetActive(false);
+        }
 
         creditsMenu.SetActive(true);
     }
 
     public void MainMenuQMenu()
     {
-        saveMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        quitMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        settingsMenu.SetActive(false);
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            pauseMenu.SetActive(false);
+        }
 
         mainMenuQ.SetActive(true);
     }
