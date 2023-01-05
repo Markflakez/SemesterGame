@@ -16,6 +16,7 @@ public class Manager : MonoBehaviour
 
     public Canvas optionsCanvas;
 
+    [Header("Main Menu")]
     public GameObject saveMenu;
     public GameObject pauseMenu;
     public GameObject settingsMenu;
@@ -23,6 +24,7 @@ public class Manager : MonoBehaviour
     public GameObject creditsMenu;
     public GameObject mainMenuQ;
 
+    [Header("InGame")]
     public GameObject saveFile1;
     public GameObject saveFile2;
     public GameObject saveFile3;
@@ -37,9 +39,12 @@ public class Manager : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player");
-        eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
-        gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+        if (SceneManager.GetSceneByName("InGame").isLoaded)
+        {
+            player = GameObject.Find("Player");
+            eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
+        }
+            gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
     }
 
     public void QuitGame()
@@ -139,7 +144,7 @@ public class Manager : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if(optionsCanvas.enabled)
+            if (optionsCanvas.enabled)
             {
                 optionsCanvas.enabled = false;
                 Time.timeScale = 1;
@@ -161,7 +166,7 @@ public class Manager : MonoBehaviour
         mainMenuQ.SetActive(false);
 
         saveMenu.SetActive(true);
-        
+
     }
     public void PauseMenu()
     {
@@ -172,7 +177,7 @@ public class Manager : MonoBehaviour
         mainMenuQ.SetActive(false);
 
         pauseMenu.SetActive(true);
-        
+
     }
 
     public void SettingsMenu()
@@ -267,7 +272,7 @@ public class Manager : MonoBehaviour
 
         PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
         savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
-        
+
         //Saves the current Player Health and Position
         SAVE_PLAYER_HEALTH(file);
         SAVE_PLAYER_LOCATION(file);
@@ -460,5 +465,4 @@ public class Manager : MonoBehaviour
         LOAD_SFX_VOLUME();
     }
     #endregion RESETSETTINGS
-
 }
