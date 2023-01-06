@@ -52,8 +52,6 @@ public class Manager : MonoBehaviour
 
     private Vector2 playerPos;
 
-    private Button button;
-
 
     private void Awake()
     {
@@ -62,9 +60,18 @@ public class Manager : MonoBehaviour
             player = GameObject.Find("Player");
             eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
         }
+
         if(SceneManager.GetActiveScene().name == "InGame" || SceneManager.GetActiveScene().name == "MainMenu")
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+        }
+
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            optionsCanvas.enabled = false;
+
+            //Loads the values from the current loaded file
+            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
         }
     }
 
@@ -87,14 +94,6 @@ public class Manager : MonoBehaviour
     {
         sceneSwitch = false;
         activeSceneName = SceneManager.GetActiveScene().name;
-
-        if (SceneManager.GetActiveScene().name == "InGame")
-        {
-            optionsCanvas.enabled = false;
-
-            //Loads the values from the current loaded file
-            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
-        }
         Time.timeScale = 1;
 
         //Loads the respective setting if it exists, if not it is reset and set to the default setting
@@ -173,22 +172,21 @@ public class Manager : MonoBehaviour
         }
         #endregion LOAD-FILENAMES
 
-        if (SceneManager.GetActiveScene().name == "LoadGame")
+
+        //If there is SaveData, it will be displayed in the respective buttons
+        if (PlayerPrefs.HasKey("FILETIME-1"))
         {
-            //If there is SaveData, it will be displayed in the respective buttons
-            if (PlayerPrefs.HasKey("FILETIME-1"))
-            {
-                saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
-            }
-            if (PlayerPrefs.HasKey("FILETIME-2"))
-            {
-                saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
-            }
-            if (PlayerPrefs.HasKey("FILETIME-3"))
-            {
-                saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
-            }
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
         }
+        if (PlayerPrefs.HasKey("FILETIME-2"))
+        {
+            saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
+        }
+        if (PlayerPrefs.HasKey("FILETIME-3"))
+        {
+            saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
+        }
+
     }
 
     private void Update()
@@ -208,7 +206,7 @@ public class Manager : MonoBehaviour
             else
             {
                 optionsCanvas.enabled = true;
-                Time.timeScale = 0;
+                Time.timeScale = 1;
             }
         }
     }
@@ -242,15 +240,15 @@ public class Manager : MonoBehaviour
 
     public void LoadSaveFile(Button button)
     {
-        if(button.gameObject == saveFile1)
+        if(button.gameObject.name == "SaveFile-1")
         {
             file = 1;
         }
-        if (button.gameObject == saveFile2)
+        if (button.gameObject.name == "SaveFile-2")
         {
             file = 2;
         }
-        if (button.gameObject == saveFile3)
+        if (button.gameObject.name == "SaveFile-3")
         {
             file = 3;
         }
@@ -259,9 +257,9 @@ public class Manager : MonoBehaviour
         if (!sceneSwitch)
         {
             PlayerPrefs.SetInt("CurrentFile", file);
-            StartCoroutine(DelaySwitchScene("QuitGame", button));
+            StartCoroutine(DelaySwitchScene("LoadSaveFile", button));
         }
-        else if (sceneSwitch)
+        if (sceneSwitch)
         {
             //The SaveFile selected by pressing one of the buttons is set as the active SaveFile, so that the selected SaveFile is loaded in the GameScene
             SceneManager.LoadScene("InGame");
@@ -292,6 +290,7 @@ public class Manager : MonoBehaviour
 
 
             saveMenu.SetActive(true);
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
@@ -306,6 +305,7 @@ public class Manager : MonoBehaviour
         else if (sceneSwitch)
         {
             SceneManager.LoadScene("LoadGame");
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
@@ -331,22 +331,31 @@ public class Manager : MonoBehaviour
         ButtonAnimation(button);
     }
 
-    public void PauseMenu()
+    public void PauseMenu(Button button)
     {
-        pauseMenu.SetActive(true);
-        
-
-        saveMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        mainMenuQ.SetActive(false);
-
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            quitMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("PauseMenu", button));
         }
-        
+        else if (sceneSwitch)
+        {
 
+
+            pauseMenu.SetActive(true);
+
+
+            saveMenu.SetActive(false);
+            settingsMenu.SetActive(false);
+            creditsMenu.SetActive(false);
+            mainMenuQ.SetActive(false);
+
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                quitMenu.SetActive(false);
+            }
+
+        }
+        ButtonAnimation(button);
     }
 
     public void SettingsMenu(Button button)
@@ -383,6 +392,7 @@ public class Manager : MonoBehaviour
             }
 
             quitMenu.SetActive(true);
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
@@ -430,6 +440,7 @@ public class Manager : MonoBehaviour
             //Returns to the GameScene and unpauses the game
             optionsCanvas.enabled = false;
             Time.timeScale = 1;
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
@@ -445,6 +456,7 @@ public class Manager : MonoBehaviour
         {
             //Returns to the Main Menu
             SceneManager.LoadScene("MainMenu");
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
