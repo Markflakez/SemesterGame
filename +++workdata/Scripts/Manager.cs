@@ -56,17 +56,19 @@ public class Manager : MonoBehaviour
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
     }
 
-    public void QuitGame()
+    public void QuitGame(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("QuitGame"));
+            StartCoroutine(DelaySwitchScene("QuitGame", button));
         }
         else if (sceneSwitch)
         {
             //Closes the application
             Application.Quit();
         }
+
+        ButtonAnimation(button);
     }
 
     private void Start()
@@ -173,14 +175,16 @@ public class Manager : MonoBehaviour
         }
     }
 
-    IEnumerator DelaySwitchScene(string function)
+    IEnumerator DelaySwitchScene(string function, Button button)
     {
         ButtonSound();
 
         yield return new WaitForSeconds(.3f);
+
         
+
         sceneSwitch = true;
-        SendMessage(function);
+        SendMessage(function, button);
     }
 
     private void ButtonSound()
@@ -189,7 +193,7 @@ public class Manager : MonoBehaviour
         uiSound.pitch = Random.Range(.8f, 1.2f);
     }
 
-    public void ButtonAnimation(Button button)
+    private void ButtonAnimation(Button button)
     {
         button.transform.DOScale(0.8f, 0.15f).OnComplete(() => {
             // Scale the button back to normal
@@ -197,11 +201,11 @@ public class Manager : MonoBehaviour
         });
     }
 
-    public void SaveMenu()
+    public void SaveMenu(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("SaveMenu"));
+            StartCoroutine(DelaySwitchScene("SaveMenu", button));
         }
         else if (sceneSwitch)
         {
@@ -213,27 +217,29 @@ public class Manager : MonoBehaviour
 
             saveMenu.SetActive(true);
         }
-        
 
+        ButtonAnimation(button);
     }
 
-    public void LoadGame()
+    public void LoadGame(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("LoadGame"));
+            StartCoroutine(DelaySwitchScene("LoadGame", button));
         }
         else if (sceneSwitch)
         {
             SceneManager.LoadScene("LoadGame");
         }
+
+        ButtonAnimation(button);
     }
 
-    public void BackToMainMenu()
+    public void BackToMainMenu(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("BackToMainMenu"));
+            StartCoroutine(DelaySwitchScene("BackToMainMenu", button));
         }
         else if (sceneSwitch)
         {
@@ -242,6 +248,8 @@ public class Manager : MonoBehaviour
             mainMenuQ.SetActive(false);
             sceneSwitch = false;
         }
+
+        ButtonAnimation(button);
     }
 
     public void PauseMenu()
@@ -262,11 +270,11 @@ public class Manager : MonoBehaviour
 
     }
 
-    public void SettingsMenu()
+    public void SettingsMenu(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("SettingsMenu"));
+            StartCoroutine(DelaySwitchScene("SettingsMenu", button));
         }
         else if(sceneSwitch)
         {
@@ -278,14 +286,15 @@ public class Manager : MonoBehaviour
             settingsMenu.SetActive(true);
             sceneSwitch = false;
         }
-        
+
+        ButtonAnimation(button);
     }
 
-    public void QuitMenu()
+    public void QuitMenu(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("QuitMenu"));
+            StartCoroutine(DelaySwitchScene("QuitMenu", button));
         }
         else if (sceneSwitch)
         {
@@ -296,14 +305,15 @@ public class Manager : MonoBehaviour
 
             quitMenu.SetActive(true);
         }
-        
+
+        ButtonAnimation(button);
     }
 
-    public void CreditsMenu()
+    public void CreditsMenu(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("CreditsMenu"));
+            StartCoroutine(DelaySwitchScene("CreditsMenu", button));
         }
         else if (sceneSwitch)
         {
@@ -315,7 +325,8 @@ public class Manager : MonoBehaviour
             creditsMenu.SetActive(true);
             sceneSwitch = false;
         }
-        
+
+        ButtonAnimation(button);
     }
 
     public void MainMenuQMenu()
@@ -329,11 +340,11 @@ public class Manager : MonoBehaviour
         
     }
 
-    public void ResumeButton()
+    public void ResumeButton(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("ResumeButton"));
+            StartCoroutine(DelaySwitchScene("ResumeButton", button));
         }
         else if (sceneSwitch)
         {
@@ -341,20 +352,23 @@ public class Manager : MonoBehaviour
             optionsCanvas.enabled = false;
             Time.timeScale = 1;
         }
-        
+
+        ButtonAnimation(button);
     }
 
-    public void MainMenuButton()
+    public void MainMenuButton(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("MainMenuButton"));
+            StartCoroutine(DelaySwitchScene("MainMenuButton", button));
         }
         else if (sceneSwitch)
         {
             //Returns to the Main Menu
             SceneManager.LoadScene("MainMenu");
         }
+
+        ButtonAnimation(button);
     }
 
     public void NewGame()

@@ -466,37 +466,13 @@ MonoBehaviour:
       - m_Target: {fileID: 479152875}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
         m_MethodName: SettingsMenu
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 685481443}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: SettingsMenu
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: ButtonAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 685481443}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 479152875}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: ButtonAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 685481443}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &685481444
@@ -1184,18 +1160,6 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: ButtonAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1276806508}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2390,18 +2354,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: ButtonAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1805684186}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1805684187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2547,18 +2499,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
-        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: ButtonAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2063689621}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2063689622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2607,19 +2547,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7359112852779357430, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112852779357430, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112852779357430, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 284.502
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112852779357430, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -655
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112853182663034, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_Pivot.x
@@ -2715,19 +2655,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7359112853665789838, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112853665789838, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112853665789838, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 284.502
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359112853665789838, guid: 61b31409369c4564cb8da140fbecc184, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -795
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
