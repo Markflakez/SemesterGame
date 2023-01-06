@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -22,9 +23,11 @@ public class Manager : MonoBehaviour
 
     public AudioClip buttonSound;
 
+    public EventSystem eventSystem;
+    private int file;
+
     [Header("MainMenu")]
     public GameObject creditsMenu;
-
 
     [Header("InGame")]
     public GameObject saveFile1;
@@ -42,18 +45,24 @@ public class Manager : MonoBehaviour
     private TextMeshProUGUI savedTimeDate;
     private TMP_InputField fileName;
 
-    public bool sceneSwitch = false;
+    public bool sceneSwitch;
 
     private Vector2 playerPos;
 
+    private Button button;
+
+
     private void Awake()
     {
-        if (SceneManager.GetSceneByName("InGame").isLoaded)
+        if (SceneManager.GetActiveScene().name == "InGame")
         {
             player = GameObject.Find("Player");
             eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
         }
+        if(SceneManager.GetActiveScene().name == "InGame" || SceneManager.GetActiveScene().name == "MainMenu")
+        {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+        }
     }
 
     public void QuitGame(Button button)
@@ -73,68 +82,78 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
-        optionsCanvas.enabled = false;
+        sceneSwitch = false;
+
+
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            optionsCanvas.enabled = false;
+
+            //Loads the values from the current loaded file
+            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
+
+            //Loads the respective setting if it exists, if not it is reset and set to the default setting
+            #region SETTINGS
+            if (PlayerPrefs.HasKey("RESOLUTION"))
+            {
+                LOAD_RESOLUTION();
+            }
+            else
+            {
+                RESET_RESOLUTION();
+            }
+
+            if (PlayerPrefs.HasKey("FRAMERATE"))
+            {
+                LOAD_FRAMERATE();
+            }
+            else
+            {
+                RESET_FRAMERATE();
+            }
+
+            if (PlayerPrefs.HasKey("FULLSCREEN"))
+            {
+                LOAD_FULLSCREEN();
+            }
+            else
+            {
+                RESET_FULLSCREEN();
+            }
+
+            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
+            {
+                LOAD_MUSIC_VOLUME();
+            }
+            else
+            {
+                RESET_MUSIC_VOLUME();
+            }
+
+            if (PlayerPrefs.HasKey("SFX_VOLUME"))
+            {
+                LOAD_SFX_VOLUME();
+            }
+            else
+            {
+                RESET_SFX_VOLUME();
+            }
+
+            if (PlayerPrefs.HasKey("FPS"))
+            {
+                LOAD_FPS();
+            }
+            else
+            {
+                RESET_FPS();
+            }
+            #endregion SETTINGS
+
+
+        }
         Time.timeScale = 1;
 
-        //Loads the respective setting if it exists, if not it is reset and set to the default setting
-        #region SETTINGS
-        if (PlayerPrefs.HasKey("RESOLUTION"))
-        {
-            LOAD_RESOLUTION();
-        }
-        else
-        {
-            RESET_RESOLUTION();
-        }
 
-        if (PlayerPrefs.HasKey("FRAMERATE"))
-        {
-            LOAD_FRAMERATE();
-        }
-        else
-        {
-            RESET_FRAMERATE();
-        }
-
-        if (PlayerPrefs.HasKey("FULLSCREEN"))
-        {
-            LOAD_FULLSCREEN();
-        }
-        else
-        {
-            RESET_FULLSCREEN();
-        }
-
-        if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
-        {
-            LOAD_MUSIC_VOLUME();
-        }
-        else
-        {
-            RESET_MUSIC_VOLUME();
-        }
-
-        if (PlayerPrefs.HasKey("SFX_VOLUME"))
-        {
-            LOAD_SFX_VOLUME();
-        }
-        else
-        {
-            RESET_SFX_VOLUME();
-        }
-
-        if (PlayerPrefs.HasKey("FPS"))
-        {
-            LOAD_FPS();
-        }
-        else
-        {
-            RESET_FPS();
-        }
-        #endregion SETTINGS
-
-        //Loads the values from the current loaded file
-        LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
 
         //Displays the names of the Save Files
         #region LOAD-FILENAMES
@@ -151,6 +170,23 @@ public class Manager : MonoBehaviour
             saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
         }
         #endregion LOAD-FILENAMES
+
+        if (SceneManager.GetActiveScene().name == "LoadGame")
+        {
+            //If there is SaveData, it will be displayed in the respective buttons
+            if (PlayerPrefs.HasKey("FILETIME-1"))
+            {
+                saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
+            }
+            if (PlayerPrefs.HasKey("FILETIME-2"))
+            {
+                saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
+            }
+            if (PlayerPrefs.HasKey("FILETIME-3"))
+            {
+                saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
+            }
+        }
     }
 
     private void Update()
@@ -181,9 +217,8 @@ public class Manager : MonoBehaviour
 
         yield return new WaitForSeconds(.3f);
 
-        
-
         sceneSwitch = true;
+
         SendMessage(function, button);
     }
 
@@ -195,11 +230,50 @@ public class Manager : MonoBehaviour
 
     private void ButtonAnimation(Button button)
     {
-        button.transform.DOScale(0.8f, 0.15f).OnComplete(() => {
-            // Scale the button back to normal
-            button.transform.DOScale(1f, 0.15f);
+        button.gameObject.transform.DOScale(0.8f, 0.15f).OnComplete(() =>
+        {
+            button.gameObject.transform.DOScale(1f, 0.15f);
         });
     }
+
+
+
+    public void LoadSaveFile(Button button)
+    {
+        if(button.gameObject == saveFile1)
+        {
+            file = 1;
+        }
+        if (button.gameObject == saveFile2)
+        {
+            file = 2;
+        }
+        if (button.gameObject == saveFile3)
+        {
+            file = 3;
+        }
+
+
+        if (!sceneSwitch)
+        {
+            PlayerPrefs.SetInt("CurrentFile", file);
+            StartCoroutine(DelaySwitchScene("QuitGame", button));
+        }
+        else if (sceneSwitch)
+        {
+            //The SaveFile selected by pressing one of the buttons is set as the active SaveFile, so that the selected SaveFile is loaded in the GameScene
+            SceneManager.LoadScene("InGame");
+        }
+        ButtonAnimation(button);
+    }
+
+    public void BackButton()
+    {
+        //Returns to the Main Menu Screen
+        SceneManager.LoadScene("MainMenu");
+    }
+
+
 
     public void SaveMenu(Button button)
     {
@@ -243,9 +317,12 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            settingsMenu.SetActive(false);
-            creditsMenu.SetActive(false);
-            mainMenuQ.SetActive(false);
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                settingsMenu.SetActive(false);
+                creditsMenu.SetActive(false);
+                mainMenuQ.SetActive(false);
+            }
             sceneSwitch = false;
         }
 

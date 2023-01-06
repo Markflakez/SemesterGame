@@ -34,7 +34,7 @@ public class LoadGame : MonoBehaviour
     }
 
 
-    public void LoadSaveFile(int file)
+    public void LoadSaveFile(int file, Button button)
     {
         //The SaveFile selected by pressing one of the buttons is set as the active SaveFile, so that the selected SaveFile is loaded in the GameScene
         SceneManager.LoadScene("InGame");
