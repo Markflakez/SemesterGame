@@ -26,6 +26,9 @@ public class Manager : MonoBehaviour
     public EventSystem eventSystem;
     private int file;
 
+    private string activeSceneName;
+
+
     [Header("MainMenu")]
     public GameObject creditsMenu;
 
@@ -83,7 +86,7 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         sceneSwitch = false;
-
+        activeSceneName = SceneManager.GetActiveScene().name;
 
         if (SceneManager.GetActiveScene().name == "InGame")
         {
@@ -91,9 +94,13 @@ public class Manager : MonoBehaviour
 
             //Loads the values from the current loaded file
             LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
+        }
+        Time.timeScale = 1;
 
-            //Loads the respective setting if it exists, if not it is reset and set to the default setting
-            #region SETTINGS
+        //Loads the respective setting if it exists, if not it is reset and set to the default setting
+        #region SETTINGS
+        if (activeSceneName == "MainMenu" || activeSceneName == "InGame")
+        {
             if (PlayerPrefs.HasKey("RESOLUTION"))
             {
                 LOAD_RESOLUTION();
@@ -147,13 +154,8 @@ public class Manager : MonoBehaviour
             {
                 RESET_FPS();
             }
-            #endregion SETTINGS
-
-
         }
-        Time.timeScale = 1;
-
-
+        #endregion SETTINGS
 
         //Displays the names of the Save Files
         #region LOAD-FILENAMES
