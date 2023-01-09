@@ -139,7 +139,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2425603894011842475, guid: bc158a0928b7ec142a178da08f4511a8, type: 3}
   m_PrefabInstance: {fileID: 1412600541}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1549161305}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 685481445}
   - component: {fileID: 685481444}
   - component: {fileID: 685481443}
+  - component: {fileID: 685481446}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -535,6 +536,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685481441}
   m_CullTransparentMesh: 1
+--- !u!114 &685481446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685481441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 685481443}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 685481443}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &701943932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,7 +1142,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7306405023421876048, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
   m_PrefabInstance: {fileID: 1763770573}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1576805080}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -1114,6 +1160,7 @@ GameObject:
   - component: {fileID: 1276806510}
   - component: {fileID: 1276806509}
   - component: {fileID: 1276806508}
+  - component: {fileID: 1276806511}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -1236,6 +1283,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276806506}
   m_CullTransparentMesh: 1
+--- !u!114 &1276806511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276806506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1276806508}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1276806508}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1364042065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,7 +1730,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2425603894011842473, guid: bc158a0928b7ec142a178da08f4511a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1549161307}
   m_SourcePrefab: {fileID: 100100000, guid: bc158a0928b7ec142a178da08f4511a8, type: 3}
 --- !u!224 &1412600542 stripped
 RectTransform:
@@ -1796,6 +1891,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528426550}
   m_CullTransparentMesh: 1
+--- !u!1 &1549161305 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2425603894011842473, guid: bc158a0928b7ec142a178da08f4511a8, type: 3}
+  m_PrefabInstance: {fileID: 1412600541}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1549161307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549161305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 235292687}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 235292687}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1570743538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,6 +2043,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1576805080 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7306405023421876054, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
+  m_PrefabInstance: {fileID: 1763770573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1576805082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576805080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1260995111}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1260995111}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1603307249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2059,6 +2254,14 @@ PrefabInstance:
       propertyPath: fullscreen
       value: 
       objectReference: {fileID: 539273661}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: buttonClick
+      value: 
+      objectReference: {fileID: 8300000, guid: 9916cfe43f37d2d42aaebf95d405b6d7, type: 3}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: buttonHover
+      value: 
+      objectReference: {fileID: 8300000, guid: 86a7ff53d505bf343a00f08862d453d3, type: 3}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: buttonSound
       value: 
@@ -2465,7 +2668,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 7306405022674325109, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7306405023421876054, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1576805082}
+    - targetCorrespondingSourceObject: {fileID: 1564673723, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2042127455}
   m_SourcePrefab: {fileID: 100100000, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
 --- !u!224 &1763770574 stripped
 RectTransform:
@@ -2500,6 +2709,7 @@ GameObject:
   - component: {fileID: 1805684188}
   - component: {fileID: 1805684187}
   - component: {fileID: 1805684186}
+  - component: {fileID: 1805684189}
   m_Layer: 5
   m_Name: QuitGameButton
   m_TagString: Untagged
@@ -2622,6 +2832,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805684184}
   m_CullTransparentMesh: 1
+--- !u!114 &1805684189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805684184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1805684186}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1805684186}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1834490997 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 304684852, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
@@ -2631,6 +2886,67 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2042127453 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1564673723, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
+  m_PrefabInstance: {fileID: 1763770573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2042127455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042127453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2042127456}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2042127456}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &2042127456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1564673725, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
+  m_PrefabInstance: {fileID: 1763770573}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042127453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2063689619
@@ -2645,6 +2961,7 @@ GameObject:
   - component: {fileID: 2063689623}
   - component: {fileID: 2063689622}
   - component: {fileID: 2063689621}
+  - component: {fileID: 2063689624}
   m_Layer: 5
   m_Name: CreditsButton
   m_TagString: Untagged
@@ -2767,6 +3084,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063689619}
   m_CullTransparentMesh: 1
+--- !u!114 &2063689624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063689619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: enterHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2063689621}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 479152875}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: exitHover
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2063689621}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &2139142833
 PrefabInstance:
   m_ObjectHideFlags: 0

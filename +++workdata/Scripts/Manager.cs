@@ -22,6 +22,8 @@ public class Manager : MonoBehaviour
     public AudioSource uiSound;
 
     public AudioClip buttonSound;
+    public AudioClip buttonHover;
+    public AudioClip buttonClick;
 
     public EventSystem eventSystem;
     private int file;
@@ -46,7 +48,7 @@ public class Manager : MonoBehaviour
     public GameObject inventoryMain;
     public GameObject mainMenuBackBoard;
 
-
+    private float buttonDelay = .15f;
     private GameObject saveFiles;
     private GameSettings gameSettings;
     private EggHealthRadiation eggHealthRadiation;
@@ -98,6 +100,9 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+        DOTween.Init();
+        DOTween.defaultTimeScaleIndependent = true;
+        DOTween.timeScale = 1;
         sceneSwitch = false;
         activeSceneName = SceneManager.GetActiveScene().name;
         Time.timeScale = 1;
@@ -212,16 +217,29 @@ public class Manager : MonoBehaviour
             else
             {
                 optionsCanvas.enabled = true;
-                Time.timeScale = 1;
+                Time.timeScale = 0;
             }
         }
     }
+
+    private void PauseGame()
+    {
+        if(Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
 
     IEnumerator DelaySwitchScene(string function, Button button)
     {
         ButtonSound();
 
-        yield return new WaitForSeconds(.3f);
+        yield return new WaitForSecondsRealtime(buttonDelay);
 
         sceneSwitch = true;
 
@@ -230,16 +248,19 @@ public class Manager : MonoBehaviour
 
     private void ButtonSound()
     {
-        uiSound.PlayOneShot(buttonSound);
+        uiSound.PlayOneShot(buttonClick);
         uiSound.pitch = Random.Range(.8f, 1.2f);
     }
 
     private void ButtonAnimation(Button button)
     {
-        button.gameObject.transform.DOScale(0.8f, 0.15f).OnComplete(() =>
+
+        button.gameObject.transform.DOScale(0.8f, buttonDelay * .5f).OnComplete(() =>
         {
-            button.gameObject.transform.DOScale(1f, 0.15f);
+            button.gameObject.transform.DOScale(1f, buttonDelay * .5f);
         });
+
+        button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
     }
 
 
@@ -279,6 +300,16 @@ public class Manager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void enterHover(Button button)
+    {
+        uiSound.PlayOneShot(buttonHover);
+        button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
+    }
+
+    public void exitHover(Button button)
+    {
+        button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+    }
 
     public void OpenInventory()
     {
@@ -294,6 +325,7 @@ public class Manager : MonoBehaviour
             inventoryMain.SetActive(false);
             mainMenuBackBoard.SetActive(false);
         }
+        PauseGame();
     }
 
     public void SaveMenu(Button button)
