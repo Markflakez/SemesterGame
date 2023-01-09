@@ -63,6 +63,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         image.raycastTarget = true;
         transform.SetParent(parentAfterDrag);
         isDragging = false;
+        ScaleInventoryItem();
     }
 
 
@@ -100,5 +101,19 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         infoText.enabled = false;
         infoTextImage.enabled = false;
+    }
+
+
+    void ScaleInventoryItem()
+    {
+
+        if (gameObject.transform.parent.transform.parent.name == "Inventory-Hotbar")
+        {
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (gameObject.transform.parent.transform.parent.name == "Inventory-Main")
+        {
+            gameObject.transform.localScale = new Vector3((float)1.3, (float)1.3, (float)1.3);
+        }
     }
 }

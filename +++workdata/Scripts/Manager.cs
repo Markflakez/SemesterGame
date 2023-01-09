@@ -41,6 +41,12 @@ public class Manager : MonoBehaviour
 
     public Canvas optionsCanvas;
 
+    [Header("InGame/Inventory")]
+    public GameObject backDrop;
+    public GameObject inventoryMain;
+    public GameObject mainMenuBackBoard;
+
+
     private GameObject saveFiles;
     private GameSettings gameSettings;
     private EggHealthRadiation eggHealthRadiation;
@@ -274,6 +280,21 @@ public class Manager : MonoBehaviour
     }
 
 
+    public void OpenInventory()
+    {
+        if (!backDrop.activeSelf)
+        {
+            backDrop.SetActive(true);
+            inventoryMain.SetActive(true);
+            mainMenuBackBoard.SetActive(true);
+        }
+        else
+        {
+            backDrop.SetActive(false);
+            inventoryMain.SetActive(false);
+            mainMenuBackBoard.SetActive(false);
+        }
+    }
 
     public void SaveMenu(Button button)
     {

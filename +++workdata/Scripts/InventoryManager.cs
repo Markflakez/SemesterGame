@@ -48,7 +48,8 @@ public class InventoryManager : MonoBehaviour
     }
 
     public bool AddItem(Item item)
-    { 
+    {
+
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
@@ -61,6 +62,7 @@ public class InventoryManager : MonoBehaviour
                 {
                     sounds.PlayOneShot(pickup);
                 }
+
                 return true;
             }
         }
@@ -72,6 +74,7 @@ public class InventoryManager : MonoBehaviour
             if(itemInSlot == null)
             {
                 SpawnNewItem(item, slot);
+                ScaleInventoryItem(slot);
                 return true;
             }
         }
@@ -83,5 +86,18 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
+    }
+
+    void ScaleInventoryItem(InventorySlot inventoryItem)
+    {
+
+        if (inventoryItem.transform.parent.name == "Inventory-Hotbar")
+        {
+            inventoryItem.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            inventoryItem.transform.GetChild(0).localScale = new Vector3((float)1.3, (float)1.3, (float)1.3);
+        }
     }
 }
