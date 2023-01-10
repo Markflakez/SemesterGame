@@ -14,7 +14,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI")]
     public Image image;
     public Text countText;
-    public Text infoText;
+    public TextMeshProUGUI infoText;
     public Image infoTextImage;
     private bool isDragging;
 

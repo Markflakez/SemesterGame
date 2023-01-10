@@ -50,7 +50,6 @@ public class GhoulEnemy : MonoBehaviour
 
 
 
-
     private void Update()
     {
         
@@ -103,6 +102,8 @@ public class GhoulEnemy : MonoBehaviour
 
     public void OnHit(int damage)
     {
+        healthBar.gameObject.SetActive(true);
+
         DamageTextSpawn(damage);
 
         float randomPercentage = Random.value;
@@ -131,6 +132,8 @@ public class GhoulEnemy : MonoBehaviour
 
     private void Start()
     {
+        healthBar.gameObject.SetActive(false);
+
         healthBar.value = maxHealth;
 
         eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();

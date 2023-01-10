@@ -57,6 +57,7 @@ public class Manager : MonoBehaviour
     private TMP_InputField fileName;
 
     public bool sceneSwitch;
+    private bool delaySwitchScene = false;
 
     private Vector2 playerPos;
 
@@ -106,6 +107,7 @@ public class Manager : MonoBehaviour
         sceneSwitch = false;
         activeSceneName = SceneManager.GetActiveScene().name;
         Time.timeScale = 1;
+
 
         //Loads the respective setting if it exists, if not it is reset and set to the default setting
         #region SETTINGS
@@ -167,36 +169,36 @@ public class Manager : MonoBehaviour
         }
         #endregion SETTINGS
 
-        //Displays the names of the Save Files
         #region LOAD-FILENAMES
-        if (PlayerPrefs.HasKey("FILETIME-1"))
-        {
-            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
-        }
-        if (PlayerPrefs.HasKey("FILETIME-2"))
-        {
-            saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
-        }
-        if (PlayerPrefs.HasKey("FILETIME-3"))
-        {
-            saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
-        }
-        #endregion LOAD-FILENAMES
-
-
         //If there is SaveData, it will be displayed in the respective buttons
         if (PlayerPrefs.HasKey("FILETIME-1"))
         {
             saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
         }
+        else
+        {
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
+        }
         if (PlayerPrefs.HasKey("FILETIME-2"))
         {
             saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
+        }
+        else
+        {
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
         }
         if (PlayerPrefs.HasKey("FILETIME-3"))
         {
             saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
         }
+        else
+        {
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
+        }
+        #endregion LOAD-FILENAMES
+
+
+
 
     }
 
@@ -234,16 +236,41 @@ public class Manager : MonoBehaviour
         }
     }
 
-
     IEnumerator DelaySwitchScene(string function, Button button)
     {
-        ButtonSound();
+        if (delaySwitchScene == false)
+        {
+            delaySwitchScene = true;
+            ButtonSound();
+            
 
-        yield return new WaitForSecondsRealtime(buttonDelay);
+            yield return new WaitForSecondsRealtime(buttonDelay);
+            
+            exitHover(button);
+            sceneSwitch = true;
+            SendMessage(function, button);
+            delaySwitchScene = false;
+        }
+    }
 
-        sceneSwitch = true;
+    public void DeleteSaveFile(int file)
+    {
+        PlayerPrefs.DeleteKey("PLAYER_HEALTH-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_DAMAGEDEALT-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file);
 
-        SendMessage(function, button);
+        PlayerPrefs.DeleteKey("PLAYER_LOCATION_X-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_LOCATION_Y-" + file);
+
+
+        GameObject.Find("SaveFile-" + file).GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
+    }
+
+    void SAVE_PLAYER_LOCATION(int file)
+    {
+        //Saves the current Player Position
+        PlayerPrefs.SetFloat("PLAYER_LOCATION_X-" + file, player.transform.position.x);
+        PlayerPrefs.SetFloat("PLAYER_LOCATION_Y-" + file, player.transform.position.y);
     }
 
     private void ButtonSound()
@@ -254,10 +281,13 @@ public class Manager : MonoBehaviour
 
     private void ButtonAnimation(Button button)
     {
+        exitHover(button);
 
-        button.gameObject.transform.DOScale(0.8f, buttonDelay * .5f).OnComplete(() =>
+        Vector3 scale = button.gameObject.transform.localScale;
+        
+        button.gameObject.transform.DOScale(scale * 0.8f, buttonDelay * .5f).OnComplete(() =>
         {
-            button.gameObject.transform.DOScale(1f, buttonDelay * .5f);
+        button.gameObject.transform.DOScale(scale * 1f, buttonDelay * .5f);
         });
 
         button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
@@ -302,13 +332,22 @@ public class Manager : MonoBehaviour
 
     public void enterHover(Button button)
     {
-        uiSound.PlayOneShot(buttonHover);
-        button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
+        if (delaySwitchScene == false)
+        {
+            uiSound.PlayOneShot(buttonHover);
+            if (button.gameObject.name != "CreditsButton")
+            {
+                button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
+            }
+        }
     }
 
     public void exitHover(Button button)
     {
-        button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        if (button.gameObject.name != "CreditsButton")
+        {
+            button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        }
     }
 
     public void OpenInventory()
@@ -515,32 +554,6 @@ public class Manager : MonoBehaviour
         ButtonAnimation(button);
     }
 
-    public void NewGame()
-    {
-        eggHealthRadiation.health = 100;
-        eggHealthRadiation.healthSegments = (int)eggHealthRadiation.healthMat.GetFloat("_SegmentCount");
-        eggHealthRadiation.healthMat.SetFloat("_RemovedSegments", eggHealthRadiation.removedSegments);
-
-        eggHealthRadiation.healthText.text = "";
-        eggHealthRadiation.healthText.text += eggHealthRadiation.health;
-    }
-
-
-    public void Save()
-    {
-        //Saves the current Player Health and the current state of the Health Bar
-        #region PlayerHealth
-        PlayerPrefs.SetFloat("PLAYER_HEALTH", eggHealthRadiation.health);
-        PlayerPrefs.SetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS", eggHealthRadiation.removedSegments);
-        #endregion PlayerHealth
-
-        //Saves the current location of the player
-        #region PlayerLocation
-        PlayerPrefs.SetFloat("PLAYER_LOCATION_X", player.transform.position.x);
-        PlayerPrefs.SetFloat("PLAYER_LOCATION_Y", player.transform.position.y);
-        #endregion PlayerLocation
-    }
-
 
 
     public void SAVEFILE(int file)
@@ -573,23 +586,24 @@ public class Manager : MonoBehaviour
     {
         //Saves the current Player Health
         PlayerPrefs.SetFloat("PLAYER_HEALTH-" + file, eggHealthRadiation.health);
-        PlayerPrefs.SetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file, eggHealthRadiation.removedSegments);
-    }
-
-    void SAVE_PLAYER_LOCATION(int file)
-    {
-        //Saves the current Player Position
-        PlayerPrefs.SetFloat("PLAYER_LOCATION_X-" + file, player.transform.position.x);
-        PlayerPrefs.SetFloat("PLAYER_LOCATION_Y-" + file, player.transform.position.y);
+        PlayerPrefs.SetFloat("PLAYER_DAMAGEDEALT-" + file, eggHealthRadiation.damageDealt);
+        PlayerPrefs.SetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.removedSegments);
     }
 
     void LOAD_PLAYER_HEALTH(int file)
     {
         //Sets the current Player Health, Health Text and Healthbar to the values from the selected Save File
         eggHealthRadiation.health = PlayerPrefs.GetFloat("PLAYER_HEALTH-" + file);
-        eggHealthRadiation.healthText.text = "";
-        eggHealthRadiation.healthText.text += eggHealthRadiation.health;
-        eggHealthRadiation.removedSegments = PlayerPrefs.GetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file);
+        eggHealthRadiation.damageDealt = PlayerPrefs.GetFloat("PLAYER_DAMAGEDEALT-" + file);
+        eggHealthRadiation.healthMat.SetFloat("_RemovedSegments", PlayerPrefs.GetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file));
+
+
+        if(!PlayerPrefs.HasKey("PLAYER_HEALTH-" + file))
+        {
+            eggHealthRadiation.health = 100;
+            eggHealthRadiation.damageDealt = 0;
+        }
+        eggHealthRadiation.UpdateHealth();
     }
 
     void LOAD_PLAYER_LOCATION(int file)

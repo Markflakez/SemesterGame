@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -34,6 +36,14 @@ public class InventoryManager : MonoBehaviour
             {
                 ChangeSelectedSlot(number -1);
             }
+        }
+    }
+
+    public void SelectSlot(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            ChangeSelectedSlot(1);
         }
     }
     void ChangeSelectedSlot(int newValue)

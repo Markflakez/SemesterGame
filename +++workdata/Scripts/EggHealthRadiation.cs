@@ -5,6 +5,8 @@ using TMPro;
 public class EggHealthRadiation : MonoBehaviour
 {
 
+
+
     public Material eggMat;
     public Material healthMat;
     public Material radiationMat;
@@ -18,13 +20,16 @@ public class EggHealthRadiation : MonoBehaviour
     public TextMeshProUGUI radiationText;
 
     public float removedSegments;
-    public float healthSegments;
     public float health;
     public float damageDealt;
 
     void Start()
     {
-        removedSegments = 0;
+        if(Application.isEditor)
+        {
+            health = 100;
+        }
+        UpdateHealth();
     }
 
     // Update is called once per frame
@@ -39,21 +44,26 @@ public class EggHealthRadiation : MonoBehaviour
         healthText.GetComponent<Animator>().Play("BarDamage");
         damageDealt += damage;
         health -= damage;
-        healthText.text = "";
-        healthText.text += health;
-        removedSegments = healthSegments / 100 * damageDealt;
-        healthMat.SetInt("_RemovedSegments", (int)removedSegments);
+        UpdateHealth();
 
         if (health <= 0)
         {
             health = 0;
             damageDealt = 100;
-            removedSegments = healthSegments;
-            healthText.text = "";
-            healthText.text += health;
+            UpdateHealth();
         }
 
     }
+
+
+    public void UpdateHealth()
+    {
+        healthText.text = "";
+        healthText.text += health;
+        removedSegments = healthMat.GetFloat("_SegmentCount") / 100 * damageDealt;
+        healthMat.SetFloat("_RemovedSegments", (int)removedSegments);
+    }
+
 
     public void addHealth(int heartHealth)
     {
@@ -62,17 +72,13 @@ public class EggHealthRadiation : MonoBehaviour
             health = 100;
             damageDealt = 0;
             removedSegments = 0;
-            healthText.text = "";
-            healthText.text += health;
+            UpdateHealth();
         }
         else
         {
             damageDealt -= heartHealth;
             health += heartHealth;
-            healthText.text = "";
-            healthText.text += health;
-            removedSegments = healthSegments / 100 * damageDealt;
-            healthMat.SetInt("_RemovedSegments", (int)removedSegments);
+            UpdateHealth();
         }
     }
 }

@@ -49,7 +49,6 @@ public class PlayerController : MonoBehaviour
     public GameObject ghostEffect;
 
 
-    private bool isC = true;
     private NPCMovement yes;
 
     public bool isMoving;
@@ -157,12 +156,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             stepSoundPlayer.Stop();
-        }
-
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            playerCurrentHealth -= 10;
-            healthBar.SetHealth(playerCurrentHealth);
         }
 
         if(Input.GetKeyDown(KeyCode.R))
@@ -310,7 +303,6 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.name == "NPC-Laurel2")
         {
-            isC = true;
             yes = collision.gameObject.GetComponent<NPCMovement>();
         }
     }
