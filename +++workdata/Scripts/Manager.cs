@@ -25,7 +25,6 @@ public class Manager : MonoBehaviour
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
-    public EventSystem eventSystem;
     private int file;
 
     private string activeSceneName;
@@ -33,6 +32,7 @@ public class Manager : MonoBehaviour
 
     [Header("MainMenu")]
     public GameObject creditsMenu;
+    public GameObject creditsButton;
 
     [Header("InGame")]
     public GameObject saveFile1;
@@ -416,6 +416,7 @@ public class Manager : MonoBehaviour
                 settingsMenu.SetActive(false);
                 creditsMenu.SetActive(false);
                 mainMenuQ.SetActive(false);
+                creditsButton.SetActive(true);
             }
             sceneSwitch = false;
         }
@@ -504,6 +505,7 @@ public class Manager : MonoBehaviour
             }
 
             creditsMenu.SetActive(true);
+            creditsButton.SetActive(false);
             sceneSwitch = false;
         }
 
