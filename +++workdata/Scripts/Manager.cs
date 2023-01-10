@@ -40,6 +40,10 @@ public class Manager : MonoBehaviour
     public GameObject saveFile3;
     public GameObject saveMenu;
     public GameObject pauseMenu;
+    public GameObject questLog;
+    public GameObject questText;
+    public GameObject questAvatar;
+    public GameObject questHeaderText;
 
     public Canvas optionsCanvas;
 
@@ -352,20 +356,42 @@ public class Manager : MonoBehaviour
 
     public void OpenInventory()
     {
-        if (!backDrop.activeSelf)
+        if (!questLog.activeSelf)
         {
-            backDrop.SetActive(true);
-            inventoryMain.SetActive(true);
-            mainMenuBackBoard.SetActive(true);
+            if (!backDrop.activeSelf)
+            {
+                backDrop.SetActive(true);
+                inventoryMain.SetActive(true);
+                mainMenuBackBoard.SetActive(true);
+            }
+            else
+            {
+                backDrop.SetActive(false);
+                inventoryMain.SetActive(false);
+                mainMenuBackBoard.SetActive(false);
+            }
+            PauseGame();
         }
-        else
-        {
-            backDrop.SetActive(false);
-            inventoryMain.SetActive(false);
-            mainMenuBackBoard.SetActive(false);
-        }
-        PauseGame();
     }
+
+    public void OpenQuestLog()
+    {
+        if (!inventoryMain.activeSelf)
+        {
+            if (!backDrop.activeSelf)
+            {
+                backDrop.SetActive(true);
+                questLog.SetActive(true);
+            }
+            else
+            {
+                backDrop.SetActive(false);
+                questLog.SetActive(false);
+            }
+            PauseGame();
+        }
+    }
+
 
     public void SaveMenu(Button button)
     {
