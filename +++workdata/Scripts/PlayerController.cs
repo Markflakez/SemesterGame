@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
     private MotionBlur motionBlur;
     public GameObject ghostEffect;
 
+    public Manager manager;
 
     private NPCMovement yes;
 
@@ -122,25 +123,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.J))
         {
             cylinder.Play("CylinderAction");
-        }
-
-        // Check if the button is pressed and the player is within range of the enemies
-        if (Input.GetKeyDown(KeyCode.Mouse0) && IsInRange())
-        {
-            // Get all the enemies within range
-            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
-
-            // Apply a force to each enemy to knock them back
-            foreach (Collider2D enemy in enemies)
-            {
-                Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();
-                if (enemyRigidbody != null)
-                {
-                    Vector2 forceDirection = enemyRigidbody.transform.position - transform.position;
-                    enemyRigidbody.AddForce(forceDirection.normalized * force, ForceMode2D.Impulse);
-                    enemy.gameObject.GetComponent<GhoulEnemy>().OnHit(Random.Range(12, 18));
-                }
-            }
         }
 
         if (rb.velocity != Vector2.zero)
@@ -279,9 +261,22 @@ public class PlayerController : MonoBehaviour
 
     public void Attack(InputAction.CallbackContext context)
     {
-        if (context.performed && !isAttacking)
+        if (context.performed && !isAttacking && !manager.isPaused && IsInRange())
         {
-            
+            // Get all the enemies within range
+            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
+
+            // Apply a force to each enemy to knock them back
+            foreach (Collider2D enemy in enemies)
+            {
+                Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();
+                if (enemyRigidbody != null)
+                {
+                    Vector2 forceDirection = enemyRigidbody.transform.position - transform.position;
+                    enemyRigidbody.AddForce(forceDirection.normalized * force, ForceMode2D.Impulse);
+                    enemy.gameObject.GetComponent<GhoulEnemy>().OnHit(Random.Range(12, 18));
+                }
+            }
         }
         
     }

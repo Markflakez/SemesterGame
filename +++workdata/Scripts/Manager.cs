@@ -64,23 +64,33 @@ public class Manager : MonoBehaviour
     private TextMeshProUGUI savedTimeDate;
     private TMP_InputField fileName;
 
-    public bool sceneSwitch;
+    public bool sceneSwitch = false;
     private bool delaySwitchScene = false;
 
     private Vector2 playerPos;
 
     public string sceneName;
 
+    public bool isPaused = false;
+
+    public InputActionAsset playerActionMap;
 
     private void Awake()
     {
-        Time.timeScale = 1;
         sceneName = SceneManager.GetActiveScene().name;
 
-        gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+        if (sceneName != "LoadGame")
+        {
+            gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+        }
 
+        LoadFileNames();
+
+    }
+
+    private void LoadSettings()
+    {
         //Loads the respective setting if it exists, if not it is reset and set to the default setting
-        #region SETTINGS
         if (PlayerPrefs.HasKey("RESOLUTION"))
         {
             LOAD_RESOLUTION();
@@ -126,19 +136,17 @@ public class Manager : MonoBehaviour
             RESET_SFX_VOLUME();
         }
 
-        if (PlayerPrefs.HasKey("FPS"))
+        if (sceneName == "InGame")
         {
-            LOAD_FPS();
+            if (PlayerPrefs.HasKey("FPS"))
+            {
+                LOAD_FPS();
+            }
+            else
+            {
+                RESET_FPS();
+            }
         }
-        else
-        {
-            RESET_FPS();
-        }
-        #endregion SETTINGS
-
-        LoadFileNames();
-
-
     }
 
     public void QuitGame(Button button)
@@ -161,23 +169,31 @@ public class Manager : MonoBehaviour
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
-        sceneSwitch = false;
-        
+        Time.timeScale = 1;
 
         if (sceneName == "InGame")
         {
             player = GameObject.Find("Player");
             eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
 
-            optionsCanvas.enabled = true;
-
-            pauseMenu.SetActive(true);
-            settingsMenu.SetActive(true);
-
             //Loads the values from the current loaded file
             LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
         }
 
+        if(sceneName != "LoadGame")
+        {
+            LoadSettings();
+        }
+        
+    }
+
+    private void HideAllPanels()
+    {
+        pauseMenu.SetActive(false);
+        saveMenu.SetActive(false);
+        quitMenu.SetActive(false);
+        mainMenuQ.SetActive(false);
+        settingsMenu.SetActive(false);
     }
 
     private void LoadFileNames()
@@ -187,8 +203,6 @@ public class Manager : MonoBehaviour
         saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
 
         saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
-
-        PlayerPrefs.Save();
     }
 
     private void Update()
@@ -204,16 +218,22 @@ public class Manager : MonoBehaviour
         }
     }
 
-    private void PauseGame()
+    public void PauseGame()
     {
         if(Time.timeScale == 1)
         {
             Time.timeScale = 0;
+            isPaused = true;
         }
         else
         {
             Time.timeScale = 1;
+            isPaused = false;
         }
+
+        DOTween.Init();
+        DOTween.defaultTimeScaleIndependent = true;
+        DOTween.timeScale = 1;
     }
 
     IEnumerator DelaySwitchScene(string function, Button button)
@@ -388,7 +408,6 @@ public class Manager : MonoBehaviour
         }
     }
 
-
     public void EscapeInput(InputAction.CallbackContext context)
     {
         if (sceneName == "InGame")
@@ -397,22 +416,16 @@ public class Manager : MonoBehaviour
             {
                 if (!inventoryMain.activeSelf && !questLog.activeSelf)
                 {
-                    if (optionsCanvas.enabled)
+                    if (!isPaused)
                     {
-
-                        optionsCanvas.enabled = false;
+                        HideAllPanels();
+                        PauseGame();
                         pauseMenu.SetActive(true);
-                        saveMenu.SetActive(false);
-                        quitMenu.SetActive(false);
-                        mainMenuQ.SetActive(false);
-                        settingsMenu.SetActive(false);
-                        
                     }
                     else
                     {
-                        optionsCanvas.enabled = true;
-                        //pauseMenu.SetActive(true);
-                        Time.timeScale = 0;
+                        HideAllPanels();
+                        PauseGame();
                     }
                 }
                 else
@@ -563,6 +576,7 @@ public class Manager : MonoBehaviour
             }
 
             settingsMenu.SetActive(true);
+            LoadFileNames();
             sceneSwitch = false;
         }
 
@@ -630,8 +644,8 @@ public class Manager : MonoBehaviour
         else if (sceneSwitch)
         {
             //Returns to the GameScene and unpauses the game
-            optionsCanvas.enabled = false;
-            Time.timeScale = 1;
+            PauseGame();
+            pauseMenu.SetActive(false);
             sceneSwitch = false;
         }
 
