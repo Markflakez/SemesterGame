@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Egg
   itemDescription: A small, delicious snack, that somehow protects you against this
     mysterious illness in town.
-  itemCount: 0
+  itemCount: 4
   type: 0
   stackable: 1
   image: {fileID: 21300000, guid: a64aa97ed8f02d94bb9f1471c2d40c3e, type: 3}

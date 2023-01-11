@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -44,6 +45,10 @@ public class Manager : MonoBehaviour
     public GameObject questText;
     public GameObject questAvatar;
     public GameObject questHeaderText;
+    public GameObject inventoryManager;
+
+    public Item egg;
+    public Item sword;
 
     public Canvas optionsCanvas;
 
@@ -213,18 +218,9 @@ public class Manager : MonoBehaviour
             PlayerPrefs.DeleteAll();
         }
 
-        if (Input.GetKeyUp(KeyCode.Escape))
+        if(Input.GetKeyUp(KeyCode.L))
         {
-            if (optionsCanvas.enabled)
-            {
-                optionsCanvas.enabled = false;
-                Time.timeScale = 1;
-            }
-            else
-            {
-                optionsCanvas.enabled = true;
-                Time.timeScale = 0;
-            }
+            LOAD_INVENTORY();
         }
     }
 
@@ -266,6 +262,9 @@ public class Manager : MonoBehaviour
         PlayerPrefs.DeleteKey("PLAYER_LOCATION_X-" + file);
         PlayerPrefs.DeleteKey("PLAYER_LOCATION_Y-" + file);
 
+        PlayerPrefs.SetString("FILETIME-" + file, "-Empty-");
+        PlayerPrefs.Save();
+
 
         GameObject.Find("SaveFile-" + file).GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
     }
@@ -275,6 +274,41 @@ public class Manager : MonoBehaviour
         //Saves the current Player Position
         PlayerPrefs.SetFloat("PLAYER_LOCATION_X-" + file, player.transform.position.x);
         PlayerPrefs.SetFloat("PLAYER_LOCATION_Y-" + file, player.transform.position.y);
+    }
+
+    public void SAVE_INVENTORY(int file)
+    {
+
+        foreach (var inventorySlot in inventoryManager.GetComponent<InventoryManager>().inventorySlots)
+        {
+            if (inventorySlot.gameObject.transform.childCount > 0)
+            {
+                PlayerPrefs.SetString("Inventory-SLOT-" + file + inventorySlot, inventorySlot.gameObject.name);
+                PlayerPrefs.SetString("ITEM_NAME-" + file + inventorySlot, inventorySlot.gameObject.GetComponentInChildren<InventoryItem>().item.itemName);
+                PlayerPrefs.SetInt("ITEM_COUNT-" + file + inventorySlot, inventorySlot.gameObject.GetComponentInChildren<InventoryItem>().count);
+
+                Debug.Log(PlayerPrefs.GetString("ITEM_NAME-" + file + inventorySlot));
+                Debug.Log(PlayerPrefs.GetInt("ITEM_COUNT-" + file + inventorySlot));
+            }
+        }
+        PlayerPrefs.Save();
+
+        
+    }
+
+    public void LOAD_INVENTORY()
+    {
+        foreach (var inventorySlot in inventoryManager.GetComponent<InventoryManager>().inventorySlots)
+        {
+            //Destroy(inventorySlot.gameObject.transform.GetChild(0).gameObject);
+
+            if (PlayerPrefs.HasKey("Inventory-SLOT-" + PlayerPrefs.GetInt("CurrentFile") + inventorySlot))
+            {
+                Debug.Log("ye");
+                inventoryManager.GetComponent<InventoryManager>().SpawnNewItem(egg, inventorySlot);
+                inventorySlot.gameObject.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("ITEM_COUNT-" + PlayerPrefs.GetInt("CurrentFile") + inventorySlot);
+            }
+        }
     }
 
     private void ButtonSound()
@@ -354,6 +388,43 @@ public class Manager : MonoBehaviour
         }
     }
 
+    public void OpenInventoryInput(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            OpenInventory();
+        }
+    }
+
+    public void OpenQuestLogInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OpenQuestLog();
+        }
+    }
+
+
+    public void PauseGame(InputAction.CallbackContext context)
+    {
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+
+            if (context.performed)
+            {
+                if (optionsCanvas.enabled)
+                {
+                    optionsCanvas.enabled = false;
+                    Time.timeScale = 1;
+                }
+                else
+                {
+                    optionsCanvas.enabled = true;
+                    Time.timeScale = 0;
+                }
+            }
+        }
+    }
     public void OpenInventory()
     {
         if (!questLog.activeSelf)

@@ -128,9 +128,9 @@ Material:
     - _QueueOffset: 0
     - _Radius: 0.4
     - _ReceiveShadows: 1
-    - _RemovedSegments: 6
+    - _RemovedSegments: 0
     - _Rotation: 0
-    - _SegmentCount: 2
+    - _SegmentCount: 10
     - _SegmentSpacing: 0.01
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0

@@ -60,7 +60,7 @@ public class GameSettings : MonoBehaviour
         SetMusicVolume(musicVolumeSlider.value);
 
 
-        float refreshRate = Screen.currentResolution.refreshRate;
+        float refreshRate = Screen.currentResolution.refreshRateRatio.numerator;
 
         // Set the options for the dropdown menu
         List<string> hz = new List<string>();

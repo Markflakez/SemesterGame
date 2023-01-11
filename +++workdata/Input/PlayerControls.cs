@@ -71,6 +71,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""5016ecbd-960e-4790-9767-0db428b5d317"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenQuestLog"",
+                    ""type"": ""Button"",
+                    ""id"": ""712ba990-9faa-48dd-8fda-4aefb20a6438"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""faa6bbf7-5bb4-4bb5-b62b-aa59c653b16e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +199,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""SelectSlot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7fae5792-380b-44dc-ad97-1dc2783386cd"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""423d866b-ddcd-4c2b-bfd4-4f73524b3775"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenQuestLog"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7222439-e824-485c-9c08-7f76ed2655c0"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -257,6 +317,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
         m_PlayerActionMap_SelectSlot = m_PlayerActionMap.FindAction("SelectSlot", throwIfNotFound: true);
+        m_PlayerActionMap_OpenInventory = m_PlayerActionMap.FindAction("OpenInventory", throwIfNotFound: true);
+        m_PlayerActionMap_OpenQuestLog = m_PlayerActionMap.FindAction("OpenQuestLog", throwIfNotFound: true);
+        m_PlayerActionMap_PauseGame = m_PlayerActionMap.FindAction("PauseGame", throwIfNotFound: true);
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Movement = m_Movement.FindAction("Movement", throwIfNotFound: true);
@@ -324,6 +387,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Attack;
     private readonly InputAction m_PlayerActionMap_Dash;
     private readonly InputAction m_PlayerActionMap_SelectSlot;
+    private readonly InputAction m_PlayerActionMap_OpenInventory;
+    private readonly InputAction m_PlayerActionMap_OpenQuestLog;
+    private readonly InputAction m_PlayerActionMap_PauseGame;
     public struct PlayerActionMapActions
     {
         private @PlayerControls m_Wrapper;
@@ -333,6 +399,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
         public InputAction @Dash => m_Wrapper.m_PlayerActionMap_Dash;
         public InputAction @SelectSlot => m_Wrapper.m_PlayerActionMap_SelectSlot;
+        public InputAction @OpenInventory => m_Wrapper.m_PlayerActionMap_OpenInventory;
+        public InputAction @OpenQuestLog => m_Wrapper.m_PlayerActionMap_OpenQuestLog;
+        public InputAction @PauseGame => m_Wrapper.m_PlayerActionMap_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -357,6 +426,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SelectSlot.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
                 @SelectSlot.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
                 @SelectSlot.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
+                @OpenInventory.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
+                @OpenQuestLog.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenQuestLog;
+                @OpenQuestLog.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenQuestLog;
+                @OpenQuestLog.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenQuestLog;
+                @PauseGame.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
+                @PauseGame.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
+                @PauseGame.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
             }
             m_Wrapper.m_PlayerActionMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -376,6 +454,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SelectSlot.started += instance.OnSelectSlot;
                 @SelectSlot.performed += instance.OnSelectSlot;
                 @SelectSlot.canceled += instance.OnSelectSlot;
+                @OpenInventory.started += instance.OnOpenInventory;
+                @OpenInventory.performed += instance.OnOpenInventory;
+                @OpenInventory.canceled += instance.OnOpenInventory;
+                @OpenQuestLog.started += instance.OnOpenQuestLog;
+                @OpenQuestLog.performed += instance.OnOpenQuestLog;
+                @OpenQuestLog.canceled += instance.OnOpenQuestLog;
+                @PauseGame.started += instance.OnPauseGame;
+                @PauseGame.performed += instance.OnPauseGame;
+                @PauseGame.canceled += instance.OnPauseGame;
             }
         }
     }
@@ -420,6 +507,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnSelectSlot(InputAction.CallbackContext context);
+        void OnOpenInventory(InputAction.CallbackContext context);
+        void OnOpenQuestLog(InputAction.CallbackContext context);
+        void OnPauseGame(InputAction.CallbackContext context);
     }
     public interface IMovementActions
     {
