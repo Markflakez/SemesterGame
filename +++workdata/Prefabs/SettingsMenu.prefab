@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -851,7 +851,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSettings, Assembly-CSharp
         m_MethodName: SetSFXVolume
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -863,7 +863,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
         m_MethodName: SAVE_SFX_VOLUME
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1104,7 +1104,7 @@ GameObject:
   - component: {fileID: 1564673727}
   - component: {fileID: 1564673726}
   - component: {fileID: 1564673725}
-  - component: {fileID: 2042127455}
+  - component: {fileID: 853344766}
   m_Layer: 5
   m_Name: RESET SETTINGS
   m_TagString: Untagged
@@ -1227,7 +1227,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2042127455
+--- !u!114 &853344766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1444,7 +1444,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSettings, Assembly-CSharp
         m_MethodName: SetMusicVolume
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1455,8 +1455,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: SAVE_MUSIC_VOLUME
-        m_Mode: 4
+        m_MethodName: SAVE_SFX_VOLUME
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1996,7 +1996,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSettings, Assembly-CSharp
         m_MethodName: SetResolution
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2008,7 +2008,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
         m_MethodName: SAVE_RESOLUTION
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3213,7 +3213,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7306405022501708025}
-  - component: {fileID: 7306405022501707908}
   - component: {fileID: 7306405022501708026}
   - component: {fileID: 7306405022501707909}
   m_Layer: 5
@@ -3245,35 +3244,6 @@ RectTransform:
   m_AnchoredPosition: {x: -73.00011, y: 119}
   m_SizeDelta: {x: 300, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7306405022501707908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7306405022501708024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-          m_MethodName: SAVE_FULLSCREEN
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &7306405022501708026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4418,7 +4388,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSettings, Assembly-CSharp
         m_MethodName: SetRefreshRate
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4430,7 +4400,7 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
         m_MethodName: SAVE_FRAMERATE
-        m_Mode: 3
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4825,7 +4795,7 @@ GameObject:
   - component: {fileID: 7306405023421876050}
   - component: {fileID: 7306405023421876049}
   - component: {fileID: 7306405023421876048}
-  - component: {fileID: 1576805082}
+  - component: {fileID: 484939668}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -4948,7 +4918,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1576805082
+--- !u!114 &484939668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

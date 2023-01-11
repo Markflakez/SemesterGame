@@ -29,16 +29,15 @@ public class Manager : MonoBehaviour
     private int file;
 
     private string activeSceneName;
-
+    public GameObject saveFile1;
+    public GameObject saveFile2;
+    public GameObject saveFile3;
 
     [Header("MainMenu")]
     public GameObject creditsMenu;
     public GameObject creditsButton;
 
     [Header("InGame")]
-    public GameObject saveFile1;
-    public GameObject saveFile2;
-    public GameObject saveFile3;
     public GameObject saveMenu;
     public GameObject pauseMenu;
     public GameObject questLog;
@@ -70,27 +69,76 @@ public class Manager : MonoBehaviour
 
     private Vector2 playerPos;
 
+    public string sceneName;
+
 
     private void Awake()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        Time.timeScale = 1;
+        sceneName = SceneManager.GetActiveScene().name;
+
+        gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+
+        //Loads the respective setting if it exists, if not it is reset and set to the default setting
+        #region SETTINGS
+        if (PlayerPrefs.HasKey("RESOLUTION"))
         {
-            player = GameObject.Find("Player");
-            eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
+            LOAD_RESOLUTION();
+        }
+        else
+        {
+            RESET_RESOLUTION();
         }
 
-        if(SceneManager.GetActiveScene().name == "InGame" || SceneManager.GetActiveScene().name == "MainMenu")
+        if (PlayerPrefs.HasKey("FRAMERATE"))
         {
-            gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
+            LOAD_FRAMERATE();
+        }
+        else
+        {
+            RESET_FRAMERATE();
         }
 
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (PlayerPrefs.HasKey("FULLSCREEN"))
         {
-            optionsCanvas.enabled = false;
-
-            //Loads the values from the current loaded file
-            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
+            LOAD_FULLSCREEN();
         }
+        else
+        {
+            RESET_FULLSCREEN();
+        }
+
+        if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
+        {
+            LOAD_MUSIC_VOLUME();
+        }
+        else
+        {
+            RESET_MUSIC_VOLUME();
+        }
+
+        if (PlayerPrefs.HasKey("SFX_VOLUME"))
+        {
+            LOAD_SFX_VOLUME();
+        }
+        else
+        {
+            RESET_SFX_VOLUME();
+        }
+
+        if (PlayerPrefs.HasKey("FPS"))
+        {
+            LOAD_FPS();
+        }
+        else
+        {
+            RESET_FPS();
+        }
+        #endregion SETTINGS
+
+        LoadFileNames();
+
+
     }
 
     public void QuitGame(Button button)
@@ -114,101 +162,33 @@ public class Manager : MonoBehaviour
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
         sceneSwitch = false;
-        activeSceneName = SceneManager.GetActiveScene().name;
-        Time.timeScale = 1;
+        
 
-
-        //Loads the respective setting if it exists, if not it is reset and set to the default setting
-        #region SETTINGS
-        if (activeSceneName == "MainMenu" || activeSceneName == "InGame")
+        if (sceneName == "InGame")
         {
-            if (PlayerPrefs.HasKey("RESOLUTION"))
-            {
-                LOAD_RESOLUTION();
-            }
-            else
-            {
-                RESET_RESOLUTION();
-            }
+            player = GameObject.Find("Player");
+            eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
 
-            if (PlayerPrefs.HasKey("FRAMERATE"))
-            {
-                LOAD_FRAMERATE();
-            }
-            else
-            {
-                RESET_FRAMERATE();
-            }
+            optionsCanvas.enabled = true;
 
-            if (PlayerPrefs.HasKey("FULLSCREEN"))
-            {
-                LOAD_FULLSCREEN();
-            }
-            else
-            {
-                RESET_FULLSCREEN();
-            }
+            pauseMenu.SetActive(true);
+            settingsMenu.SetActive(true);
 
-            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
-            {
-                LOAD_MUSIC_VOLUME();
-            }
-            else
-            {
-                RESET_MUSIC_VOLUME();
-            }
-
-            if (PlayerPrefs.HasKey("SFX_VOLUME"))
-            {
-                LOAD_SFX_VOLUME();
-            }
-            else
-            {
-                RESET_SFX_VOLUME();
-            }
-
-            if (PlayerPrefs.HasKey("FPS"))
-            {
-                LOAD_FPS();
-            }
-            else
-            {
-                RESET_FPS();
-            }
+            //Loads the values from the current loaded file
+            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
         }
-        #endregion SETTINGS
 
-        #region LOAD-FILENAMES
-        //If there is SaveData, it will be displayed in the respective buttons
-        if (PlayerPrefs.HasKey("FILETIME-1"))
-        {
-            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
-        }
-        else
-        {
-            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
-        }
-        if (PlayerPrefs.HasKey("FILETIME-2"))
-        {
-            saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
-        }
-        else
-        {
-            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
-        }
-        if (PlayerPrefs.HasKey("FILETIME-3"))
-        {
-            saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
-        }
-        else
-        {
-            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
-        }
-        #endregion LOAD-FILENAMES
+    }
 
+    private void LoadFileNames()
+    {
+        saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
+        
+        saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
 
+        saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
 
-
+        PlayerPrefs.Save();
     }
 
     private void Update()
@@ -265,8 +245,7 @@ public class Manager : MonoBehaviour
         PlayerPrefs.SetString("FILETIME-" + file, "-Empty-");
         PlayerPrefs.Save();
 
-
-        GameObject.Find("SaveFile-" + file).GetComponentInChildren<TextMeshProUGUI>().text = "-Empty-";
+        LoadFileNames();
     }
 
     void SAVE_PLAYER_LOCATION(int file)
@@ -331,8 +310,6 @@ public class Manager : MonoBehaviour
         button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
     }
 
-
-
     public void LoadSaveFile(Button button)
     {
         if(button.gameObject.name == "SaveFile-1")
@@ -347,6 +324,13 @@ public class Manager : MonoBehaviour
         {
             file = 3;
         }
+
+
+        DateTime currentDate = DateTime.Today;
+        savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
+
+        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+        savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
 
 
         if (!sceneSwitch)
@@ -405,22 +389,42 @@ public class Manager : MonoBehaviour
     }
 
 
-    public void PauseGame(InputAction.CallbackContext context)
+    public void EscapeInput(InputAction.CallbackContext context)
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (sceneName == "InGame")
         {
-
             if (context.performed)
             {
-                if (optionsCanvas.enabled)
+                if (!inventoryMain.activeSelf && !questLog.activeSelf)
                 {
-                    optionsCanvas.enabled = false;
-                    Time.timeScale = 1;
+                    if (optionsCanvas.enabled)
+                    {
+
+                        optionsCanvas.enabled = false;
+                        pauseMenu.SetActive(true);
+                        saveMenu.SetActive(false);
+                        quitMenu.SetActive(false);
+                        mainMenuQ.SetActive(false);
+                        settingsMenu.SetActive(false);
+                        
+                    }
+                    else
+                    {
+                        optionsCanvas.enabled = true;
+                        //pauseMenu.SetActive(true);
+                        Time.timeScale = 0;
+                    }
                 }
                 else
                 {
-                    optionsCanvas.enabled = true;
-                    Time.timeScale = 0;
+                    if(inventoryMain.activeSelf)
+                    {
+                        OpenInventory();
+                    }
+                    else if (questLog.activeSelf)
+                    {
+                        OpenQuestLog();
+                    }
                 }
             }
         }
@@ -495,6 +499,7 @@ public class Manager : MonoBehaviour
         {
             SceneManager.LoadScene("LoadGame");
             sceneSwitch = false;
+            LoadFileNames();
         }
 
         ButtonAnimation(button);
@@ -529,17 +534,13 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-
-
             pauseMenu.SetActive(true);
-
-
             saveMenu.SetActive(false);
             settingsMenu.SetActive(false);
             creditsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
-            if (SceneManager.GetActiveScene().name == "InGame")
+            if (sceneName == "InGame")
             {
                 quitMenu.SetActive(false);
             }
@@ -652,8 +653,6 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
-
-
 
     public void SAVEFILE(int file)
     {
@@ -828,31 +827,37 @@ public class Manager : MonoBehaviour
     void RESET_FPS()
     {
         PlayerPrefs.SetInt("FPS", 0);
+        PlayerPrefs.Save();
         LOAD_FPS();
     }
     void RESET_FULLSCREEN()
     {
         PlayerPrefs.SetInt("FULLSCREEN", 0);
+        PlayerPrefs.Save();
         LOAD_FULLSCREEN();
     }
     void RESET_FRAMERATE()
     {
         PlayerPrefs.SetInt("FRAMERATE", 0);
+        PlayerPrefs.Save();
         LOAD_FRAMERATE();
     }
     void RESET_RESOLUTION()
     {
         PlayerPrefs.SetInt("RESOLUTION", 0);
+        PlayerPrefs.Save();
         LOAD_RESOLUTION();
     }
     void RESET_MUSIC_VOLUME()
     {
         PlayerPrefs.SetFloat("MUSIC_VOLUME", 1);
+        PlayerPrefs.Save();
         LOAD_MUSIC_VOLUME();
     }
     void RESET_SFX_VOLUME()
     {
         PlayerPrefs.SetFloat("SFX_VOLUME", 1);
+        PlayerPrefs.Save();
         LOAD_SFX_VOLUME();
     }
     #endregion RESETSETTINGS
