@@ -29,6 +29,8 @@ public class Manager : MonoBehaviour
     private int file;
 
     private string activeSceneName;
+
+    //All three Files for saving/loading gameStates
     public GameObject saveFile1;
     public GameObject saveFile2;
     public GameObject saveFile3;
@@ -132,7 +134,6 @@ public class Manager : MonoBehaviour
         mainMenuQ.SetActive(false);
         settingsMenu.SetActive(false);
     }
-
     private void LoadFileNames()
     {
         saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
@@ -141,8 +142,6 @@ public class Manager : MonoBehaviour
 
         saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
     }
-
-
     public void PauseGame()
     {
         if(Time.timeScale == 1)
@@ -165,7 +164,6 @@ public class Manager : MonoBehaviour
         uiSound.PlayOneShot(buttonClick);
         uiSound.pitch = Random.Range(.8f, 1.2f);
     }
-
     private void ButtonAnimation(Button button)
     {
         exitHover(button);
@@ -179,7 +177,6 @@ public class Manager : MonoBehaviour
 
         button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
     }
-
     public void LoadSaveFile(Button button)
     {
         if(button.gameObject.name == "SaveFile-1")
@@ -229,8 +226,6 @@ public class Manager : MonoBehaviour
 
         LoadFileNames();
     }
-
-
     public void enterHover(Button button)
     {
         if (delaySwitchScene == false)
@@ -242,7 +237,6 @@ public class Manager : MonoBehaviour
             }
         }
     }
-
     public void exitHover(Button button)
     {
         if (button.gameObject.name != "CreditsButton")
@@ -250,7 +244,6 @@ public class Manager : MonoBehaviour
             button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         }
     }
-
 
     #region InputAction
     public void OpenInventoryInput(InputAction.CallbackContext context)
