@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 226c945ea6e89364da8cc8a4955aae83
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Bradley DJR Variable
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: fa9b1d67ff002244a907e9c88f1b2c66, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

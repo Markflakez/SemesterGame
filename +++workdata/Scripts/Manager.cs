@@ -56,11 +56,19 @@ public class Manager : MonoBehaviour
     [Header("InGame/Inventory")]
     public GameObject backDrop;
     public GameObject inventoryMain;
+    public GameObject inventoryHotbar;
+    public GameObject inventoryHotbarBackBoard;
     public GameObject mainMenuBackBoard;
+
+    public GameObject graphicsPanel;
+    public GameObject controlsPanel;
+    public GameObject audioPanel;
+
 
     private float buttonDelay = .15f;
     private GameObject saveFiles;
     private GameSettings gameSettings;
+    public GameObject dialogBox;
     private EggHealthRadiation eggHealthRadiation;
     private GameObject player;
     private TextMeshProUGUI savedTimeDate;
@@ -74,6 +82,11 @@ public class Manager : MonoBehaviour
     public string sceneName;
 
     public bool isPaused = false;
+
+    public GameObject graphicsButton;
+    public GameObject controlsButton;
+    public GameObject audioButton;
+
 
     public InputActionAsset playerActionMap;
 
@@ -109,6 +122,7 @@ public class Manager : MonoBehaviour
         if(sceneName != "LoadGame")
         {
             LoadSettings();
+            graphicsPanel.SetActive(true);
         }
         
     }
@@ -231,7 +245,7 @@ public class Manager : MonoBehaviour
         if (delaySwitchScene == false)
         {
             uiSound.PlayOneShot(buttonHover);
-            if (button.gameObject.name != "CreditsButton")
+            if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton")
             {
                 button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
             }
@@ -239,16 +253,35 @@ public class Manager : MonoBehaviour
     }
     public void exitHover(Button button)
     {
-        if (button.gameObject.name != "CreditsButton")
+        if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton")
         {
             button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         }
     }
 
+    
+
+    IEnumerator DelaySwitchScene(string function, Button button)
+    {
+        if (delaySwitchScene == false)
+        {
+            delaySwitchScene = true;
+            ButtonSound();
+
+
+            yield return new WaitForSecondsRealtime(buttonDelay);
+
+            exitHover(button);
+            sceneSwitch = true;
+            SendMessage(function, button);
+            delaySwitchScene = false;
+        }
+    }
+    
     #region InputAction
     public void OpenInventoryInput(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
             OpenInventory();
         }
@@ -268,7 +301,7 @@ public class Manager : MonoBehaviour
         {
             if (context.performed)
             {
-                if (!inventoryMain.activeSelf && !questLog.activeSelf)
+                if (!inventoryMain.activeSelf && !questLog.activeSelf && !dialogBox.activeSelf)
                 {
                     if (!isPaused)
                     {
@@ -282,9 +315,13 @@ public class Manager : MonoBehaviour
                         PauseGame();
                     }
                 }
+                else if (dialogBox.activeSelf)
+                {
+                    player.GetComponent<Dialog>().CloseChat();
+                }
                 else
                 {
-                    if(inventoryMain.activeSelf)
+                    if (inventoryMain.activeSelf)
                     {
                         OpenInventory();
                     }
@@ -298,23 +335,6 @@ public class Manager : MonoBehaviour
     }
 
     #endregion InputAction
-
-    IEnumerator DelaySwitchScene(string function, Button button)
-    {
-        if (delaySwitchScene == false)
-        {
-            delaySwitchScene = true;
-            ButtonSound();
-
-
-            yield return new WaitForSecondsRealtime(buttonDelay);
-
-            exitHover(button);
-            sceneSwitch = true;
-            SendMessage(function, button);
-            delaySwitchScene = false;
-        }
-    }
 
     #region Menus/Buttons
     public void OpenInventory()
@@ -515,6 +535,67 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    public void GraphicsButton(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("GraphicsButton", button));
+        }
+        else if (sceneSwitch)
+        {
+            graphicsPanel.SetActive(true);
+            controlsPanel.SetActive(false);
+            audioPanel.SetActive(false);
+            graphicsButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            audioButton.transform.localScale = new Vector3(1, 1, 1);
+            controlsButton.transform.localScale = new Vector3(1, 1, 1);
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
+    public void AudioButton(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("AudioButton", button));
+        }
+        else if (sceneSwitch)
+        {
+            audioPanel.SetActive(true);
+            controlsPanel.SetActive(false);
+            graphicsPanel.SetActive(false);
+            audioButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            graphicsButton.transform.localScale = new Vector3(1, 1, 1);
+            controlsButton.transform.localScale = new Vector3(1, 1, 1);
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
+    public void ControlsButton(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("ControlsButton", button));
+        }
+        else if (sceneSwitch)
+        {
+            controlsPanel.SetActive(true);
+            audioPanel.SetActive(false);
+            graphicsPanel.SetActive(false);
+            controlsButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            audioButton.transform.localScale = new Vector3(1, 1, 1);
+            graphicsButton.transform.localScale = new Vector3(1, 1, 1);
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
     public void BackButton()
     {
         //Returns to the Main Menu Screen

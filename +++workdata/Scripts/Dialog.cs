@@ -11,6 +11,7 @@ public class Dialog : MonoBehaviour
 {
     public GameObject pc;
     public GameObject player;
+    public GameObject manager;
 
     private GameObject currentNPC;
 
@@ -131,6 +132,8 @@ public class Dialog : MonoBehaviour
         //currentNPC.GetComponent<NPCMovement>().ExitDialog();
         index = 0;
         text.text = "";
+        manager.GetComponent<Manager>().inventoryHotbar.SetActive(true);
+        manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(true);
         canTalk = true;
         typeAudio.Stop();
         text.enabled = false;
@@ -230,6 +233,8 @@ public class Dialog : MonoBehaviour
     {
         if (canTalk && isInteracting && !virtualCamera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CameraPanOut"))
         {
+            manager.GetComponent<Manager>().inventoryHotbar.SetActive(false);
+            manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(false);
             canTalk = false;
             e.enabled = false;
             text.enabled = true;
