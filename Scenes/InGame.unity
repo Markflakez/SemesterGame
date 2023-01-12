@@ -2547,7 +2547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &276800501
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25089,7 +25089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230396, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: field of view
-      value: 60
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230788, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_Follow
@@ -25097,7 +25097,7 @@ PrefabInstance:
       objectReference: {fileID: 1172664349}
     - target: {fileID: 7802986897225230788, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_Lens.FieldOfView
-      value: 60
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230789, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_Name

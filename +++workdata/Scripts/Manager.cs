@@ -118,8 +118,7 @@ public class Manager : MonoBehaviour
             //Loads the values from the current loaded file
             LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
         }
-
-        if(sceneName != "LoadGame")
+        if (sceneName != "LoadGame")
         {
             LoadSettings();
             graphicsPanel.SetActive(true);
@@ -735,57 +734,30 @@ public class Manager : MonoBehaviour
         {
             LOAD_RESOLUTION();
         }
-        else
-        {
-            RESET_RESOLUTION();
-        }
 
         if (PlayerPrefs.HasKey("FRAMERATE"))
         {
             LOAD_FRAMERATE();
-        }
-        else
-        {
-            RESET_FRAMERATE();
         }
 
         if (PlayerPrefs.HasKey("FULLSCREEN"))
         {
             LOAD_FULLSCREEN();
         }
-        else
-        {
-            RESET_FULLSCREEN();
-        }
 
         if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
         {
             LOAD_MUSIC_VOLUME();
-        }
-        else
-        {
-            RESET_MUSIC_VOLUME();
         }
 
         if (PlayerPrefs.HasKey("SFX_VOLUME"))
         {
             LOAD_SFX_VOLUME();
         }
-        else
-        {
-            RESET_SFX_VOLUME();
-        }
 
-        if (sceneName == "InGame")
+        if (PlayerPrefs.HasKey("FPS"))
         {
-            if (PlayerPrefs.HasKey("FPS"))
-            {
-                LOAD_FPS();
-            }
-            else
-            {
-                RESET_FPS();
-            }
+            LOAD_FPS();
         }
     }
     public void ResetSettings()

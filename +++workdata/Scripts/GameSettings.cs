@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Windows;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class GameSettings : MonoBehaviour
 {
@@ -112,7 +113,10 @@ public class GameSettings : MonoBehaviour
             int framerate = Mathf.RoundToInt(frameCount / elapsedTime);
 
             // Update the text with the current framerate
-            fpsDisplay.text = "FPS: " + framerate;
+            if (SceneManager.GetActiveScene().name == "InGame")
+            {
+                fpsDisplay.text = "FPS: " + framerate;
+            }
 
             // Reset the counters
             frameCount = 0;
