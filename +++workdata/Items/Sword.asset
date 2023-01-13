@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   itemName: Sword
-  itemDescription: it's really big, trust me
+  itemDescription: kill Pascal
   itemCount: 0
-  type: 0
-  stackable: 1
+  type: 1
+  stackable: 0
   image: {fileID: 21300000, guid: deff71b5934c258458d8beff4d77afba, type: 3}

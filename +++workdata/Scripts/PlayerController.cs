@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
 {
 
     // The force that will be applied to the enemies when they are knocked
-    public float force = 5.0f;
+    public float force = 10.0f;
 
     // The range within which the player can knock the enemies
-    public float range = 5.0f;
+    public float range = 1.5f;
 
     // The layer on which the enemies are placed
     public LayerMask enemyLayer;
