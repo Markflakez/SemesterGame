@@ -46,7 +46,7 @@ public class Manager : MonoBehaviour
     public GameObject questText;
     public GameObject questAvatar;
     public GameObject questHeaderText;
-    public GameObject inventoryManager;
+    public InventoryManager inventoryManager;
 
     public Item egg;
     public Item sword;
@@ -80,6 +80,9 @@ public class Manager : MonoBehaviour
     private Vector2 playerPos;
 
     public string sceneName;
+
+    public Item[] items;
+    private Item currentItem;
 
     public bool isPaused = false;
 
@@ -116,7 +119,7 @@ public class Manager : MonoBehaviour
             eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
 
             //Loads the values from the current loaded file
-            LOADFILE(PlayerPrefs.GetInt("CurrentFile"));
+            LOADFILE();
         }
         if (sceneName != "LoadGame")
         {
@@ -159,11 +162,13 @@ public class Manager : MonoBehaviour
     {
         if(Time.timeScale == 1)
         {
+            player.GetComponent<PlayerController>().isAttacking = true;
             Time.timeScale = 0;
             isPaused = true;
         }
         else
         {
+            player.GetComponent<PlayerController>().isAttacking = false;
             Time.timeScale = 1;
             isPaused = false;
         }
@@ -640,10 +645,12 @@ public class Manager : MonoBehaviour
         savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
 
         //Saves the current Player Health and Position
-        SAVE_PLAYER_HEALTH(file);
-        SAVE_PLAYER_LOCATION(file);
+        //SAVE_PLAYER_HEALTH(file);
+        //SAVE_PLAYER_LOCATION(file);
+
+        SAVE_INVENTORY(PlayerPrefs.GetInt("CurrentFile"));
     }
-    public void LOADFILE(int file)
+    public void LOADFILE()
     {
         //savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
         //fileName = GameObject.Find("FileName-" + file).GetComponent<TMP_InputField>();
@@ -651,8 +658,10 @@ public class Manager : MonoBehaviour
         //savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
         //fileName.text = PlayerPrefs.GetString("FILENAME-" + file);
 
-        LOAD_PLAYER_HEALTH(file);
-        LOAD_PLAYER_LOCATION(file);
+        //LOAD_PLAYER_HEALTH(file);
+        //LOAD_PLAYER_LOCATION(file);
+
+        LOAD_INVENTORY();
 
     }
     #region LOADSAVE
@@ -678,19 +687,49 @@ public class Manager : MonoBehaviour
     }
     public void LOAD_INVENTORY()
     {
-        foreach (var inventorySlot in inventoryManager.GetComponent<InventoryManager>().inventorySlots)
-        {
-            //Destroy(inventorySlot.gameObject.transform.GetChild(0).gameObject);
+        int file = PlayerPrefs.GetInt("CurrentFile");
 
-            if (PlayerPrefs.HasKey("Inventory-SLOT-" + PlayerPrefs.GetInt("CurrentFile") + inventorySlot))
+        {
+            for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
             {
-                Debug.Log("ye");
-                inventoryManager.GetComponent<InventoryManager>().SpawnNewItem(egg, inventorySlot);
-                inventorySlot.gameObject.GetComponentInChildren<Text>().text = PlayerPrefs.GetString("ITEM_COUNT-" + PlayerPrefs.GetInt("CurrentFile") + inventorySlot);
+                if (PlayerPrefs.HasKey("INVENTORY-ITEM-NAME" + file + i))
+                {
+                    InventorySlot slot = inventoryManager.inventorySlots[i];
+                    InventorySlot spawnSlot = inventoryManager.inventorySlots[PlayerPrefs.GetInt("INVENTORY-ITEM-SLOT" + file + i)];
+                    FindItemById(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i), i.ToString(), file.ToString());
+
+                    inventoryManager.SpawnNewItem(currentItem, spawnSlot);
+
+                    //inventoryManager.GetComponent<InventoryManager>().inventorySlots[i].GetComponentInChildren<InventoryItem>(). = PlayerPrefs.GetString("InventoryItemName" + file + i);
+                    slot.GetComponentInChildren<InventoryItem>().count = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i);
+                    slot.GetComponentInChildren<InventoryItem>().countText.text = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i).ToString();
+                }
+                else
+                {
+                    // key is not found, skip this item and check the next
+                    continue;
+                }
             }
         }
     }
     #endregion LOADSAVE
+
+    public Item FindItemById(string name, string currentIndex, string currentFile)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            string itemName = name.Replace(currentFile + currentIndex, "");
+
+            if (items[i].name == itemName)
+            {
+                currentItem = items[i];
+            }
+        }
+        return null;
+    }
+
+
+
 
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH(int file)
@@ -708,20 +747,26 @@ public class Manager : MonoBehaviour
     }
     public void SAVE_INVENTORY(int file)
     {
-
-        foreach (var inventorySlot in inventoryManager.GetComponent<InventoryManager>().inventorySlots)
+        for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
         {
-            if (inventorySlot.gameObject.transform.childCount > 0)
+            InventorySlot slot = inventoryManager.inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null)
             {
-                PlayerPrefs.SetString("Inventory-SLOT-" + file + inventorySlot, inventorySlot.gameObject.name);
-                PlayerPrefs.SetString("ITEM_NAME-" + file + inventorySlot, inventorySlot.gameObject.GetComponentInChildren<InventoryItem>().item.itemName);
-                PlayerPrefs.SetInt("ITEM_COUNT-" + file + inventorySlot, inventorySlot.gameObject.GetComponentInChildren<InventoryItem>().count);
+                PlayerPrefs.SetString("INVENTORY-ITEM-NAME" + file + i, itemInSlot.item.itemName);
+                PlayerPrefs.SetInt("INVENTORY-ITEM-COUNT" + file + i, itemInSlot.count);
+                PlayerPrefs.SetInt("INVENTORY-ITEM-SLOT" + file + i, i);
 
-                Debug.Log(PlayerPrefs.GetString("ITEM_NAME-" + file + inventorySlot));
-                Debug.Log(PlayerPrefs.GetInt("ITEM_COUNT-" + file + inventorySlot));
+                Debug.Log(PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i));
+                Debug.Log(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i));
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                continue;
             }
         }
-        PlayerPrefs.Save();
+        
 
 
     }

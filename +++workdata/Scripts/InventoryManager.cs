@@ -23,7 +23,6 @@ public class InventoryManager : MonoBehaviour
         ChangeSelectedSlot(0);
         foreach(var item in startItems)
         {
-
         }
     }
 
@@ -67,7 +66,7 @@ public class InventoryManager : MonoBehaviour
             if (itemInSlot != null && itemInSlot.item == item && itemInSlot.count < maxStackedItem && itemInSlot.item.stackable == true)
             {
                 itemInSlot.count++;
-                itemInSlot.RefreshCount(item);
+                itemInSlot.RefreshCount();
                 if(item.name == "Egg")
                 {
                     sounds.PlayOneShot(pickup);

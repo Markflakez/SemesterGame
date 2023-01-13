@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [HideInInspector]public Item item;
-    [HideInInspector]public int count = 1;
+    public int count = 1;
     [HideInInspector]public Transform parentAfterDrag;
 
 
@@ -24,21 +24,26 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         infoTextImage.enabled = false;
     }
 
+    private void Start()
+    {
+        RefreshCount();
+        ScaleInventoryItem();
+    }
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
         image.sprite = newItem.image;
-        RefreshCount(item);
-        RefreshItemDescription(item);
+        RefreshCount();
+        RefreshItemDescription();
     }
 
-    public void RefreshCount(Item item)
+    public void RefreshCount()
     {
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
 
-        RefreshItemDescription(item);
+        RefreshItemDescription();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -68,7 +73,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
 
 
-    public void RefreshItemDescription(Item item)
+    public void RefreshItemDescription()
     {
         infoText.text = "<size=60>" + item.itemName + " ";
         if(countText.text != "1")

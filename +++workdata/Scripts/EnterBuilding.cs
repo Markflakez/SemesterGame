@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class EnterBuilding : MonoBehaviour
@@ -25,6 +26,7 @@ public class EnterBuilding : MonoBehaviour
         if(context.performed && isInDistance)
         {
             Debug.Log("enters building");
+
         }
     }
 

@@ -89,6 +89,7 @@ public class Dialog : MonoBehaviour
     //Wenn der Dialogtext dem Text aus dem jetzigen Index des Arrays entspricht, wird der NextButton aktiviert und der Tippsound gestoppt.
     IEnumerator Type()
     {
+
         typeAudio.PlayOneShot(typeSound);
 
         if (sentences[index].Contains("   "))
@@ -116,7 +117,7 @@ public class Dialog : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(typingSpeed);
+            yield return new WaitForSecondsRealtime(typingSpeed);
         }
 
     }
@@ -134,6 +135,7 @@ public class Dialog : MonoBehaviour
         text.text = "";
         manager.GetComponent<Manager>().inventoryHotbar.SetActive(true);
         manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(true);
+        manager.GetComponent<Manager>().PauseGame();
         canTalk = true;
         typeAudio.Stop();
         text.enabled = false;
@@ -235,6 +237,7 @@ public class Dialog : MonoBehaviour
         {
             manager.GetComponent<Manager>().inventoryHotbar.SetActive(false);
             manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(false);
+            manager.GetComponent<Manager>().PauseGame();
             canTalk = false;
             e.enabled = false;
             text.enabled = true;
