@@ -165,7 +165,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         canMove = true;
-        tr = GetComponent<TrailRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -287,8 +286,7 @@ public class PlayerController : MonoBehaviour
         {
             isDashing = true;
             canDash = false;
-            tr.emitting = true;
-            StartCoroutine(DashCoaldown((float)1));
+            StartCoroutine(DashCoaldown(1));
             StartCoroutine(DashLength((float).2));
         }
     }
