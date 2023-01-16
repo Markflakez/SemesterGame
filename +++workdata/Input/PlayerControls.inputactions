@@ -42,10 +42,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SelectSlot",
+                    "name": "SelectSlot2",
                     "type": "Value",
                     "id": "2e6b69a8-3032-4cd7-94ff-a906b6d2ef8b",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SelectSlot1",
+                    "type": "Value",
+                    "id": "0197cee9-620e-4e3f-99c8-99c7e81854b5",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -72,6 +81,15 @@
                     "name": "PauseGame",
                     "type": "Button",
                     "id": "faa6bbf7-5bb4-4bb5-b62b-aa59c653b16e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThrowEgg",
+                    "type": "Button",
+                    "id": "a4cc93ba-e949-470a-ae28-83f2d3d1860d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -126,55 +144,11 @@
                 {
                     "name": "",
                     "id": "c20e68ef-fc3a-426f-b5c4-73b54ba27e92",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectSlot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d753a75b-b2c0-4cd7-992d-ecbab0ec4ebf",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SelectSlot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e5ea4c19-9f92-4af1-bb5f-01fcac625e30",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectSlot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e7537ca1-9338-4bad-9cf6-a1b2f2346559",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectSlot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dbcbb4dd-7e40-44f7-8c8b-f246f75c67b7",
-                    "path": "<Keyboard>/5",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectSlot",
+                    "action": "SelectSlot2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -208,6 +182,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d05f874-6661-47cb-a6c9-19a1fe4fee28",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectSlot1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "804b7ff4-0f39-443c-a4bc-20a072cd4032",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectSlot1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "991690ed-dd75-44de-aaa3-4ac7fd3c2bd7",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectSlot2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c3f3907d-4b3a-40df-9c9e-b9c7ff114562",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThrowEgg",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

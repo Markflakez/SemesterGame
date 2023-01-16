@@ -9,6 +9,9 @@ public class InventoryManager : MonoBehaviour
     public AudioSource sounds;
     public AudioClip pickup;
 
+    public Manager manager;
+    public string selectedItemName;
+
     public Item[] startItems;
 
     public int maxStackedItem = 12;
@@ -16,45 +19,83 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject inventoryItemPrefab;
 
-    int selectedSlot = -1;
+    public int selectedSlot;
 
     private void Start()
     {
         ChangeSelectedSlot(0);
-        foreach(var item in startItems)
+        foreach (var item in startItems)
         {
         }
     }
 
-    private void Update()
-    {
-        if(Input.inputString != null)
-        {
-            bool isNumber = int.TryParse(Input.inputString, out int number);
-            if(isNumber && number > 0 && number < 6)
-            {
-                ChangeSelectedSlot(number -1);
-            }
-        }
-    }
-
-    public void SelectSlot(InputAction.CallbackContext context)
+    public void SelectSlot_1(InputAction.CallbackContext context)
     {
         if(context.performed)
+        {
+            ChangeSelectedSlot(0);
+        }
+    }
+
+    public void SelectSlot_2(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
             ChangeSelectedSlot(1);
         }
     }
+
     void ChangeSelectedSlot(int newValue)
     {
         if (selectedSlot >= 0)
         {
             inventorySlots[selectedSlot].Deselect();
+        }
+        inventorySlots[newValue].Select();
+        selectedSlot = newValue;
         
-            inventorySlots[newValue].Select();
-            selectedSlot = newValue;
+        CheckSelectedItem();
+    }
+
+    public void CheckSelectedItem()
+    {
+        InventorySlot slot = inventorySlots[selectedSlot];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+
+        if (itemInSlot != null)
+        {
+            selectedItemName = itemInSlot.item.itemName;
+        }
+        else
+        {
+            selectedItemName = null;
+        }
+
+        if (selectedItemName == "Egg")
+        {
+            manager.eggIndicator.SetActive(true);
+        }
+        else
+        {
+            manager.eggIndicator.SetActive(false);
         }
     }
+
+    public void RemoveItem(Item item)
+    {
+        InventorySlot slot = inventorySlots[selectedSlot];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot != null)
+        {
+            itemInSlot.count--;
+            itemInSlot.RefreshCount();
+            if(itemInSlot.count == 0)
+            {
+                Destroy(itemInSlot.gameObject);
+            }
+        }
+    }
+
 
     public bool AddItem(Item item)
     {
@@ -102,7 +143,7 @@ public class InventoryManager : MonoBehaviour
 
         if (inventoryItem.transform.parent.name == "Inventory-Hotbar")
         {
-            inventoryItem.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+            inventoryItem.transform.GetChild(0).localScale = new Vector3((float).8, (float).8, (float).8);
         }
         else
         {

@@ -9,11 +9,12 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public Image image;
     public Color selectedColor, notSelectedColor;
 
-    private void Awake()
+    private InventoryManager inventoryManager;
+
+    private void Start()
     {
         Deselect();
     }
-
 
 
     public void Select()
@@ -33,6 +34,9 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
             inventoryItem.parentAfterDrag = transform;
+
+            inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+            inventoryManager.CheckSelectedItem();
         }
     }
 

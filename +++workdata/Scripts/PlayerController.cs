@@ -25,6 +25,13 @@ public class PlayerController : MonoBehaviour
     public bool isTyping = false;
 
     public GameObject GhoulPrefab;
+    public GameObject eggThrowablePrefab;
+    public Camera camera;
+
+    public InventoryManager inventoryManager;
+
+    private float throwForce = 10;
+    private float rotationSpeed = 2f;
 
 
     #region Variables
@@ -198,7 +205,30 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
+    public void ThrowEgg(InputAction.CallbackContext context)
+    {
+        if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+        {
+            // Instantiate the object to throw
+            GameObject thrownObject = Instantiate(eggThrowablePrefab, transform.position, Quaternion.identity);
 
+            // Get the direction to the mouse cursor
+            Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 throwDirection = (mousePos - (Vector2)transform.position).normalized;
+
+            // Add force to the object in the direction of the cursor
+            thrownObject.GetComponent<Rigidbody2D>().AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
+
+            // Add rotation to the object
+            thrownObject.GetComponent<Rigidbody2D>().AddTorque(rotationSpeed, ForceMode2D.Impulse);
+            Destroy(thrownObject, 3f);
+            inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+        }
+        else if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+        {
+            Debug.Log("SWORD");
+        }
+    }
 
 
     private void FixedUpdate()

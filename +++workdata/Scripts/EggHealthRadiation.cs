@@ -19,7 +19,7 @@ public class EggHealthRadiation : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI radiationText;
 
-    public float removedSegments;
+    public float removedSegments = 5;
     public float health;
     public float damageDealt;
 
@@ -44,15 +44,15 @@ public class EggHealthRadiation : MonoBehaviour
         healthText.GetComponent<Animator>().Play("BarDamage");
         damageDealt += damage;
         health -= damage;
-        UpdateHealth();
 
         if (health <= 0)
         {
             health = 0;
             damageDealt = 100;
-            UpdateHealth();
+            removedSegments = 10;
+            Application.Quit();
         }
-
+        UpdateHealth();
     }
 
 
@@ -60,16 +60,16 @@ public class EggHealthRadiation : MonoBehaviour
     {
         healthText.text = "";
         healthText.text += health;
-        removedSegments = healthMat.GetFloat("_SegmentCount") / 100 * damageDealt;
+        removedSegments = healthMat.GetFloat("_SegmentCount") / 100 * damageDealt +5;
         healthMat.SetFloat("_RemovedSegments", (int)removedSegments);
     }
 
 
     public void addHealth(int heartHealth)
     {
-        if (health >= 100)
+        if (health >= 50)
         {
-            health = 100;
+            health = 50;
             damageDealt = 0;
             removedSegments = 0;
             UpdateHealth();

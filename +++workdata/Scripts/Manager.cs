@@ -86,6 +86,9 @@ public class Manager : MonoBehaviour
 
     public bool isPaused = false;
 
+    public GameObject eggIndicator;
+
+
     public GameObject graphicsButton;
     public GameObject controlsButton;
     public GameObject audioButton;
@@ -675,7 +678,7 @@ public class Manager : MonoBehaviour
 
         if(!PlayerPrefs.HasKey("PLAYER_HEALTH-" + file))
         {
-            eggHealthRadiation.health = 100;
+            eggHealthRadiation.health = 50;
             eggHealthRadiation.damageDealt = 0;
         }
         eggHealthRadiation.UpdateHealth();

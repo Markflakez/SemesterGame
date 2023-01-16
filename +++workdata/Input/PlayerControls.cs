@@ -64,10 +64,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SelectSlot"",
+                    ""name"": ""SelectSlot2"",
                     ""type"": ""Value"",
                     ""id"": ""2e6b69a8-3032-4cd7-94ff-a906b6d2ef8b"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SelectSlot1"",
+                    ""type"": ""Value"",
+                    ""id"": ""0197cee9-620e-4e3f-99c8-99c7e81854b5"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -94,6 +103,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""PauseGame"",
                     ""type"": ""Button"",
                     ""id"": ""faa6bbf7-5bb4-4bb5-b62b-aa59c653b16e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThrowEgg"",
+                    ""type"": ""Button"",
+                    ""id"": ""a4cc93ba-e949-470a-ae28-83f2d3d1860d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -148,55 +166,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c20e68ef-fc3a-426f-b5c4-73b54ba27e92"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectSlot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d753a75b-b2c0-4cd7-992d-ecbab0ec4ebf"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SelectSlot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e5ea4c19-9f92-4af1-bb5f-01fcac625e30"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectSlot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e7537ca1-9338-4bad-9cf6-a1b2f2346559"",
-                    ""path"": ""<Keyboard>/4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectSlot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dbcbb4dd-7e40-44f7-8c8b-f246f75c67b7"",
-                    ""path"": ""<Keyboard>/5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectSlot"",
+                    ""action"": ""SelectSlot2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -230,6 +204,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d05f874-6661-47cb-a6c9-19a1fe4fee28"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSlot1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""804b7ff4-0f39-443c-a4bc-20a072cd4032"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSlot1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""991690ed-dd75-44de-aaa3-4ac7fd3c2bd7"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectSlot2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3f3907d-4b3a-40df-9c9e-b9c7ff114562"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowEgg"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -316,10 +334,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActionMap_Escape = m_PlayerActionMap.FindAction("Escape", throwIfNotFound: true);
         m_PlayerActionMap_Attack = m_PlayerActionMap.FindAction("Attack", throwIfNotFound: true);
         m_PlayerActionMap_Dash = m_PlayerActionMap.FindAction("Dash", throwIfNotFound: true);
-        m_PlayerActionMap_SelectSlot = m_PlayerActionMap.FindAction("SelectSlot", throwIfNotFound: true);
+        m_PlayerActionMap_SelectSlot2 = m_PlayerActionMap.FindAction("SelectSlot2", throwIfNotFound: true);
+        m_PlayerActionMap_SelectSlot1 = m_PlayerActionMap.FindAction("SelectSlot1", throwIfNotFound: true);
         m_PlayerActionMap_OpenInventory = m_PlayerActionMap.FindAction("OpenInventory", throwIfNotFound: true);
         m_PlayerActionMap_OpenQuestLog = m_PlayerActionMap.FindAction("OpenQuestLog", throwIfNotFound: true);
         m_PlayerActionMap_PauseGame = m_PlayerActionMap.FindAction("PauseGame", throwIfNotFound: true);
+        m_PlayerActionMap_ThrowEgg = m_PlayerActionMap.FindAction("ThrowEgg", throwIfNotFound: true);
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Movement = m_Movement.FindAction("Movement", throwIfNotFound: true);
@@ -386,10 +406,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_Escape;
     private readonly InputAction m_PlayerActionMap_Attack;
     private readonly InputAction m_PlayerActionMap_Dash;
-    private readonly InputAction m_PlayerActionMap_SelectSlot;
+    private readonly InputAction m_PlayerActionMap_SelectSlot2;
+    private readonly InputAction m_PlayerActionMap_SelectSlot1;
     private readonly InputAction m_PlayerActionMap_OpenInventory;
     private readonly InputAction m_PlayerActionMap_OpenQuestLog;
     private readonly InputAction m_PlayerActionMap_PauseGame;
+    private readonly InputAction m_PlayerActionMap_ThrowEgg;
     public struct PlayerActionMapActions
     {
         private @PlayerControls m_Wrapper;
@@ -398,10 +420,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Escape => m_Wrapper.m_PlayerActionMap_Escape;
         public InputAction @Attack => m_Wrapper.m_PlayerActionMap_Attack;
         public InputAction @Dash => m_Wrapper.m_PlayerActionMap_Dash;
-        public InputAction @SelectSlot => m_Wrapper.m_PlayerActionMap_SelectSlot;
+        public InputAction @SelectSlot2 => m_Wrapper.m_PlayerActionMap_SelectSlot2;
+        public InputAction @SelectSlot1 => m_Wrapper.m_PlayerActionMap_SelectSlot1;
         public InputAction @OpenInventory => m_Wrapper.m_PlayerActionMap_OpenInventory;
         public InputAction @OpenQuestLog => m_Wrapper.m_PlayerActionMap_OpenQuestLog;
         public InputAction @PauseGame => m_Wrapper.m_PlayerActionMap_PauseGame;
+        public InputAction @ThrowEgg => m_Wrapper.m_PlayerActionMap_ThrowEgg;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -423,9 +447,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dash.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnDash;
-                @SelectSlot.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
-                @SelectSlot.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
-                @SelectSlot.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot;
+                @SelectSlot2.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot2;
+                @SelectSlot2.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot2;
+                @SelectSlot2.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot2;
+                @SelectSlot1.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot1;
+                @SelectSlot1.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot1;
+                @SelectSlot1.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnSelectSlot1;
                 @OpenInventory.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
                 @OpenInventory.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
                 @OpenInventory.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnOpenInventory;
@@ -435,6 +462,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PauseGame.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
                 @PauseGame.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
                 @PauseGame.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnPauseGame;
+                @ThrowEgg.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
+                @ThrowEgg.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
+                @ThrowEgg.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
             }
             m_Wrapper.m_PlayerActionMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -451,9 +481,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @SelectSlot.started += instance.OnSelectSlot;
-                @SelectSlot.performed += instance.OnSelectSlot;
-                @SelectSlot.canceled += instance.OnSelectSlot;
+                @SelectSlot2.started += instance.OnSelectSlot2;
+                @SelectSlot2.performed += instance.OnSelectSlot2;
+                @SelectSlot2.canceled += instance.OnSelectSlot2;
+                @SelectSlot1.started += instance.OnSelectSlot1;
+                @SelectSlot1.performed += instance.OnSelectSlot1;
+                @SelectSlot1.canceled += instance.OnSelectSlot1;
                 @OpenInventory.started += instance.OnOpenInventory;
                 @OpenInventory.performed += instance.OnOpenInventory;
                 @OpenInventory.canceled += instance.OnOpenInventory;
@@ -463,6 +496,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @PauseGame.started += instance.OnPauseGame;
                 @PauseGame.performed += instance.OnPauseGame;
                 @PauseGame.canceled += instance.OnPauseGame;
+                @ThrowEgg.started += instance.OnThrowEgg;
+                @ThrowEgg.performed += instance.OnThrowEgg;
+                @ThrowEgg.canceled += instance.OnThrowEgg;
             }
         }
     }
@@ -506,10 +542,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnEscape(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnSelectSlot(InputAction.CallbackContext context);
+        void OnSelectSlot2(InputAction.CallbackContext context);
+        void OnSelectSlot1(InputAction.CallbackContext context);
         void OnOpenInventory(InputAction.CallbackContext context);
         void OnOpenQuestLog(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
+        void OnThrowEgg(InputAction.CallbackContext context);
     }
     public interface IMovementActions
     {
