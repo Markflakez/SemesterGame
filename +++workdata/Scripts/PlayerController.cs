@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public float force = 10.0f;
 
     // The range within which the player can knock the enemies
-    public float range = 1.5f;
+    public float range = 2.5f;
 
     // The layer on which the enemies are placed
     public LayerMask enemyLayer;
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject GhoulPrefab;
     public GameObject eggThrowablePrefab;
-    public Camera camera;
+    public Camera mainCamera;
 
     public InventoryManager inventoryManager;
 
@@ -40,14 +41,21 @@ public class PlayerController : MonoBehaviour
     public float speed;
 
     [SerializeField]
-    public bool isDashing;
+    public bool isDashing = false;
     public bool isAttacking;
     private bool canDash = true;
     private float dashSpeed = 16;
+    private float dashDuration = .125f;
+
+    private float cooldownTime = 1.0f;
+
+    private bool onCooldown = false;
 
     public PhysicsMaterial2D physicsMaterial2D;
 
     public LayerMask hardCollisions;
+
+    public float dashDistance = 5;
 
 
     public Volume volume;
@@ -152,22 +160,36 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        if (Input.GetMouseButtonDown(1) && !onCooldown)
+        {
+            Debug.Log("DASH");
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dashDirection = (mousePos - (Vector2)transform.position).normalized;
+            Vector2 dashTarget = (Vector2)transform.position + dashDirection * dashDistance;
+            transform.DOMove(dashTarget, dashDuration, false).SetEase(Ease.Flash).OnComplete(StopDash);
+            onCooldown = true;
+            isDashing = true;
+            Invoke("ResetCooldown", cooldownTime);
+            
+        }
+
+        if (isDashing)
+        {
+            Instantiate(ghostEffect).transform.position = this.transform.position;
+        }
+
+    }
+    void StopDash()
+    {
+        isDashing = false;
     }
 
-    IEnumerator DashCoaldown(float length)
+
+    void ResetCooldown()
     {
-        // Wait for the specified length of time
-        yield return new WaitForSeconds(length);
-        isDashing = false;
-        canDash = true;
+        onCooldown = false;
     }
 
-    IEnumerator DashLength(float length)
-    {
-        // Wait for the specified length of time
-        yield return new WaitForSeconds(length);
-        isDashing = false;
-    }
 
     private void Awake()
     {
@@ -213,7 +235,7 @@ public class PlayerController : MonoBehaviour
             GameObject thrownObject = Instantiate(eggThrowablePrefab, transform.position, Quaternion.identity);
 
             // Get the direction to the mouse cursor
-            Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector2 throwDirection = (mousePos - (Vector2)transform.position).normalized;
 
             // Add force to the object in the direction of the cursor
@@ -224,9 +246,9 @@ public class PlayerController : MonoBehaviour
             Destroy(thrownObject, 3f);
             inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
         }
-        else if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+        if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
         {
-            Debug.Log("SWORD");
+            Attack();
         }
     }
 
@@ -247,51 +269,13 @@ public class PlayerController : MonoBehaviour
             stop = new Vector2(movementX * 0, movementY * 0);
             rb.velocity = stop;
         }
-
-        if(isDashing)
-        {
-            Instantiate(ghostEffect).transform.position = this.transform.position;
-        }
-
-        if (idleState == 0)
-        {
-            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 90);
-            if (isDashing)
-            {
-                rb.AddForce(transform.up * dashSpeed, ForceMode2D.Impulse);
-            }
-
-        }
-        else if (idleState == 1)
-        {
-            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 0);
-            if (isDashing)
-            {
-                rb.AddForce(transform.right * dashSpeed, ForceMode2D.Impulse);
-            }
-        }
-        else if (idleState == 2)
-        {
-            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, -90);
-            if (isDashing)
-            {
-                rb.AddForce(transform.up * -dashSpeed, ForceMode2D.Impulse);
-            }
-        }
-        else if (idleState == 3)
-        {
-            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 180);
-            if (isDashing)
-            {
-                rb.AddForce(transform.right * -dashSpeed, ForceMode2D.Impulse);
-            }
-        }
     }
 
-    public void Attack(InputAction.CallbackContext context)
+    public void Attack()
     {
-        if (context.performed && !isAttacking && !manager.isPaused && IsInRange())
+        if (!isAttacking && !manager.isPaused && IsInRange())
         {
+            anim.Play("PlayerAttackSwordDown");
             // Get all the enemies within range
             Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
 
@@ -308,17 +292,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-    }
-
-    public void Dash(InputAction.CallbackContext context)
-    {
-        if (context.performed && allowDash && canDash)
-        {
-            isDashing = true;
-            canDash = false;
-            StartCoroutine(DashCoaldown(1));
-            StartCoroutine(DashLength((float).2));
-        }
     }
 
 

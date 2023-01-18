@@ -34,6 +34,7 @@ public class InventoryManager : MonoBehaviour
         if(context.performed)
         {
             ChangeSelectedSlot(0);
+            CheckSelectedItem();
         }
     }
 
@@ -42,6 +43,7 @@ public class InventoryManager : MonoBehaviour
         if (context.performed)
         {
             ChangeSelectedSlot(1);
+            CheckSelectedItem();
         }
     }
 
@@ -94,6 +96,7 @@ public class InventoryManager : MonoBehaviour
                 Destroy(itemInSlot.gameObject);
             }
         }
+        CheckSelectedItem();
     }
 
 
@@ -128,6 +131,7 @@ public class InventoryManager : MonoBehaviour
                 return true;
             }
         }
+        CheckSelectedItem();
         return false;
     }
 
@@ -136,6 +140,7 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
+        CheckSelectedItem();
     }
 
     void ScaleInventoryItem(InventorySlot inventoryItem)

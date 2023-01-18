@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4519913297031376895}
   - component: {fileID: 1264815821678510582}
-  - component: {fileID: 3211188648493014069}
+  - component: {fileID: 3010365608648529675}
   - component: {fileID: 3361723192161932873}
   - component: {fileID: 8867207669139208630}
   m_Layer: 5
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 70.009995, y: 70.009995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1264815821678510582
 CanvasRenderer:
@@ -48,7 +48,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8897979869683606586}
   m_CullTransparentMesh: 1
---- !u!114 &3211188648493014069
+--- !u!114 &3010365608648529675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b55fadff8f4139646818d7351b107009, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: 85412d65faa114e4caf3a032b968efd4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_UseSpriteMesh: 1
   m_PixelsPerUnitMultiplier: 1
 --- !u!114 &3361723192161932873
 MonoBehaviour:
@@ -114,6 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391a002f59f886a4080f91a5ebe51f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 3211188648493014069}
-  selectedColor: {r: 0, g: 0.100815296, b: 1, a: 1}
+  image: {fileID: 3010365608648529675}
+  selectedColor: {r: 1, g: 0.15846762, b: 0, a: 1}
   notSelectedColor: {r: 1, g: 1, b: 1, a: 1}

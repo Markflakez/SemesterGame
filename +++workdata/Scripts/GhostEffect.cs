@@ -9,7 +9,7 @@ public class GhostEffect : MonoBehaviour
     private PlayerController pc;
 
 
-    public float invokeSpeed = 2;
+    private float invokeSpeed = 15f;
 
 
 

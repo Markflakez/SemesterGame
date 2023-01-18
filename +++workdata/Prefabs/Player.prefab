@@ -233,7 +233,6 @@ GameObject:
   - component: {fileID: 5523723489648766037}
   - component: {fileID: 5523723489648766062}
   - component: {fileID: 5523723489648766058}
-  - component: {fileID: 5717837896835175849}
   - component: {fileID: 5010586743985958775}
   - component: {fileID: 5523723489648766036}
   - component: {fileID: 5523723489648766039}
@@ -304,6 +303,9 @@ MonoBehaviour:
   plane: {fileID: 0}
   isTyping: 0
   GhoulPrefab: {fileID: 1083718491972997592, guid: 2a856a6541ca461418f6a2ef0d31390a, type: 3}
+  eggThrowablePrefab: {fileID: 0}
+  camera: {fileID: 0}
+  inventoryManager: {fileID: 0}
   speed: 5
   isDashing: 0
   isAttacking: 0
@@ -474,41 +476,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &5717837896835175849
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523723489648766061}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.04172968, y: -0.88435537}
-  m_Size: {x: 1.0919546, y: 0.430216}
-  m_Direction: 1
 --- !u!61 &5010586743985958775
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -605,18 +572,18 @@ MonoBehaviour:
     m_ActionName: Movement/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5523723489648766063}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Attack
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
     m_ActionId: e857f760-983c-428d-9644-879a19d8fd97
     m_ActionName: PlayerActionMap/Attack[/Mouse/leftButton]
   - m_PersistentCalls:

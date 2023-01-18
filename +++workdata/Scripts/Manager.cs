@@ -88,6 +88,7 @@ public class Manager : MonoBehaviour
 
     public GameObject eggIndicator;
 
+    public bool canThrowEgg = true;
 
     public GameObject graphicsButton;
     public GameObject controlsButton;
@@ -98,9 +99,8 @@ public class Manager : MonoBehaviour
 
     private void Awake()
     {
-        sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName != "LoadGame")
+        if (SceneManager.GetActiveScene().name != "LoadGame")
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
@@ -116,7 +116,7 @@ public class Manager : MonoBehaviour
         DOTween.timeScale = 1;
         Time.timeScale = 1;
 
-        if (sceneName == "InGame")
+        if (SceneManager.GetActiveScene().name == "InGame")
         {
             player = GameObject.Find("Player");
             eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
@@ -124,7 +124,7 @@ public class Manager : MonoBehaviour
             //Loads the values from the current loaded file
             LOADFILE();
         }
-        if (sceneName != "LoadGame")
+        if (SceneManager.GetActiveScene().name != "LoadGame")
         {
             LoadSettings();
             graphicsPanel.SetActive(true);
@@ -198,9 +198,10 @@ public class Manager : MonoBehaviour
 
         button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
     }
-    public void LoadSaveFile(Button button)
+    public void LoadSaveFile(Button  button)
     {
-        if(button.gameObject.name == "SaveFile-1")
+
+        if (button.gameObject.name == "SaveFile-1")
         {
             file = 1;
         }
@@ -265,7 +266,6 @@ public class Manager : MonoBehaviour
             button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         }
     }
-
     
 
     IEnumerator DelaySwitchScene(string function, Button button)
@@ -304,7 +304,7 @@ public class Manager : MonoBehaviour
 
     public void EscapeInput(InputAction.CallbackContext context)
     {
-        if (sceneName == "InGame")
+        if (SceneManager.GetActiveScene().name == "InGame")
         {
             if (context.performed)
             {
@@ -651,7 +651,7 @@ public class Manager : MonoBehaviour
         //SAVE_PLAYER_HEALTH(file);
         //SAVE_PLAYER_LOCATION(file);
 
-        SAVE_INVENTORY(PlayerPrefs.GetInt("CurrentFile"));
+        SAVE_INVENTORY();
     }
     public void LOADFILE()
     {
@@ -748,8 +748,10 @@ public class Manager : MonoBehaviour
         PlayerPrefs.SetFloat("PLAYER_LOCATION_X-" + file, player.transform.position.x);
         PlayerPrefs.SetFloat("PLAYER_LOCATION_Y-" + file, player.transform.position.y);
     }
-    public void SAVE_INVENTORY(int file)
+    public void SAVE_INVENTORY()
     {
+        int file = PlayerPrefs.GetInt("CurrentFile");
+
         for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
         {
             InventorySlot slot = inventoryManager.inventorySlots[i];
