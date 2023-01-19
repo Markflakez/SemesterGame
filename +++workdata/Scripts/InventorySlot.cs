@@ -9,10 +9,14 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public Image image;
     public Color selectedColor, notSelectedColor;
 
+    private Manager manager;
+
     private InventoryManager inventoryManager;
 
     private void Start()
     {
+        inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         Deselect();
     }
 
@@ -30,14 +34,21 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+        InventoryItem inventoryItem2 = gameObject.transform.GetComponentInChildren<InventoryItem>();
+
         if (transform.childCount == 0)
         {
-            InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
             inventoryItem.parentAfterDrag = transform;
-
-            inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
-            inventoryManager.CheckSelectedItem();
         }
-    }
+        else if(transform.childCount > 0)
+        {
+            inventoryItem.parentAfterDrag = transform;
+            inventoryItem2.transform.parent = manager.originalSlot;
+        }
+        inventoryManager.CheckSelectedItem();
 
+        //inventoryItem.ScaleInventoryItem();
+        //inventoryItem2.ScaleInventoryItem();
+    }
 }

@@ -69,7 +69,6 @@ public class GameSettings : MonoBehaviour
         if (refreshRate >= 120) hz.Add("120fps");
         if (refreshRate >= 60) hz.Add("60fps");
         if (refreshRate >= 30) hz.Add("30fps");
-        hz.Add("no limit");
 
         refreshRateDropdown.AddOptions(hz);
 
@@ -142,11 +141,8 @@ public class GameSettings : MonoBehaviour
             case "60fps":
                 Application.targetFrameRate = 60;
                 break;
-            case "30fps":
+            case "24fps":
                 Application.targetFrameRate = 30;
-                break;
-            case "no limit":
-                Application.targetFrameRate = 9999;
                 break;
         }
     }

@@ -34,7 +34,6 @@ public class InventoryManager : MonoBehaviour
         if(context.performed)
         {
             ChangeSelectedSlot(0);
-            CheckSelectedItem();
         }
     }
 
@@ -43,7 +42,6 @@ public class InventoryManager : MonoBehaviour
         if (context.performed)
         {
             ChangeSelectedSlot(1);
-            CheckSelectedItem();
         }
     }
 
@@ -111,11 +109,6 @@ public class InventoryManager : MonoBehaviour
             {
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
-                if(item.name == "Egg")
-                {
-                    sounds.PlayOneShot(pickup);
-                }
-
                 return true;
             }
         }
@@ -143,7 +136,7 @@ public class InventoryManager : MonoBehaviour
         CheckSelectedItem();
     }
 
-    void ScaleInventoryItem(InventorySlot inventoryItem)
+    public void ScaleInventoryItem(InventorySlot inventoryItem)
     {
 
         if (inventoryItem.transform.parent.name == "Inventory-Hotbar")

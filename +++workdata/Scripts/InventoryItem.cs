@@ -6,10 +6,13 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [HideInInspector]public Item item;
+    [HideInInspector] public Item item;
     public int count = 1;
-    [HideInInspector]public Transform parentAfterDrag;
+    [HideInInspector] public Transform parentAfterDrag;
 
+    private Manager manager;
+
+    InventoryManager inventoryManager;
 
     [Header("UI")]
     public Image image;
@@ -22,10 +25,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         infoText.enabled = false;
         infoTextImage.enabled = false;
+        inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
     }
 
     private void Start()
     {
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         RefreshCount();
         ScaleInventoryItem();
     }
@@ -51,6 +56,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         image.raycastTarget = false;
         countText.raycastTarget = false;
         parentAfterDrag = transform.parent;
+
+        manager.originalSlot = transform.parent;
         transform.SetParent(transform.root);
 
         infoText.enabled = false;
@@ -66,11 +73,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
         countText.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
         isDragging = false;
         ScaleInventoryItem();
+        inventoryManager.CheckSelectedItem();
     }
 
 
@@ -111,7 +119,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     }
 
 
-    void ScaleInventoryItem()
+    public void ScaleInventoryItem()
     {
 
         if (gameObject.transform.parent.transform.parent.name == "Inventory-Hotbar")

@@ -116,6 +116,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""8da2271d-a2d8-4710-8cb4-6c5fc02b6ef7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -250,6 +259,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""ThrowEgg"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ff31c86-d94a-4f5b-98b9-af7f3f5ed7dd"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -340,6 +360,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerActionMap_OpenQuestLog = m_PlayerActionMap.FindAction("OpenQuestLog", throwIfNotFound: true);
         m_PlayerActionMap_PauseGame = m_PlayerActionMap.FindAction("PauseGame", throwIfNotFound: true);
         m_PlayerActionMap_ThrowEgg = m_PlayerActionMap.FindAction("ThrowEgg", throwIfNotFound: true);
+        m_PlayerActionMap_RMB = m_PlayerActionMap.FindAction("RMB", throwIfNotFound: true);
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Movement = m_Movement.FindAction("Movement", throwIfNotFound: true);
@@ -412,6 +433,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActionMap_OpenQuestLog;
     private readonly InputAction m_PlayerActionMap_PauseGame;
     private readonly InputAction m_PlayerActionMap_ThrowEgg;
+    private readonly InputAction m_PlayerActionMap_RMB;
     public struct PlayerActionMapActions
     {
         private @PlayerControls m_Wrapper;
@@ -426,6 +448,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @OpenQuestLog => m_Wrapper.m_PlayerActionMap_OpenQuestLog;
         public InputAction @PauseGame => m_Wrapper.m_PlayerActionMap_PauseGame;
         public InputAction @ThrowEgg => m_Wrapper.m_PlayerActionMap_ThrowEgg;
+        public InputAction @RMB => m_Wrapper.m_PlayerActionMap_RMB;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -465,6 +488,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ThrowEgg.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
                 @ThrowEgg.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
                 @ThrowEgg.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnThrowEgg;
+                @RMB.started -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnRMB;
+                @RMB.performed -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnRMB;
+                @RMB.canceled -= m_Wrapper.m_PlayerActionMapActionsCallbackInterface.OnRMB;
             }
             m_Wrapper.m_PlayerActionMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -499,6 +525,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ThrowEgg.started += instance.OnThrowEgg;
                 @ThrowEgg.performed += instance.OnThrowEgg;
                 @ThrowEgg.canceled += instance.OnThrowEgg;
+                @RMB.started += instance.OnRMB;
+                @RMB.performed += instance.OnRMB;
+                @RMB.canceled += instance.OnRMB;
             }
         }
     }
@@ -548,6 +577,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnOpenQuestLog(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
         void OnThrowEgg(InputAction.CallbackContext context);
+        void OnRMB(InputAction.CallbackContext context);
     }
     public interface IMovementActions
     {

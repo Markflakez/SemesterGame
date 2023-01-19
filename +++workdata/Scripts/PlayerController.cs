@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
     public InventoryManager inventoryManager;
 
+    public EggHealthRadiation eggHealthRadiation;
+
     private float throwForce = 10;
     private float rotationSpeed = 2f;
 
@@ -229,26 +231,39 @@ public class PlayerController : MonoBehaviour
 
     public void ThrowEgg(InputAction.CallbackContext context)
     {
-        if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+        if (!manager.isPaused)
         {
-            // Instantiate the object to throw
-            GameObject thrownObject = Instantiate(eggThrowablePrefab, transform.position, Quaternion.identity);
+            if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            {
+                // Instantiate the object to throw
+                GameObject thrownObject = Instantiate(eggThrowablePrefab, transform.position, Quaternion.identity);
 
-            // Get the direction to the mouse cursor
-            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 throwDirection = (mousePos - (Vector2)transform.position).normalized;
+                // Get the direction to the mouse cursor
+                Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 throwDirection = (mousePos - (Vector2)transform.position).normalized;
 
-            // Add force to the object in the direction of the cursor
-            thrownObject.GetComponent<Rigidbody2D>().AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
+                // Add force to the object in the direction of the cursor
+                thrownObject.GetComponent<Rigidbody2D>().AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
 
-            // Add rotation to the object
-            thrownObject.GetComponent<Rigidbody2D>().AddTorque(rotationSpeed, ForceMode2D.Impulse);
-            Destroy(thrownObject, 3f);
-            inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                // Add rotation to the object
+                thrownObject.GetComponent<Rigidbody2D>().AddTorque(rotationSpeed, ForceMode2D.Impulse);
+                Destroy(thrownObject, 3f);
+                inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+            }
+            if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            {
+                Attack();
+            }
+            inventoryManager.CheckSelectedItem();
         }
-        if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+    }
+
+    public void EatEgg(InputAction.CallbackContext context)
+    {
+        if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0 && eggHealthRadiation.eggMat.GetFloat("_RemovedSegments") > 10)
         {
-            Attack();
+            inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+            eggHealthRadiation.AddEggs(1);
         }
     }
 
@@ -273,9 +288,27 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (!isAttacking && !manager.isPaused && IsInRange())
+        if (idleState == 2)
         {
             anim.Play("PlayerAttackSwordDown");
+        }
+        else if (idleState == 0)
+        {
+            //up
+        }
+        else if (idleState == 1)
+        {
+            //right
+        }
+        else if (idleState == 3)
+        {
+            //left
+        }
+
+
+        if (!isAttacking && !manager.isPaused && IsInRange())
+        {
+            
             // Get all the enemies within range
             Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
 

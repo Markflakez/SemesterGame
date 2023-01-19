@@ -11,7 +11,7 @@ using UnityEngine.Events;
 using TMPro;
 using DG.Tweening;
 
-public class Manager : MonoBehaviour
+public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Main Menu/InGame")]
 
@@ -69,8 +69,8 @@ public class Manager : MonoBehaviour
     private GameObject saveFiles;
     private GameSettings gameSettings;
     public GameObject dialogBox;
-    private EggHealthRadiation eggHealthRadiation;
-    private GameObject player;
+    public EggHealthRadiation eggHealthRadiation;
+    public GameObject player;
     private TextMeshProUGUI savedTimeDate;
     private TMP_InputField fileName;
 
@@ -94,42 +94,55 @@ public class Manager : MonoBehaviour
     public GameObject controlsButton;
     public GameObject audioButton;
 
+    public GameObject healthPopup;
+    public GameObject eggsPopup;
+    public GameObject radiationPopup;
 
-    public InputActionAsset playerActionMap;
+    [HideInInspector]
+    public Transform originalSlot;
+
 
     private void Awake()
     {
+        sceneName = SceneManager.GetActiveScene().name;
 
-        if (SceneManager.GetActiveScene().name != "LoadGame")
-        {
-            gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
-        }
-
-        LoadFileNames();
-
-    }
-
-    private void Start()
-    {
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
         Time.timeScale = 1;
 
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (sceneName != "LoadGame")
         {
-            player = GameObject.Find("Player");
-            eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
-
-            //Loads the values from the current loaded file
-            LOADFILE();
+            gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
-        if (SceneManager.GetActiveScene().name != "LoadGame")
+        if (sceneName != "MainMenu")
         {
-            LoadSettings();
-            graphicsPanel.SetActive(true);
+            LoadFileNames();
         }
         
+
+
+
+    }
+
+    private void Start()
+    {
+
+        if(Application.isEditor)
+        {
+            PlayerPrefs.SetInt("CurrentFile", 1);
+        }
+
+        if (sceneName == "InGame")
+        {
+            LOADFILE();
+        }
+
+        if (sceneName != "LoadGame")
+        {
+            LoadSettings();
+            Debug.Log("hallo");
+        }
     }
 
     private void Update()
@@ -253,7 +266,7 @@ public class Manager : MonoBehaviour
         if (delaySwitchScene == false)
         {
             uiSound.PlayOneShot(buttonHover);
-            if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton")
+            if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
             {
                 button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
             }
@@ -261,7 +274,7 @@ public class Manager : MonoBehaviour
     }
     public void exitHover(Button button)
     {
-        if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton")
+        if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
         {
             button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         }
@@ -400,6 +413,107 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    public void HeartPopup(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("HeartPopup", button));
+        }
+        else if (sceneSwitch)
+        {
+            if(!healthPopup.activeSelf)
+            {
+                healthPopup.SetActive(true);
+            }
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
+    public void EggsPopup(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("EggsPopup", button));
+        }
+        else if (sceneSwitch)
+        {
+            if (!eggsPopup.activeSelf)
+            {
+                eggsPopup.SetActive(true);
+            }
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
+    public void RadiationPopup(Button button)
+    {
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("RadiationPopup", button));
+        }
+        else if (sceneSwitch)
+        {
+            if (!radiationPopup.activeSelf)
+            {
+                radiationPopup.SetActive(true);
+            }
+            sceneSwitch = false;
+        }
+
+        ButtonAnimation(button);
+    }
+
+    public void HoverClosePopup(Button button)
+    {
+
+        sceneSwitch = false;
+    }
+
+    public void HoverOpenPopup(Button button)
+    {
+
+        sceneSwitch = false;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (eventData.pointerCurrentRaycast.gameObject.name == "HeartIcon" && healthPopup.activeSelf)
+        {
+            healthPopup.SetActive(true);
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "SkullIcon" && radiationPopup.activeSelf)
+        {
+            radiationPopup.SetActive(true);
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.name == "EggIcon" && eggsPopup.activeSelf)
+        {
+            eggsPopup.SetActive(true);
+        }
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (eventData.pointerEnter.gameObject.name == "HeartIcon" && healthPopup.activeSelf)
+        {
+            healthPopup.SetActive(false);
+        }
+        else if (eventData.selectedObject.gameObject.name == "SkullIcon" && radiationPopup.activeSelf)
+        {
+            radiationPopup.SetActive(false);
+        }
+        else if (eventData.selectedObject.gameObject.name == "EggIcon" && eggsPopup.activeSelf)
+        {
+            eggsPopup.SetActive(false);
+        }
+    }
+
+
     public void LoadGame(Button button)
     {
         if (!sceneSwitch)
@@ -410,7 +524,6 @@ public class Manager : MonoBehaviour
         {
             SceneManager.LoadScene("LoadGame");
             sceneSwitch = false;
-            LoadFileNames();
         }
 
         ButtonAnimation(button);
@@ -446,7 +559,6 @@ public class Manager : MonoBehaviour
             pauseMenu.SetActive(true);
             saveMenu.SetActive(false);
             settingsMenu.SetActive(false);
-            creditsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
             if (sceneName == "InGame")
@@ -471,7 +583,10 @@ public class Manager : MonoBehaviour
             }
 
             settingsMenu.SetActive(true);
-            LoadFileNames();
+            if (SceneManager.GetActiveScene().name != "MainMenu")
+            {
+                LoadFileNames();
+            }
             sceneSwitch = false;
         }
 
@@ -692,26 +807,22 @@ public class Manager : MonoBehaviour
     {
         int file = PlayerPrefs.GetInt("CurrentFile");
 
+        for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
         {
-            for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
+            if (PlayerPrefs.HasKey("INVENTORY-ITEM-NAME" + file + i))
             {
-                if (PlayerPrefs.HasKey("INVENTORY-ITEM-NAME" + file + i))
-                {
-                    InventorySlot slot = inventoryManager.inventorySlots[i];
-                    InventorySlot spawnSlot = inventoryManager.inventorySlots[PlayerPrefs.GetInt("INVENTORY-ITEM-SLOT" + file + i)];
-                    FindItemById(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i), i.ToString(), file.ToString());
+                InventorySlot slot = inventoryManager.inventorySlots[i];
+                InventorySlot spawnSlot = inventoryManager.inventorySlots[PlayerPrefs.GetInt("INVENTORY-ITEM-SLOT" + file + i)];
+                FindItemById(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i), i.ToString(), file.ToString());
 
-                    inventoryManager.SpawnNewItem(currentItem, spawnSlot);
+                inventoryManager.SpawnNewItem(currentItem, spawnSlot);
 
-                    //inventoryManager.GetComponent<InventoryManager>().inventorySlots[i].GetComponentInChildren<InventoryItem>(). = PlayerPrefs.GetString("InventoryItemName" + file + i);
-                    slot.GetComponentInChildren<InventoryItem>().count = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i);
-                    slot.GetComponentInChildren<InventoryItem>().countText.text = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i).ToString();
-                }
-                else
-                {
-                    // key is not found, skip this item and check the next
-                    continue;
-                }
+                slot.GetComponentInChildren<InventoryItem>().count = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i);
+                slot.GetComponentInChildren<InventoryItem>().countText.text = PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i).ToString();
+            }
+            else
+            {
+                continue;
             }
         }
     }
@@ -730,9 +841,6 @@ public class Manager : MonoBehaviour
         }
         return null;
     }
-
-
-
 
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH(int file)
@@ -764,12 +872,13 @@ public class Manager : MonoBehaviour
 
                 Debug.Log(PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i));
                 Debug.Log(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i));
-                PlayerPrefs.Save();
             }
             else
             {
-                continue;
+                PlayerPrefs.DeleteKey("INVENTORY-ITEM-NAME" + file + i);
+                PlayerPrefs.DeleteKey("INVENTORY-ITEM-COUNT" + file + i);
             }
+            PlayerPrefs.Save();
         }
         
 
@@ -779,33 +888,12 @@ public class Manager : MonoBehaviour
 
     private void LoadSettings()
     {
-        //Loads the respective setting if it exists, if not it is reset and set to the default setting
-        if (PlayerPrefs.HasKey("RESOLUTION"))
-        {
-            LOAD_RESOLUTION();
-        }
-
-        if (PlayerPrefs.HasKey("FRAMERATE"))
-        {
-            LOAD_FRAMERATE();
-        }
-
-        if (PlayerPrefs.HasKey("FULLSCREEN"))
-        {
-            LOAD_FULLSCREEN();
-        }
-
-        if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
-        {
-            LOAD_MUSIC_VOLUME();
-        }
-
-        if (PlayerPrefs.HasKey("SFX_VOLUME"))
-        {
-            LOAD_SFX_VOLUME();
-        }
-
-        if (PlayerPrefs.HasKey("FPS"))
+        LOAD_RESOLUTION();
+        LOAD_FRAMERATE();
+        LOAD_FULLSCREEN();
+        LOAD_MUSIC_VOLUME();
+        LOAD_SFX_VOLUME();
+        if (sceneName == "InGame")
         {
             LOAD_FPS();
         }

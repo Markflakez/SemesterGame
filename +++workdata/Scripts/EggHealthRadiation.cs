@@ -8,7 +8,6 @@ public class EggHealthRadiation : MonoBehaviour
 
     public TextMeshProUGUI currentHealthText;
     public TextMeshProUGUI maxHealthText;
-    public TextMeshProUGUI eggText;
     public TextMeshProUGUI currentRadiationText;
 
     public Material eggMat;
@@ -21,22 +20,26 @@ public class EggHealthRadiation : MonoBehaviour
 
     [HideInInspector]
     public float radiationRemovedSegments;
+    public float eggRemovedSegments;
 
     [HideInInspector]
     public float removedSegments;
     public float health;
     public float damageDealt;
+    public float eggs;
 
     public float startValue = 0;
     public float endValue = 101;
     public float duration = 10;
     public float executeEvery = 0.1f;
 
+    public GameObject avatarIcon;
     void Start()
     {
         health = 100;
 
         radiationRemovedSegments = 1000;
+        eggRemovedSegments = 20;
         removedSegments = 0;
 
         RadiationOverTime();
@@ -53,6 +56,11 @@ public class EggHealthRadiation : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.C))
         {
             addHealth(5);
+        }
+
+        if (Input.GetKeyUp(KeyCode.B))
+        {
+            AddEggs(1);
         }
     }
 
@@ -77,7 +85,7 @@ public class EggHealthRadiation : MonoBehaviour
     {
         damageDealt += damage;
         health -= damage;
-        
+        avatarIcon.GetComponent<Animator>().Play("Damage");
         UpdateHealth();
     }
 
@@ -89,11 +97,48 @@ public class EggHealthRadiation : MonoBehaviour
         radiationMat.SetFloat("_RemovedSegments", (int)radiationRemovedSegments + radiationMat.GetFloat("_SegmentCount"));
         UpdateHealth();
     }
+
+    public void AddEggs(int eggNumber)
+    {
+        eggs += eggNumber * 10;
+        UpdateEggs();
+    }
+
+
+
+    public void UpdateEggs()
+    {
+        eggRemovedSegments = eggMat.GetFloat("_SegmentCount") / 200 * -eggs;
+        eggMat.SetFloat("_RemovedSegments", (int)eggRemovedSegments + eggMat.GetFloat("_SegmentCount"));
+        if(eggs == 100)
+        {
+            DOTween.Pause(startValue);
+            Invoke("ResumeRadiation", 120);
+        }
+    }
+
+    public void ResumeRadiation()
+    {
+        DOTween.Play(startValue);
+        AddEggs(-1);
+    }
+
     public void UpdateHealth()
     {
         currentHealthText.text = "";
 
         float restValue = 100 - startValue;
+
+        Animator avatar = avatarIcon.GetComponent<Animator>();
+
+        
+
+        //Mathf.RoundToInt(startValue) == 1 && avatar.GetCurrentAnimatorStateInfo(0).length > avatar.GetCurrentAnimatorStateInfo(0).normalizedTime
+        //if (Mathf.RoundToInt(startValue) > lastRadiation && avatar.GetCurrentAnimatorStateInfo(0).length > avatar.GetCurrentAnimatorStateInfo(0).normalizedTime)
+        {
+            //avatar.Play("Radiation");
+        }
+
 
         if (health <= 0)
         {
