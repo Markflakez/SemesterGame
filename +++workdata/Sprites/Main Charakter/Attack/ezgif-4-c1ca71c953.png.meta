@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3d2766e9a2f22564197f0972c75382bc
+guid: 9f36f5c65d367ad479c672e1d459053f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,11 +43,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
-  spriteExtrude: 1
+  spriteMode: 2
+  spriteExtrude: 0
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.53125, y: 0.09375}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -104,7 +104,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Windows Store Apps
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -115,32 +115,130 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: ezgif-4-c1ca71c953_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 2
+        width: 17
+        height: 32
+      alignment: 9
+      pivot: {x: 0.47058824, y: 0.1875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17c67cf2f97d9af42bcda680cdb7fcf1
+      internalID: 1209977396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ezgif-4-c1ca71c953_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 20
+        height: 34
+      alignment: 9
+      pivot: {x: 0.55, y: 0.23529412}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fee9746f44a5c648b2dd3dec3ad1e4c
+      internalID: 1969784182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ezgif-4-c1ca71c953_2
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 0
+        width: 24
+        height: 34
+      alignment: 9
+      pivot: {x: 0.625, y: 0.23529412}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9bed146181d4b8439588637cf3f4a70
+      internalID: 1815154472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ezgif-4-c1ca71c953_3
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 3
+        width: 29
+        height: 31
+      alignment: 9
+      pivot: {x: 0.6896552, y: 0.16129032}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d193c3efefa3c714fa24c0a1797ac820
+      internalID: 145020275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ezgif-4-c1ca71c953_4
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 5
+        width: 34
+        height: 29
+      alignment: 9
+      pivot: {x: 0.7352941, y: 0.10344827}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13228546221e23540a3013fd122e8820
+      internalID: -85120394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ezgif-4-c1ca71c953_0: 1209977396
+      ezgif-4-c1ca71c953_1: 1969784182
+      ezgif-4-c1ca71c953_2: 1815154472
+      ezgif-4-c1ca71c953_3: 145020275
+      ezgif-4-c1ca71c953_4: -85120394
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -9,61 +9,54 @@ using UnityEngine.SceneManagement;
 
 public class GameSettings : MonoBehaviour
 {
+    //General Sceneaudio
     public AudioMixer mixer;
 
+    //Toggle for fullscreen
     public Toggle fullscreen;
+    //Toggle for a FPS diplay
     public Toggle fps;
 
+    //AudioGroup only for music
     public AudioMixerGroup musicc;
 
     const string MIXER_MUSIC = "musicVolume";
+    
     const string MIXER_SFX = "sfxVolume";
 
+    //Check if is Fullscreen
     public bool isFullscreen;
 
-
+    //FPS display text
     public TextMeshProUGUI fpsDisplay;
 
     private int frameCount;
     private float elapsedTime;
 
-    // The dropdown menu to choose the framerate
+    //Dropdown-menu to choose the framerate
     public TMP_Dropdown refreshRateDropdown;
-
-
-    // Create a slider
-    public Slider sfxVolumeSlider;
-    public Slider musicVolumeSlider;
-    // Create a dropdown menu
+    //Dropdown that contains resolutions
     public TMP_Dropdown resolutionDropdown;
 
-    // Array of resolutions with aspect ratio 16:9
+    //Slider for SFXVolume
+    public Slider sfxVolumeSlider;
+    //Slider for MusicVolume
+    public Slider musicVolumeSlider;
 
 
     private void Awake()
     {
     }
-
-    public void SetMusicVolume(float volume)
-    {
-        mixer.SetFloat(MIXER_MUSIC, Mathf.Log10(volume) * 20);
-    }
-
-    public void SetSFXVolume(float volume)
-    {
-        mixer.SetFloat(MIXER_SFX, Mathf.Log10(volume) * 20);
-    }
-
     void Start()
     {
-        
+
         SetSFXVolume(sfxVolumeSlider.value);
         SetMusicVolume(musicVolumeSlider.value);
 
 
         float refreshRate = Screen.currentResolution.refreshRateRatio.numerator;
 
-        // Set the options for the dropdown menu
+        //Set the options for the dropdown menu
         List<string> hz = new List<string>();
         if (refreshRate >= 144) hz.Add("144fps");
         if (refreshRate >= 120) hz.Add("120fps");
@@ -76,7 +69,7 @@ public class GameSettings : MonoBehaviour
         int width = Display.main.systemWidth;
         int height = Display.main.systemHeight;
 
-        // Set the options for the dropdown menu
+        //Set the options for the dropdown menu
         List<string> res = new List<string>();
         if (width >= 3840 && height >= 2160) res.Add("2160p");
         if (width >= 2560 && height >= 1440) res.Add("1440p");
@@ -88,48 +81,52 @@ public class GameSettings : MonoBehaviour
         //SetResolution(options.Count -1);
 
     }
-
-    public void FullscreenToggle()
-    {
-        Screen.fullScreen = !Screen.fullScreen;
-        isFullscreen = !isFullscreen;
-    }
-
-    public void FPSToggle()
-    {
-        fpsDisplay.enabled = !fpsDisplay.enabled;
-    }
-
     private void Update()
     {
-        // Count the number of frames and the elapsed time
+        //Counts the number of frames and the elapsed time
         frameCount++;
         elapsedTime += Time.deltaTime;
 
-        // Calculate the framerate every second and round it to the nearest whole number
+        //Calculates the framerate every second and round it to the nearest whole number
         if (elapsedTime >= .5)
         {
             int framerate = Mathf.RoundToInt(frameCount / elapsedTime);
 
-            // Update the text with the current framerate
+            //Updates the text with the current framerate
             if (SceneManager.GetActiveScene().name == "InGame")
             {
                 fpsDisplay.text = "FPS: " + framerate;
             }
 
-            // Reset the counters
+            //Resets the counters
             frameCount = 0;
             elapsedTime = 0;
         }
     }
-
+    public void SetMusicVolume(float volume)
+    {
+        mixer.SetFloat(MIXER_MUSIC, Mathf.Log10(volume) * 20);
+    }
+    public void SetSFXVolume(float volume)
+    {
+        mixer.SetFloat(MIXER_SFX, Mathf.Log10(volume) * 20);
+    }
+    public void FullscreenToggle()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+        isFullscreen = !isFullscreen;
+    }
+    public void FPSToggle()
+    {
+        fpsDisplay.enabled = !fpsDisplay.enabled;
+    }
     public void SetRefreshRate(int RefreshRateIndexIndex)
     {
-        // Get the selected resolution from the dropdown menu
+        //Gets the selected resolution from the dropdown menu
         string refreshRate = refreshRateDropdown.options[RefreshRateIndexIndex].text;
 
 
-        // Set the resolution based on the selected option
+        //Sets the resolution based on the selected option
         switch (refreshRate)
         {
             case "144fps":
@@ -146,13 +143,12 @@ public class GameSettings : MonoBehaviour
                 break;
         }
     }
-
     public void SetResolution(int resolutionIndex)
     {
-        // Get the  resolution from the dropdown menu
+        //Gets the  resolution from the dropdown menu
         string resolution = resolutionDropdown.options[resolutionIndex].text;
 
-        // Set the resolution based on the selected option
+        //Sets the resolution based on the selected option
 
         switch (resolution)
         {

@@ -42,10 +42,13 @@ public class EggHealthRadiation : MonoBehaviour
         eggRemovedSegments = 20;
         removedSegments = 0;
 
+        eggMat.SetFloat("_RemovedSegments", 20);
+
+
         RadiationOverTime();
     }
 
-    // Update is called once per frame
+    //Updates is called once per frame
     void Update()
     {
         if(Input.GetKeyUp(KeyCode.V))
@@ -104,7 +107,7 @@ public class EggHealthRadiation : MonoBehaviour
         UpdateEggs();
     }
 
-
+    
 
     public void UpdateEggs()
     {
@@ -112,7 +115,6 @@ public class EggHealthRadiation : MonoBehaviour
         eggMat.SetFloat("_RemovedSegments", (int)eggRemovedSegments + eggMat.GetFloat("_SegmentCount"));
         if(eggs == 100)
         {
-            DOTween.Pause(startValue);
             Invoke("ResumeRadiation", 120);
         }
     }
@@ -142,6 +144,7 @@ public class EggHealthRadiation : MonoBehaviour
 
         if (health <= 0)
         {
+            DOTween.Kill(startValue,false);
             health = 0;
             damageDealt = 100;
             removedSegments = 1000;

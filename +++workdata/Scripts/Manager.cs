@@ -754,20 +754,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     #endregion Menus/Buttons
 
-    public void SAVEFILE(int file)
-    {
-        DateTime currentDate = DateTime.Today;
-        savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
-
-        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
-        savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
-
-        //Saves the current Player Health and Position
-        //SAVE_PLAYER_HEALTH(file);
-        //SAVE_PLAYER_LOCATION(file);
-
-        SAVE_INVENTORY();
-    }
+    
+    
+    #region LOADSAVE
     public void LOADFILE()
     {
         //savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
@@ -782,7 +771,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         LOAD_INVENTORY();
 
     }
-    #region LOADSAVE
     void LOAD_PLAYER_HEALTH(int file)
     {
         //Sets the current Player Health, Health Text and Healthbar to the values from the selected Save File
@@ -826,8 +814,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             }
         }
     }
-    #endregion LOADSAVE
-
+    
     public Item FindItemById(string name, string currentIndex, string currentFile)
     {
         for (int i = 0; i < items.Length; i++)
@@ -841,7 +828,22 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         return null;
     }
+    #endregion LOADSAVE
 
+    public void SAVEFILE(int file)
+    {
+        DateTime currentDate = DateTime.Today;
+        savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
+
+        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+        savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
+
+        //Saves the current Player Health and Position
+        //SAVE_PLAYER_HEALTH(file);
+        //SAVE_PLAYER_LOCATION(file);
+
+        SAVE_INVENTORY();
+    }
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH(int file)
     {
@@ -886,18 +888,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     #endregion SAVESAVE
 
-    private void LoadSettings()
-    {
-        LOAD_RESOLUTION();
-        LOAD_FRAMERATE();
-        LOAD_FULLSCREEN();
-        LOAD_MUSIC_VOLUME();
-        LOAD_SFX_VOLUME();
-        if (sceneName == "InGame")
-        {
-            LOAD_FPS();
-        }
-    }
+    
     public void ResetSettings()
     {
         //Resets all the Settings to their default value
@@ -908,7 +899,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         RESET_SFX_VOLUME();
         RESET_RESOLUTION();
     }
-
     //Saves the respective setting
     #region SAVESETTINGS
     public void SAVE_FPS()
@@ -960,6 +950,18 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     #endregion SAVESETTINGS
 
+    private void LoadSettings()
+    {
+        LOAD_RESOLUTION();
+        LOAD_FRAMERATE();
+        LOAD_FULLSCREEN();
+        LOAD_MUSIC_VOLUME();
+        LOAD_SFX_VOLUME();
+        if (sceneName == "InGame")
+        {
+            LOAD_FPS();
+        }
+    }
     //Loads the respective setting
     #region LOADSETTINGS
     void LOAD_FPS()

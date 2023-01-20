@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4208893549022229068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1090005112148275015}
+  m_Layer: 0
+  m_Name: EggThrowSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1090005112148275015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4208893549022229068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5523723489648766057}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5523723488661944330
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,6 +289,7 @@ Transform:
   m_Children:
   - {fileID: 5523723488661944331}
   - {fileID: 5523723489591559979}
+  - {fileID: 1090005112148275015}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -304,8 +336,9 @@ MonoBehaviour:
   isTyping: 0
   GhoulPrefab: {fileID: 1083718491972997592, guid: 2a856a6541ca461418f6a2ef0d31390a, type: 3}
   eggThrowablePrefab: {fileID: 0}
-  camera: {fileID: 0}
+  mainCamera: {fileID: 0}
   inventoryManager: {fileID: 0}
+  eggHealthRadiation: {fileID: 0}
   speed: 5
   isDashing: 0
   isAttacking: 0
@@ -313,6 +346,7 @@ MonoBehaviour:
   hardCollisions:
     serializedVersion: 2
     m_Bits: 1
+  dashDistance: 5
   volume: {fileID: 0}
   ghostEffect: {fileID: 1399075159163129759, guid: 51ca487f58fed1f4e905261007f2489f, type: 3}
   manager: {fileID: 0}
@@ -392,7 +426,6 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294956694
   typingSpeed: 0.01
-  middlepoint: {fileID: 0}
   canTalk: 0
   continueButton: {fileID: 0}
   closeButton: {fileID: 0}

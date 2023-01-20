@@ -54,7 +54,6 @@ public class Dialog : MonoBehaviour
 
     private int index;
     public float typingSpeed;
-    public GameObject middlepoint;
 
     public bool canTalk = false;
 
@@ -130,7 +129,7 @@ public class Dialog : MonoBehaviour
     //Außerdem wird der instantiierte Mittelpunkt als Referenz für die Kamera gelöscht.
     public void CloseChat()
     {
-        //currentNPC.GetComponent<NPCMovement>().ExitDialog();
+        StopAllCoroutines();
         index = 0;
         text.text = "";
         manager.GetComponent<Manager>().inventoryHotbar.SetActive(true);
@@ -143,11 +142,6 @@ public class Dialog : MonoBehaviour
         dialogBox.SetActive(false);
         icon.enabled = false;
         pc.GetComponent<PlayerController>().canMove = true;
-        StopAllCoroutines();
-        virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
-        virtualCamera.GetComponent<Animator>().Play("CameraPanOut");
-        GameObject middlepoint = GameObject.Find("middlepoint");
-        Destroy(middlepoint);
     }
 
     //Summary
@@ -156,15 +150,12 @@ public class Dialog : MonoBehaviour
     //Falls Text im Dialogfeld ist wird er gelöscht und die Koroutine Type wird aufgerufen.
     public void NextDialog()
     {
-        if(virtualCamera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CameraPanIn"))
+        continueButton.SetActive(false);
+        if (index < sentences.Length - 1)
         {
-            continueButton.SetActive(false);
-            if (index < sentences.Length - 1)
-            {
-                index++;
-                text.text = "";
-                StartCoroutine(Type());
-            }
+            index++;
+            text.text = "";
+            StartCoroutine(Type());
         }
     }
 
@@ -235,6 +226,14 @@ public class Dialog : MonoBehaviour
     {
         if (canTalk && isInteracting && !virtualCamera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CameraPanOut"))
         {
+            GameObject Gerhardt = GameObject.Find("NPC-Gerhardt");
+            Gerhardt.GetComponent<DialogBox>().PlayerIsTalking();
+            GameObject Rheinhardt = GameObject.Find("NPC-Rheinhardt");
+            Rheinhardt.GetComponent<DialogBox>().PlayerIsTalking();
+            GameObject Richardt = GameObject.Find("NPC-Richardt");
+            Richardt.GetComponent<DialogBox>().PlayerIsTalking();
+
+
             manager.GetComponent<Manager>().inventoryHotbar.SetActive(false);
             manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(false);
             manager.GetComponent<Manager>().PauseGame();
@@ -245,10 +244,6 @@ public class Dialog : MonoBehaviour
             StartCoroutine(Type());
             icon.enabled = true;
             pc.GetComponent<PlayerController>().canMove = false;
-            Instantiate(middlepoint);
-            middlepoint.transform.position = Vector3.Lerp(this.transform.position, other.transform.position, 0.5f) + new Vector3(0, 1, 0);
-            virtualCamera.GetComponent<CinemachineVirtualCamera>().Follow = middlepoint.transform;
-            virtualCamera.GetComponent<Animator>().Play("CameraPanIn");
         }
     }
 

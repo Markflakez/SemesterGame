@@ -26,6 +26,13 @@ public class DialogBox : MonoBehaviour
         
     }
 
+
+    public void PlayerIsTalking()
+    {
+        updateDialog = true;
+        dialogBox.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {

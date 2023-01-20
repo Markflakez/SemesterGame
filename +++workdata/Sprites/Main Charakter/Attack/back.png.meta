@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9f36f5c65d367ad479c672e1d459053f
+guid: 6e8aed160592c5f41b7e7e46f30180a7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -44,7 +44,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -119,106 +119,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ezgif-4-c1ca71c953_0
+      name: back_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 2
+        x: 0
+        y: 0
         width: 17
-        height: 32
+        height: 26
       alignment: 9
-      pivot: {x: 0.5294118, y: 0.375}
+      pivot: {x: 0.5294118, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17c67cf2f97d9af42bcda680cdb7fcf1
-      internalID: 1209977396
+      spriteID: 483e8af981b6255419d17cf14f0714de
+      internalID: -437172163
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ezgif-4-c1ca71c953_1
+      name: back_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 38
         y: 0
-        width: 20
-        height: 34
-      alignment: 9
-      pivot: {x: 0.6, y: 0.44117647}
+        width: 18
+        height: 26
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1fee9746f44a5c648b2dd3dec3ad1e4c
-      internalID: 1969784182
+      spriteID: b8ef2c0b6dd6b6b4a8a89747b3814072
+      internalID: 576140792
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ezgif-4-c1ca71c953_2
+      name: back_2
       rect:
         serializedVersion: 2
-        x: 78
+        x: 76
         y: 0
-        width: 24
-        height: 34
+        width: 23
+        height: 26
       alignment: 9
-      pivot: {x: 0.6666667, y: 0.44117647}
+      pivot: {x: 0.39130434, y: -0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a9bed146181d4b8439588637cf3f4a70
-      internalID: 1815154472
+      spriteID: 33ac17812b0c18942974a9e2bcc46f88
+      internalID: -1338172004
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ezgif-4-c1ca71c953_3
+      name: back_3
       rect:
         serializedVersion: 2
-        x: 107
-        y: 3
+        x: 114
+        y: 0
         width: 29
-        height: 31
+        height: 26
       alignment: 9
-      pivot: {x: 0.7241379, y: 0.38709676}
+      pivot: {x: 0.31034482, y: -0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d193c3efefa3c714fa24c0a1797ac820
-      internalID: 145020275
+      spriteID: e376f5917a0893e489cbbfcd08f20586
+      internalID: -2092340847
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ezgif-4-c1ca71c953_4
+      name: back_4
       rect:
         serializedVersion: 2
-        x: 136
-        y: 5
-        width: 34
-        height: 29
+        x: 152
+        y: 0
+        width: 38
+        height: 26
       alignment: 9
-      pivot: {x: 0.7647059, y: 0.3448276}
+      pivot: {x: 0.23684211, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 13228546221e23540a3013fd122e8820
-      internalID: -85120394
+      spriteID: 125ae80ea101e4048b794129fdc71731
+      internalID: -1883209208
       vertices: []
       indices: 
       edges: []
@@ -234,11 +234,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ezgif-4-c1ca71c953_0: 1209977396
-      ezgif-4-c1ca71c953_1: 1969784182
-      ezgif-4-c1ca71c953_2: 1815154472
-      ezgif-4-c1ca71c953_3: 145020275
-      ezgif-4-c1ca71c953_4: -85120394
+      back_4: -1883209208
+      back_0: -437172163
+      back_2: -1338172004
+      back_1: 576140792
+      back_3: -2092340847
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

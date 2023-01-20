@@ -10,13 +10,12 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
 
-    // The force that will be applied to the enemies when they are knocked
+    //The force that will be applied to the enemies when they are knocked
     public float force = 10.0f;
 
-    // The range within which the player can knock the enemies
+    //The range within which the player can knock the enemies
     public float range = 2.5f;
 
-    // The layer on which the enemies are placed
     public LayerMask enemyLayer;
 
     public Animator cylinder;
@@ -36,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private float throwForce = 10;
     private float rotationSpeed = 2f;
 
+    public Transform eggThrowSpawn;
 
     #region Variables
     float movementX, movementY; 
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
     bool IsInRange()
     {
-        // Get all the enemies within range
+        //Gets all the enemies within range
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
         return enemies.Length > 0;
     }
@@ -235,17 +235,17 @@ public class PlayerController : MonoBehaviour
         {
             if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
-                // Instantiate the object to throw
-                GameObject thrownObject = Instantiate(eggThrowablePrefab, transform.position, Quaternion.identity);
+                //Instantiates the object to throw
+                GameObject thrownObject = Instantiate(eggThrowablePrefab, eggThrowSpawn.position, Quaternion.identity);
 
-                // Get the direction to the mouse cursor
+                //Gets the direction to the mouse cursor
                 Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 throwDirection = (mousePos - (Vector2)transform.position).normalized;
 
-                // Add force to the object in the direction of the cursor
+                //Adds force to the object in the direction of the cursor
                 thrownObject.GetComponent<Rigidbody2D>().AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
 
-                // Add rotation to the object
+                //Adds rotation to the object
                 thrownObject.GetComponent<Rigidbody2D>().AddTorque(rotationSpeed, ForceMode2D.Impulse);
                 Destroy(thrownObject, 3f);
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
@@ -294,25 +294,25 @@ public class PlayerController : MonoBehaviour
         }
         else if (idleState == 0)
         {
-            //up
+            anim.Play("PlayerAttackSwordUp");
         }
         else if (idleState == 1)
         {
-            //right
+            anim.Play("PlayerAttackSwordRight");
         }
         else if (idleState == 3)
         {
-            //left
+            anim.Play("PlayerAttackSwordLeft");
         }
 
 
         if (!isAttacking && !manager.isPaused && IsInRange())
         {
             
-            // Get all the enemies within range
+            //Gets all the enemies within range
             Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
 
-            // Apply a force to each enemy to knock them back
+            //Applys a force to each enemy to knock them back
             foreach (Collider2D enemy in enemies)
             {
                 Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();

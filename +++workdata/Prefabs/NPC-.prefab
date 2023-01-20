@@ -245,10 +245,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: wqwqwqqq
+  m_text: '
+
+'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8e05d07344676f348bbeb61a1777ee58, type: 2}
+  m_sharedMaterial: {fileID: -5790844319625227376, guid: 8e05d07344676f348bbeb61a1777ee58, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -460,9 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogText: {fileID: 752320831033244836}
-  randomSentencees:
-  - Halllloooooooooooooooo
-  - Timooooooooooooooooo
+  randomSentencees: []
   dialogBox: {fileID: 752320829730239273}
 --- !u!95 &6210660345451354841
 Animator:
