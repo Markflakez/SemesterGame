@@ -162,13 +162,32 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        if (Input.GetMouseButtonDown(1) && !onCooldown)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !onCooldown)
         {
-            Debug.Log("DASH");
-            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 dashDirection = (mousePos - (Vector2)transform.position).normalized;
-            Vector2 dashTarget = (Vector2)transform.position + dashDirection * dashDistance;
-            transform.DOMove(dashTarget, dashDuration, false).SetEase(Ease.Flash).OnComplete(StopDash);
+            if (idleState == 1)
+            {
+                // set x direction to 0 and y direction to 1
+                // execute dash with dashSpeed in the y direction for dashDuration
+                transform.DOLocalMoveY(dashSpeed, dashDuration);
+            }
+            else if (idleState == 2)
+            {
+                // set x direction to 0 and y direction to -1
+                // execute dash with dashSpeed in the -y direction for dashDuration
+                transform.DOLocalMoveY(-dashSpeed, dashDuration);
+            }
+            else if (idleState == 3)
+            {
+                // set x direction to -1 and y direction to 0
+                // execute dash with dashSpeed in the -x direction for dashDuration
+                transform.DOLocalMoveX(-dashSpeed, dashDuration);
+            }
+            else if (idleState == 4)
+            {
+                // set x direction to 1 and y direction to 0
+                // execute dash with dashSpeed in the x direction for dashDuration
+                transform.DOLocalMoveX(dashSpeed, dashDuration);
+            }
             onCooldown = true;
             isDashing = true;
             Invoke("ResetCooldown", cooldownTime);

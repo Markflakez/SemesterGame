@@ -17,15 +17,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI")]
     public Image image;
     public TextMeshProUGUI countText;
-    public TextMeshProUGUI infoText;
-    public Image infoTextImage;
     private bool isDragging;
 
     private void Awake()
     {
-        infoText.enabled = false;
-        infoTextImage.enabled = false;
         inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+        RefreshCount();
     }
 
     private void Start()
@@ -39,7 +36,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         item = newItem;
         image.sprite = newItem.image;
         RefreshCount();
-        RefreshItemDescription();
     }
 
     public void RefreshCount()
@@ -47,8 +43,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
-
-        RefreshItemDescription();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -60,8 +54,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         manager.originalSlot = transform.parent;
         transform.SetParent(transform.root);
 
-        infoText.enabled = false;
-        infoTextImage.enabled = false;
         isDragging = true;
     }
 
@@ -85,37 +77,23 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void RefreshItemDescription()
     {
-        infoText.text = "<size=60>" + item.itemName + " ";
-        if(countText.text != "1")
-        {
-            infoText.text += "(" + countText.text + ")";
-            infoText.text += "</size>" + "\n" + "\n" + item.itemDescription;
-        }
-        else
-        {
-            infoText.text += "</size>" + "\n" + "\n" + item.itemDescription;
-        }
+        TextMeshProUGUI text = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
+        //text.text = item.itemName + " ";
+        text.text = "";
+        text.text += "</size>" + "\n" + "\n" + item.itemDescription;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!isDragging)
-        {
-            infoText.enabled = true;
-            infoTextImage.enabled = true;
-        }
-        else
-        {
-            infoText.enabled = false;
-            infoTextImage.enabled = false;
-        }
+        RefreshItemDescription();
+
         
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        infoText.enabled = false;
-        infoTextImage.enabled = false;
+        TextMeshProUGUI text = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
+        text.text = "";
     }
 
 

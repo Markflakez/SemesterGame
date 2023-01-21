@@ -38,14 +38,12 @@ public class EggHealthRadiation : MonoBehaviour
     {
         health = 100;
 
-        radiationRemovedSegments = 1000;
+        radiationRemovedSegments = 100;
         eggRemovedSegments = 20;
         removedSegments = 0;
 
         eggMat.SetFloat("_RemovedSegments", 20);
-
-
-        RadiationOverTime();
+        radiationMat.SetFloat("_RemovedSegments", 100);
     }
 
     //Updates is called once per frame
@@ -147,7 +145,7 @@ public class EggHealthRadiation : MonoBehaviour
             DOTween.Kill(startValue,false);
             health = 0;
             damageDealt = 100;
-            removedSegments = 1000;
+            removedSegments = 100;
             currentHealthText.text = 0.ToString();
         }
         else if (health <= restValue) 
@@ -160,7 +158,7 @@ public class EggHealthRadiation : MonoBehaviour
         {
             health = 0;
             damageDealt = 100;
-            removedSegments = 1000;
+            removedSegments = 100;
             maxHealthText.text = health.ToString();
         }
         else

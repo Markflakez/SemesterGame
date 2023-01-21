@@ -10,6 +10,8 @@ using Random = UnityEngine.Random;
 using UnityEngine.Events;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -79,6 +81,10 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private Vector2 playerPos;
 
+    public Volume postProcessingVolume;
+    private ColorAdjustments colorAdjustments;
+    public RectTransform uiPanel;
+
     public string sceneName;
 
     public Item[] items;
@@ -136,6 +142,16 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (sceneName == "InGame")
         {
             LOADFILE();
+            
+            if(Application.isEditor)
+            {
+                SaturationFade();
+                eggHealthRadiation.RadiationOverTime();
+            }
+            else
+            {
+                BlackInFade();
+            }
         }
 
         if (sceneName != "LoadGame")
@@ -143,6 +159,35 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LoadSettings();
             Debug.Log("hallo");
         }
+    }
+
+
+    public void SaturationFade()
+    {
+        if (postProcessingVolume.profile.TryGet(out colorAdjustments))
+        {
+            colorAdjustments.saturation.value = -100;
+            DOTween.To(() => colorAdjustments.saturation.value, x => colorAdjustments.saturation.value = x, 10, 5f);
+        }
+    }
+    public void BlackInFade()
+    {
+        Vector3 startPos = uiPanel.anchoredPosition;
+        startPos.y = -500;
+        uiPanel.anchoredPosition = startPos;
+
+        if (postProcessingVolume.profile.TryGet(out colorAdjustments))
+        {
+            colorAdjustments.postExposure.value = -6;
+            DOTween.To(() => colorAdjustments.postExposure.value, x => colorAdjustments.postExposure.value = x, (float)-0.2, 7.5f).OnComplete(SlideInUi);
+        }
+    }
+    private void SlideInUi()
+    {
+        Vector3 startPos = uiPanel.anchoredPosition;
+        startPos.y = -300;
+        uiPanel.anchoredPosition = startPos;
+        uiPanel.DOAnchorPosY(0, 3.5f).OnComplete(eggHealthRadiation.RadiationOverTime);
     }
 
     private void Update()
@@ -155,6 +200,13 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (Input.GetKeyUp(KeyCode.L))
         {
             LOAD_INVENTORY();
+        }
+
+        else if (Input.GetKeyUp(KeyCode.Minus))
+        {
+            DOTween.Clear();
+            colorAdjustments.postExposure.value = 0;
+            uiPanel.transform.position = new Vector3(0, 0, 0);
         }
     }
 
@@ -307,21 +359,13 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    public void OpenQuestLogInput(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            OpenQuestLog();
-        }
-    }
-
     public void EscapeInput(InputAction.CallbackContext context)
     {
         if (SceneManager.GetActiveScene().name == "InGame")
         {
             if (context.performed)
             {
-                if (!inventoryMain.activeSelf && !questLog.activeSelf && !dialogBox.activeSelf)
+                if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
                 {
                     if (!isPaused)
                     {
@@ -335,20 +379,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                         PauseGame();
                     }
                 }
-                else if (dialogBox.activeSelf)
+                else if (inventoryMain.activeSelf)
                 {
-                    player.GetComponent<Dialog>().CloseChat();
-                }
-                else
-                {
-                    if (inventoryMain.activeSelf)
-                    {
-                        OpenInventory();
-                    }
-                    else if (questLog.activeSelf)
-                    {
-                        OpenQuestLog();
-                    }
+                    OpenInventory();
                 }
             }
         }
@@ -359,39 +392,15 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     #region Menus/Buttons
     public void OpenInventory()
     {
-        if (!questLog.activeSelf)
-        {
-            if (!backDrop.activeSelf)
-            {
-                backDrop.SetActive(true);
-                inventoryMain.SetActive(true);
-                mainMenuBackBoard.SetActive(true);
-            }
-            else
-            {
-                backDrop.SetActive(false);
-                inventoryMain.SetActive(false);
-                mainMenuBackBoard.SetActive(false);
-            }
-            PauseGame();
-        }
-    }
-    public void OpenQuestLog()
-    {
         if (!inventoryMain.activeSelf)
         {
-            if (!backDrop.activeSelf)
-            {
-                backDrop.SetActive(true);
-                questLog.SetActive(true);
-            }
-            else
-            {
-                backDrop.SetActive(false);
-                questLog.SetActive(false);
-            }
-            PauseGame();
+            inventoryMain.SetActive(true);
         }
+        else
+        {
+            inventoryMain.SetActive(false);
+        }
+        PauseGame();
     }
     public void SaveMenu(Button button)
     {
