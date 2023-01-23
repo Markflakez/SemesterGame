@@ -350,7 +350,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
         inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
-        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().PerformDash();
+        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().Dash();
         inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
         inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
 

@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     //The range within which the player can knock the enemies
     public float range = 2.5f;
 
+    public bool isDashing = false;
+    public bool canDash = true;
+
     public LayerMask enemyLayer;
 
     public Animator cylinder;
@@ -162,43 +165,6 @@ public class PlayerController : MonoBehaviour
 
 
 
-    public void PerformDash()
-    {
-        Debug.Log("ye");
-        if (idleState == 1)
-        {
-            // set x direction to 0 and y direction to 1
-            dashVelocity = new Vector2(0f, dashSpeed);
-        }
-        else if (idleState == 2)
-        {
-            // set x direction to 0 and y direction to -1
-            dashVelocity = new Vector2(0f, -dashSpeed);
-        }
-        else if (idleState == 3)
-        {
-            // set x direction to -1 and y direction to 0
-            dashVelocity = new Vector2(-dashSpeed, 0f);
-        }
-        else if (idleState == 4)
-        {
-            // set x direction to 1 and y direction to 0
-            dashVelocity = new Vector2(dashSpeed, 0f);
-        }
-
-        rb.velocity = dashVelocity;
-        Invoke("StopDash", dashDuration);
-    }
-
-    private void StopDash()
-    {
-        rb.velocity = Vector2.zero;
-    }
-
-    void ResetCooldown()
-    {
-        onCooldown = false;
-    }
 
 
     private void Awake()
@@ -284,6 +250,32 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    public void Dash()
+    {
+        if (!isDashing && canDash)
+        {
+            isDashing = true;
+            canDash = false;
+            StartCoroutine(DashCoaldown((float)1));
+            StartCoroutine(DashLength((float).4));
+        }
+    }
+
+    IEnumerator DashCoaldown(float length)
+    {
+        // Wait for the specified length of time
+        yield return new WaitForSeconds(length);
+        isDashing = false;
+        canDash = true;
+    }
+
+    IEnumerator DashLength(float length)
+    {
+        // Wait for the specified length of time
+        yield return new WaitForSeconds(length);
+        isDashing = false;
+    }
+
 
 
     private void FixedUpdate()
@@ -300,6 +292,58 @@ public class PlayerController : MonoBehaviour
             stop = new Vector2(movementX * 0, movementY * 0);
             rb.velocity = stop;
         }
+
+        //if (isDashing)
+        {
+        //    Instantiate(ghostEffect).transform.position = this.transform.position;
+        }
+
+        if (idleState == 0)
+        {
+            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 90);
+            if (isDashing)
+            {
+                rb.AddForce(transform.up * dashSpeed, ForceMode2D.Impulse);
+            }
+
+        }
+        else if (idleState == 1)
+        {
+            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 0);
+            if (isDashing)
+            {
+                rb.AddForce(transform.right * dashSpeed, ForceMode2D.Impulse);
+            }
+        }
+        else if (idleState == 2)
+        {
+            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, -90);
+            if (isDashing)
+            {
+                rb.AddForce(transform.up * -dashSpeed, ForceMode2D.Impulse);
+            }
+        }
+        else if (idleState == 3)
+        {
+            weaponCollision.transform.rotation = Quaternion.Euler(0, 0, 180);
+            if (isDashing)
+            {
+                rb.AddForce(transform.right * -dashSpeed, ForceMode2D.Impulse);
+            }
+        }
+
+        if(isDashing)
+        {
+            anim.speed = 4;
+        }
+        else
+        {
+            anim.speed = 1;
+        }
+
+        anim.SetFloat("idleState", idleState);
+        anim.SetFloat("xDirection", movementX);
+        anim.SetFloat("yDirection", movementY);
     }
 
 
