@@ -23,15 +23,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private void Awake()
     {
         inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
-        infoText = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
-        RefreshCount();
     }
 
     private void Start()
     {
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+        infoText = manager.infoText;
         RefreshCount();
         ScaleInventoryItem();
+        
     }
     public void InitialiseItem(Item newItem)
     {

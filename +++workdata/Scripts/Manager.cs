@@ -100,6 +100,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public GameObject barIndicators;
 
+    public TextMeshProUGUI infoText;
 
     public GameObject graphicsButton;
     public GameObject controlsButton;
@@ -144,16 +145,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (sceneName == "InGame")
         {
             LOADFILE();
-            
-            if(Application.isEditor)
-            {
-                SaturationFade();
-                eggHealthRadiation.RadiationOverTime();
-            }
-            else
-            {
-                BlackInFade();
-            }
+
+            SaturationFade();
+            eggHealthRadiation.RadiationOverTime();
         }
 
         if (sceneName != "LoadGame")
@@ -348,6 +342,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void FindInputActions()
     {
         inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
+        inputActions.FindAction("RMB").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
         inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
         inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().Dash();

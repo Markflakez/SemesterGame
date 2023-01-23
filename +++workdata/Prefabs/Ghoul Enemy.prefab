@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8439949061494312350}
   - component: {fileID: 4118935952260249553}
   - component: {fileID: 2276945494008108492}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,10 +86,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1083718491972997596}
   - component: {fileID: 1083718491972997597}
-  - component: {fileID: 1083718491972997598}
   - component: {fileID: 1083718491972997599}
   - component: {fileID: 1083718491972997587}
   - component: {fileID: 1083718491972997586}
+  - component: {fileID: 485497543579850672}
   - component: {fileID: 4881423525905806509}
   m_Layer: 6
   m_Name: Ghoul Enemy
@@ -112,7 +112,7 @@ Transform:
   m_Children:
   - {fileID: 5687636426588928408}
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1083718491972997597
 SpriteRenderer:
@@ -166,30 +166,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1083718491972997598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083718491972997592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f3e787bc22bc74e8c037e9696ca1bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackDistance: 5
-  attackDelay: 3
-  attackDamage: 20
-  dashSpeed: 5
-  dashDuration: 1.5
-  followDistance: 1
-  avoidDistance: 2
-  randomMovementSpeed: 1
-  randomMovementDelay: 2
-  knockbackForce: 30
-  heart: {fileID: 8039829054715657932, guid: 2ff319be49259c74abb6d2c969dd985b, type: 3}
-  damageText: {fileID: 7891752204774086465, guid: 00c970c612f8b7c4abed70b7b46794d8, type: 3}
 --- !u!61 &1083718491972997599
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -247,9 +223,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDrag: 5
-  m_AngularDrag: 5
+  m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -282,6 +258,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &485497543579850672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083718491972997592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 903321c4966457d40ba2cfb2fc6c5024, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  attackRadius: 2
+  attackDelay: 1
 --- !u!114 &4881423525905806509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,7 +297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5973895764661603561}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,7 +337,7 @@ GameObject:
   - component: {fileID: 2290896567214846803}
   - component: {fileID: 8074134149059435226}
   - component: {fileID: 1673526893764947016}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +438,7 @@ GameObject:
   - component: {fileID: 2379831649745610315}
   - component: {fileID: 2819394225363156471}
   - component: {fileID: 2557468222565607958}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4961246431733250203}
   - component: {fileID: 3749854593252849670}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

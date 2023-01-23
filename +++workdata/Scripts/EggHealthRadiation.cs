@@ -10,6 +10,8 @@ public class EggHealthRadiation : MonoBehaviour
     public TextMeshProUGUI maxHealthText;
     public TextMeshProUGUI currentRadiationText;
 
+    public PlayerController playerController;
+
     public Material eggMat;
     public Material healthMat;
     public Material radiationMat;
@@ -51,17 +53,17 @@ public class EggHealthRadiation : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.V))
         {
-            Damage(5);
+            Damage(25);
         }
 
         if (Input.GetKeyUp(KeyCode.C))
         {
-            addHealth(5);
+            addHealth(25);
         }
 
         if (Input.GetKeyUp(KeyCode.B))
         {
-            AddEggs(1);
+            AddEggs(3);
         }
     }
 
@@ -88,7 +90,58 @@ public class EggHealthRadiation : MonoBehaviour
         health -= damage;
         avatarIcon.GetComponent<Animator>().Play("Damage");
         UpdateHealth();
+
+
+        if (health <= 0)
+        {
+            Death();
+        }
+        else
+        {
+            Hit();
+        }
     }
+
+    private void Hit()
+    {
+        if (playerController.idleState == 0)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerHitDown");
+        }
+        else if (playerController.idleState == 1)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerHitRight");
+        }
+        else if (playerController.idleState == 2)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerHitUp");
+        }
+        else if (playerController.idleState == 3)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerHitLeft");
+        }
+    }
+
+    private void Death()
+    {
+        if (playerController.idleState == 0)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerDeathUp");
+        }
+        else if (playerController.idleState == 1)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerDeathRight");
+        }
+        else if (playerController.idleState == 2)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerDeathDown");
+        }
+        else if (playerController.idleState == 3)
+        {
+            playerController.GetComponent<Animator>().Play("PlayerDeathLeft");
+        }
+    }
+
 
     public void UpdateRadiation(float timePased)
     {

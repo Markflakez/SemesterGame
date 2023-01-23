@@ -22,14 +22,12 @@ public class WorldspaceItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if(collision.gameObject.name == "Player")
         {
-            bool canAdd = inventoryManager.AddItem(item);
-            if (canAdd)
-            {
-                Invoke("DestroyItself", .01f);
-            }
+            inventoryManager.AddItem(item);
+            Invoke("DestroyItself", .01f);
         }
+        return;
     }
     private void DestroyItself()
     {

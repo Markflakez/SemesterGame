@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public Animator plane;
 
     private bool canThrowEgg = true;
+    private bool canEatEgg = true;
 
     public bool isTyping = false;
 
@@ -234,10 +235,12 @@ public class PlayerController : MonoBehaviour
     {
         if (!manager.isPaused)
         {
-            if (inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            if (inventoryManager.selectedItemName == "Egg" && canEatEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
                 eggHealthRadiation.AddEggs(1);
+                canEatEgg = false;
+                Invoke("EggEatCoaldown", .125f);
             }
             inventoryManager.CheckSelectedItem();
         }
@@ -247,6 +250,11 @@ public class PlayerController : MonoBehaviour
     void EggThrowCoaldown()
     {
         canThrowEgg = true;
+    }
+
+    void EggEatCoaldown()
+    {
+        canEatEgg = true;
     }
 
 
