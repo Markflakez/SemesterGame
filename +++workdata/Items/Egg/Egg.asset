@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Egg
   m_EditorClassIdentifier: 
   itemName: Egg
-  itemDescription: YUM
+  itemDescription: Very delicious and healthy snack!
   itemCount: 0
   type: 0
   stackable: 1
-  imageIngame: {fileID: 21300000, guid: a64aa97ed8f02d94bb9f1471c2d40c3e, type: 3}
-  imageUI: {fileID: 21300000, guid: 2d57c58fb9e9cb748a3d69f2a02c81a0, type: 3}
+  image: {fileID: 21300000, guid: a64aa97ed8f02d94bb9f1471c2d40c3e, type: 3}

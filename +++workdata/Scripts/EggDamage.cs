@@ -20,7 +20,7 @@ public class EggDamage : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("Ghoul Enemy"))
         {
-            collision.gameObject.GetComponent<GhoulEnemy>().OnHit(40);
+            collision.gameObject.GetComponent<Health>().TakeDamage(40);
             Destroy(gameObject);
         }
     }

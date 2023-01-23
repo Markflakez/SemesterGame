@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 752320831372845471}
   - component: {fileID: 752320831372845460}
   - component: {fileID: 8820352235116970651}
+  - component: {fileID: 4059293074362316269}
   - component: {fileID: 6210660345451354841}
   m_Layer: 0
   m_Name: NPC-
@@ -464,6 +465,34 @@ MonoBehaviour:
   dialogText: {fileID: 752320831033244836}
   randomSentencees: []
   dialogBox: {fileID: 752320829730239273}
+--- !u!114 &4059293074362316269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752320831372845468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aab865d1901aef47bb5d66d81bf4c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcName: Richardt
+  dialog:
+  - Hey Fremder!
+  - hallo?
+  - OK, funkt!
+  - 
+  npcColor:
+    serializedVersion: 2
+    rgba: 255
+  npcIndex: 0
+  dialogOrder:
+  - npc
+  - player
+  - npc
+  - player
+  npcSprite: {fileID: 786098734, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
 --- !u!95 &6210660345451354841
 Animator:
   serializedVersion: 5

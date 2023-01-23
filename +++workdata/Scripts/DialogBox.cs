@@ -36,17 +36,17 @@ public class DialogBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float dist = (Vector3.Distance(this.transform.position, player.transform.position));
-        if(dist < 4 && updateDialog)
+        //float dist = (Vector3.Distance(this.transform.position, player.transform.position));
+        //if(dist < 4 && updateDialog)
         {
-            updateDialog = false;
-            dialogText.text = randomSentencees[Random.Range(0, randomSentencees.Length)];
-            dialogBox.SetActive(true);
+            //updateDialog = false;
+            //dialogText.text = randomSentencees[Random.Range(0, randomSentencees.Length)];
+            //dialogBox.SetActive(true);
         }
-        if(dist > 6 && !updateDialog)
+        //if(dist > 6 && !updateDialog)
         {
-            updateDialog = true;
-            dialogBox.SetActive(false);
+            //updateDialog = true;
+            //dialogBox.SetActive(false);
         }
     }
 }

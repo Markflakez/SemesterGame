@@ -87,6 +87,8 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public string sceneName;
 
+    public InputActionAsset inputActions;
+
     public Item[] items;
     private Item currentItem;
 
@@ -95,6 +97,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject eggIndicator;
 
     public bool canThrowEgg = true;
+
+    public GameObject barIndicators;
+
 
     public GameObject graphicsButton;
     public GameObject controlsButton;
@@ -125,10 +130,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             LoadFileNames();
         }
-        
-
-
-
+        FindInputActions();
     }
 
     private void Start()
@@ -159,6 +161,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LoadSettings();
             Debug.Log("hallo");
         }
+        
     }
 
 
@@ -188,26 +191,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         startPos.y = -300;
         uiPanel.anchoredPosition = startPos;
         uiPanel.DOAnchorPosY(0, 3.5f).OnComplete(eggHealthRadiation.RadiationOverTime);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.M))
-        {
-            PlayerPrefs.DeleteAll();
-        }
-
-        if (Input.GetKeyUp(KeyCode.L))
-        {
-            LOAD_INVENTORY();
-        }
-
-        else if (Input.GetKeyUp(KeyCode.Minus))
-        {
-            DOTween.Clear();
-            colorAdjustments.postExposure.value = 0;
-            uiPanel.transform.position = new Vector3(0, 0, 0);
-        }
     }
 
     private void HideAllPanels()
@@ -349,40 +332,56 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             delaySwitchScene = false;
         }
     }
-    
+
     #region InputAction
-    public void OpenInventoryInput(InputAction.CallbackContext context)
+
+    private void OnEnable()
     {
-        if (context.performed)
-        {
-            OpenInventory();
-        }
+        inputActions.Enable();
     }
 
-    public void EscapeInput(InputAction.CallbackContext context)
+    private void OnDisable()
+    {
+        inputActions.Disable();
+    }
+
+    private void FindInputActions()
+    {
+        inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
+        inputActions.FindAction("Escape").performed += ctx => EscapeInput();
+        inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
+        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().PerformDash();
+        inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
+        inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
+
+        inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
+        inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
+    }
+    public void EscapeInput()
     {
         if (SceneManager.GetActiveScene().name == "InGame")
         {
-            if (context.performed)
+            if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
             {
-                if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
+                if (!isPaused)
                 {
-                    if (!isPaused)
-                    {
-                        HideAllPanels();
-                        PauseGame();
-                        pauseMenu.SetActive(true);
-                    }
-                    else
-                    {
-                        HideAllPanels();
-                        PauseGame();
-                    }
+                    HideAllPanels();
+                    PauseGame();
+                    pauseMenu.SetActive(true);
                 }
-                else if (inventoryMain.activeSelf)
+                else
                 {
-                    OpenInventory();
+                    HideAllPanels();
+                    PauseGame();
                 }
+            }
+            else if (inventoryMain.activeSelf)
+            {
+                OpenInventory();
+            }
+            else if (dialogBox.activeSelf)
+            {
+                player.gameObject.GetComponent<Dialog>().CloseChat();
             }
         }
     }
@@ -777,7 +776,10 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //LOAD_PLAYER_HEALTH(file);
         //LOAD_PLAYER_LOCATION(file);
 
-        LOAD_INVENTORY();
+        if (!Application.isEditor)
+        {
+            LOAD_INVENTORY();
+        }
 
     }
     void LOAD_PLAYER_HEALTH(int file)

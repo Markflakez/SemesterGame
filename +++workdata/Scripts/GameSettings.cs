@@ -122,49 +122,55 @@ public class GameSettings : MonoBehaviour
     }
     public void SetRefreshRate(int RefreshRateIndexIndex)
     {
-        //Gets the selected resolution from the dropdown menu
-        string refreshRate = refreshRateDropdown.options[RefreshRateIndexIndex].text;
-
-
-        //Sets the resolution based on the selected option
-        switch (refreshRate)
+        if (!Application.isEditor)
         {
-            case "144fps":
-                Application.targetFrameRate = 144;
-                break;
-            case "120fps":
-                Application.targetFrameRate = 120;
-                break;
-            case "60fps":
-                Application.targetFrameRate = 60;
-                break;
-            case "24fps":
-                Application.targetFrameRate = 30;
-                break;
+            //Gets the selected resolution from the dropdown menu
+            string refreshRate = refreshRateDropdown.options[RefreshRateIndexIndex].text;
+
+
+            //Sets the resolution based on the selected option
+            switch (refreshRate)
+            {
+                case "144fps":
+                    Application.targetFrameRate = 144;
+                    break;
+                case "120fps":
+                    Application.targetFrameRate = 120;
+                    break;
+                case "60fps":
+                    Application.targetFrameRate = 60;
+                    break;
+                case "24fps":
+                    Application.targetFrameRate = 30;
+                    break;
+            }
         }
     }
     public void SetResolution(int resolutionIndex)
     {
-        //Gets the  resolution from the dropdown menu
-        string resolution = resolutionDropdown.options[resolutionIndex].text;
-
-        //Sets the resolution based on the selected option
-
-        switch (resolution)
+        if (!Application.isEditor)
         {
+            //Gets the  resolution from the dropdown menu
+            string resolution = resolutionDropdown.options[resolutionIndex].text;
 
-            case "2160p":
-                Screen.SetResolution(3840, 2160, isFullscreen);
-                break;
-            case "1440p":
-                Screen.SetResolution(2560, 1440, isFullscreen);
-                break;
-            case "1080p":
-                Screen.SetResolution(1920, 1080, isFullscreen);
-                break;
-            case "720p":
-                Screen.SetResolution(1280, 720, isFullscreen);
-                break;
+            //Sets the resolution based on the selected option
+
+            switch (resolution)
+            {
+
+                case "2160p":
+                    Screen.SetResolution(3840, 2160, isFullscreen);
+                    break;
+                case "1440p":
+                    Screen.SetResolution(2560, 1440, isFullscreen);
+                    break;
+                case "1080p":
+                    Screen.SetResolution(1920, 1080, isFullscreen);
+                    break;
+                case "720p":
+                    Screen.SetResolution(1280, 720, isFullscreen);
+                    break;
+            }
         }
     }
 }

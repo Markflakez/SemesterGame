@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #beb7b5;
+      }
+    </style>
+    <symbol id="Pause_Icon" viewBox="0 0 84 100">
+      <g>
+        <path class="cls-1" d="m79,5v90h-20V5h20m0-5h-20c-2.76,0-5,2.24-5,5v90c0,2.76,2.24,5,5,5h20c2.76,0,5-2.24,5-5V5c0-2.76-2.24-5-5-5h0Z"/>
+        <path class="cls-1" d="m25,5v90H5V5h20m0-5H5C2.24,0,0,2.24,0,5v90c0,2.76,2.24,5,5,5h20c2.76,0,5-2.24,5-5V5c0-2.76-2.24-5-5-5h0Z"/>
+      </g>
+    </symbol>
+  </defs>
+  <use width="84" height="100" transform="translate(8 0)" xlink:href="#Pause_Icon"/>
+</svg>

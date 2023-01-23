@@ -261,11 +261,11 @@ GameObject:
   - component: {fileID: 5523723489648766057}
   - component: {fileID: 5523723489648766056}
   - component: {fileID: 5523723489648766063}
+  - component: {fileID: 1172664362}
   - component: {fileID: 5523723489648766037}
   - component: {fileID: 5523723489648766062}
   - component: {fileID: 5523723489648766058}
   - component: {fileID: 5010586743985958775}
-  - component: {fileID: 5523723489648766036}
   - component: {fileID: 5523723489648766039}
   - component: {fileID: 8053581215198172407}
   m_Layer: 0
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   force: 10
-  range: 5
+  range: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -335,19 +335,19 @@ MonoBehaviour:
   plane: {fileID: 0}
   isTyping: 0
   GhoulPrefab: {fileID: 1083718491972997592, guid: 2a856a6541ca461418f6a2ef0d31390a, type: 3}
-  eggThrowablePrefab: {fileID: 0}
+  eggThrowablePrefab: {fileID: 3539102128345917510, guid: f7ce5d6434c42624691c38052b3abc97, type: 3}
   mainCamera: {fileID: 0}
   inventoryManager: {fileID: 0}
   eggHealthRadiation: {fileID: 0}
-  eggThrowSpawn: {fileID: 0}
+  eggThrowSpawn: {fileID: 1090005112148275015}
   speed: 5
   isDashing: 0
-  isAttacking: 0
+  isAttacking: 1
   physicsMaterial2D: {fileID: 6200000, guid: e8c30e3bf61eee74583aeaba8105a9a4, type: 2}
   hardCollisions:
     serializedVersion: 2
     m_Bits: 1
-  dashDistance: 5
+  dashDistance: 4
   volume: {fileID: 0}
   ghostEffect: {fileID: 1399075159163129759, guid: 51ca487f58fed1f4e905261007f2489f, type: 3}
   manager: {fileID: 0}
@@ -360,6 +360,22 @@ MonoBehaviour:
   playerCurrentHealth: 100
   canMove: 0
   allowDash: 0
+--- !u!114 &1172664362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5523723489648766061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebdfb9385748f0445b965cbb1593df39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 3
+  attackDamage: 30
+  knockbackForce: 50
+  inputActions: {fileID: -944628639613478452, guid: b476c4eaf9b5c964981da588da8fbb4f, type: 3}
 --- !u!114 &5523723489648766037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,7 +488,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1190291757, guid: 56245f1780c6b814ebb86c81599e797d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 132799b71eec1504d9f7fa6c3273994b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -499,7 +515,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: e8c30e3bf61eee74583aeaba8105a9a4, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -545,8 +561,8 @@ BoxCollider2D:
   m_Offset: {x: -0.03875947, y: -0.0845654}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.6666667, y: 2.6666667}
+    pivot: {x: 0.5, y: 0.09375}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1.6, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -555,108 +571,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4387469, y: 2.0183318}
   m_EdgeRadius: 0
---- !u!114 &5523723489648766036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523723489648766061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: b476c4eaf9b5c964981da588da8fbb4f, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5523723489648766037}
-        m_TargetAssemblyTypeName: Dialog, Assembly-CSharp
-        m_MethodName: Interact
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 20cc72b5-3aa4-4128-9535-cc2b1d4debe3
-    m_ActionName: PlayerActionMap/Interact[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2f93d744-4ce6-4291-afa8-2197857af64e
-    m_ActionName: PlayerActionMap/Escape[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: a23654e5-57da-4b2a-af64-7adbf7c21b13
-    m_ActionName: Movement/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 0
-    m_ActionId: e857f760-983c-428d-9644-879a19d8fd97
-    m_ActionName: PlayerActionMap/Attack[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5523723489648766063}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Dash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 37a3edb3-4439-4150-bc7d-bf3c2248a6dc
-    m_ActionName: PlayerActionMap/New action
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2e6b69a8-3032-4cd7-94ff-a906b6d2ef8b
-    m_ActionName: PlayerActionMap/SelectSlot[/Keyboard/1,/Keyboard/2,/Keyboard/3,/Keyboard/4,/Keyboard/5]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5016ecbd-960e-4790-9767-0db428b5d317
-    m_ActionName: PlayerActionMap/OpenInventory[/Keyboard/f]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 712ba990-9faa-48dd-8fda-4aefb20a6438
-    m_ActionName: PlayerActionMap/OpenQuestLog[/Keyboard/q]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: faa6bbf7-5bb4-4bb5-b62b-aa59c653b16e
-    m_ActionName: PlayerActionMap/PauseGame[/Keyboard/escape]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: PlayerActionMap
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &5523723489648766039
 MonoBehaviour:
   m_ObjectHideFlags: 0

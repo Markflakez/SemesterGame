@@ -19,32 +19,27 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject inventoryItemPrefab;
 
-    public int selectedSlot;
+    public int selectedSlot = 0;
 
     private void Start()
     {
-        ChangeSelectedSlot(0);
+        ChangeSelectedSlot(selectedSlot);
         foreach (var item in startItems)
         {
         }
     }
 
-    public void SelectSlot_1(InputAction.CallbackContext context)
+    public void SelectSlot()
     {
-        if(context.performed)
+        if(selectedSlot == 0)
+        {
+            ChangeSelectedSlot(1);
+        }
+        else
         {
             ChangeSelectedSlot(0);
         }
     }
-
-    public void SelectSlot_2(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            ChangeSelectedSlot(1);
-        }
-    }
-
     void ChangeSelectedSlot(int newValue)
     {
         if (selectedSlot >= 0)
@@ -53,7 +48,6 @@ public class InventoryManager : MonoBehaviour
         }
         inventorySlots[newValue].Select();
         selectedSlot = newValue;
-        
         CheckSelectedItem();
     }
 
@@ -134,6 +128,7 @@ public class InventoryManager : MonoBehaviour
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
         CheckSelectedItem();
+
     }
 
     public void ScaleInventoryItem(InventorySlot inventoryItem)

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   itemName: Sword
-  itemDescription: kill Pascal
+  itemDescription: Defend you town from Ghouls
   itemCount: 0
   type: 1
   stackable: 0
-  imageIngame: {fileID: 21300000, guid: f66a79ae047cea94b8c2f73badeb8e70, type: 3}
-  imageUI: {fileID: 21300000, guid: deff71b5934c258458d8beff4d77afba, type: 3}
+  image: {fileID: 21300000, guid: deff71b5934c258458d8beff4d77afba, type: 3}

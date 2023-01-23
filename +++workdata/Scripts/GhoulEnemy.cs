@@ -4,36 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
+
 public class GhoulEnemy : MonoBehaviour
 {
-    // The maximum health of the character
-    public int maxHealth = 100;
-
-    // The current health of the character
-    public int currentHealth = 100;
-
     // The UI element that will be used to display the health bar
-    public Slider healthBar;
 
-    Vector3 dis;
+    public float attackDistance;
+    public float attackDelay;
+    public int attackDamage;
+    public float dashSpeed;
+    public float dashDuration;
+
+    private GameObject player;
+    private float lastAttackTime;
+    private bool dashing = false;
+    private float dashStartTime;
+    private bool knocked = false;
+    public float followDistance;
+    public float avoidDistance;
+
+    public float randomMovementSpeed;
+    public float randomMovementDelay;
+
+    private float lastRandomMovementTime;
+    private Vector3 randomMovementDirection;
+
+    public float knockbackForce;
 
     private EggHealthRadiation eggHealthRadiation;
-
-    public Dialog dialog;
-    private GameObject player;
-    public SpriteRenderer sr;
-    public Rigidbody2D rb;
-    public Animator anim;
-    public float speed;
-
-    private bool notPlaying;
-
-    private float distance;
-
-    public float currentSpeed;
-    public float maxSpeed;
-    public float accelerationSpeed;
-
     public GameObject heart;
     public GameObject damageText;
 
@@ -50,93 +48,106 @@ public class GhoulEnemy : MonoBehaviour
 
 
 
-    private void Update()
+    void Update()
     {
-        
-        if (Vector3.Distance(gameObject.transform.position, player.transform.position) < 5)
+        if (Vector2.Distance(transform.position, player.transform.position) <= attackDistance && !dashing && !knocked)
         {
-
-            // calculate the distance to the target
-            Vector3 distance = player.transform.position - transform.position;
-
-            // calculate the direction to the target
-            Vector3 direction = distance.normalized;
-
-            // update the object's speed
-            currentSpeed += accelerationSpeed * Time.deltaTime;
-            currentSpeed = Mathf.Min(currentSpeed, maxSpeed);
-
-            // move the object in the direction of the target at the current speed
-            transform.position += direction * currentSpeed * Time.deltaTime;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject == player)
-        {
-            Damage();
-            InvokeRepeating("Damage", 1, 1);
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        CancelInvoke("Damage");
-    }
-    private void Damage()
-    {
-
-        eggHealthRadiation.Damage(15);
-
-    }
-
-    private void DamageTextSpawn(int damage)
-    {
-        // Create a random direction vector
-        Vector3 randomDirection = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-
-        // Instantiate the Scriptable Object in a random direction with a slight impulse
-        GameObject spawnedObject = Instantiate(damageText, transform.position, Quaternion.identity);
-        spawnedObject.GetComponent<TextMeshPro>().text += damage;
-    }
-
-    public void OnHit(int damage)
-    {
-        healthBar.gameObject.SetActive(true);
-
-        DamageTextSpawn(damage);
-
-        float randomPercentage = Random.value;
-        if(randomPercentage < .2)
-        {
-            HeartDrop();
-            randomPercentage = Random.value;
-            if (randomPercentage < .4)
+            if (Time.time >= lastAttackTime + attackDelay)
             {
-                HeartDrop();
-                randomPercentage = Random.value;
-                if(randomPercentage < .2)
-                {
-                    HeartDrop();
-                }
+                StartCoroutine(Dash());
+                lastAttackTime = Time.time;
             }
         }
-
-        currentHealth -= damage;
-        healthBar.value = currentHealth;
-        if(currentHealth <= 0)
+        else if (Vector2.Distance(transform.position, player.transform.position) > followDistance)
         {
-            Destroy(gameObject);
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, dashSpeed * Time.deltaTime);
         }
+        else if (Vector2.Distance(transform.position, player.transform.position) < avoidDistance)
+        {
+            AvoidOtherEnemies();
+        }
+        RandomMovement();
     }
+
+
 
     private void Start()
     {
-        healthBar.gameObject.SetActive(false);
-
-        healthBar.value = maxHealth;
-
-        eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
         player = GameObject.Find("Player");
+        eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
+
+        player = GameObject.FindWithTag("Player");
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Draw the attack radius in the editor
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackDistance);
+    }
+
+
+    IEnumerator Dash()
+    {
+        dashing = true;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = player.transform.position;
+        float startTime = Time.time;
+        float endTime = Time.time + dashDuration;
+        while (Time.time < endTime)
+        {
+            float timeElapsed = Time.time - startTime;
+            float percentageComplete = timeElapsed / dashDuration;
+            float easeOutSine = Mathf.Sin(percentageComplete * Mathf.PI * 0.5f);
+            transform.position = Vector3.Lerp(startPos, endPos, easeOutSine);
+            yield return null;
+        }
+        dashing = false;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            Attack();
+            knocked = true;
+            Vector2 knockbackDirection = (transform.position - player.transform.position).normalized;
+            collision.rigidbody.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+        }
+    }
+    void Attack()
+    {
+        eggHealthRadiation.Damage(attackDamage);
+    }
+
+    void AvoidOtherEnemies()
+    {
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, avoidDistance);
+        Vector2 avoidDirection = Vector2.zero;
+        int enemiesCount = 0;
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i].CompareTag("Ghoul") && enemies[i] != gameObject.GetComponent<Collider2D>())
+            {
+                enemiesCount++;
+                avoidDirection += (Vector2)(transform.position - enemies[i].transform.position);
+            }
+        }
+        if (enemiesCount > 0)
+        {
+            avoidDirection /= enemiesCount;
+            avoidDirection = avoidDirection.normalized;
+            transform.position = Vector2.MoveTowards(transform.position, transform.position + (Vector3)avoidDirection, dashSpeed * Time.deltaTime);
+        }
+    }
+
+    void RandomMovement()
+    {
+        if (Time.time >= lastRandomMovementTime + randomMovementDelay)
+        {
+            lastRandomMovementTime = Time.time;
+            randomMovementDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0).normalized;
+        }
+        transform.position += randomMovementDirection * randomMovementSpeed * Time.deltaTime;
     }
 }

@@ -18,10 +18,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Image image;
     public TextMeshProUGUI countText;
     private bool isDragging;
+    private TextMeshProUGUI infoText;
 
     private void Awake()
     {
         inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+        infoText = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
         RefreshCount();
     }
 
@@ -34,8 +36,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
-        image.sprite = newItem.imageUI;
+        image.sprite = newItem.image;
         RefreshCount();
+        ScaleInventoryItem();
     }
 
     public void RefreshCount()
@@ -77,10 +80,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void RefreshItemDescription()
     {
-        TextMeshProUGUI text = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
-        //text.text = item.itemName + " ";
-        text.text = "";
-        text.text += "</size>" + "\n" + "\n" + item.itemDescription;
+        infoText.text = "";
+        infoText.text += "</size>" + "\n" + "\n" + item.itemDescription;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -92,8 +93,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        TextMeshProUGUI text = GameObject.Find("InfoText").GetComponent<TextMeshProUGUI>();
-        text.text = "";
+        infoText.text = "";
     }
 
 

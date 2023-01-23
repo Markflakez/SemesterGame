@@ -90,9 +90,10 @@ GameObject:
   - component: {fileID: 1083718491972997599}
   - component: {fileID: 1083718491972997587}
   - component: {fileID: 1083718491972997586}
+  - component: {fileID: 4881423525905806509}
   m_Layer: 6
   m_Name: Ghoul Enemy
-  m_TagString: Untagged
+  m_TagString: Ghoul
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +112,7 @@ Transform:
   m_Children:
   - {fileID: 5687636426588928408}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1083718491972997597
 SpriteRenderer:
@@ -177,17 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f3e787bc22bc74e8c037e9696ca1bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
-  healthBar: {fileID: 3749854593252849670}
-  dialog: {fileID: 0}
-  sr: {fileID: 1083718491972997597}
-  rb: {fileID: 1083718491972997587}
-  anim: {fileID: 1083718491972997586}
-  speed: 2
-  currentSpeed: 0
-  maxSpeed: 4
-  accelerationSpeed: 1
+  attackDistance: 5
+  attackDelay: 3
+  attackDamage: 20
+  dashSpeed: 5
+  dashDuration: 1.5
+  followDistance: 1
+  avoidDistance: 2
+  randomMovementSpeed: 1
+  randomMovementDelay: 2
+  knockbackForce: 30
   heart: {fileID: 8039829054715657932, guid: 2ff319be49259c74abb6d2c969dd985b, type: 3}
   damageText: {fileID: 7891752204774086465, guid: 00c970c612f8b7c4abed70b7b46794d8, type: 3}
 --- !u!61 &1083718491972997599
@@ -282,6 +282,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &4881423525905806509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083718491972997592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdb3a2d31e7bf743b083a724384291a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 100
+  healthBar: {fileID: 3749854593252849670}
 --- !u!1 &2139091413026281493
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +597,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 100
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:

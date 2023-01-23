@@ -9,16 +9,13 @@ using UnityEngine.InputSystem;
 
 public class Dialog : MonoBehaviour
 {
-    public GameObject pc;
     public GameObject player;
     public GameObject manager;
 
-    private GameObject currentNPC;
+    private string[] currentDialog;
 
     public AudioClip typeSound;
     public AudioSource typeAudio;
-
-    public InputAction interaction;
     public CinemachineVirtualCamera virtualCamera;
 
     public string playerName;
@@ -26,36 +23,29 @@ public class Dialog : MonoBehaviour
 
     public TextMeshProUGUI nameText;
 
-    public Sprite gerhardtIcon;
-    public Sprite richardtIcon;
-    public Sprite rheinhardtIcon;
     public Sprite playerIcon;
     private Sprite npcIcon;
     public Image icon;
 
+    private float closestDistance = Mathf.Infinity;
+    private int runThrough;
+
+    public GameObject[] npcArray;
+    public float range;
+    public Vector2 checkPos;
+
+    private GameObject closestObject;
+
 
     public TextMeshProUGUI text;
-    public TextMeshProUGUI e;
-
-    private bool isInteracting;
-
-
-    //Sätze in Arrays der jeweiligen NPCs
-    private string[] sentences;
-    public string[] sentencesGerhardt;
-    public string[] sentencesRichardt; 
-    public string[] sentencesRheinhardt;
 
     //Individuelle Farben für die NPCnamensTexte
     private Color32 nameTextColor;
-    public Color32 colorGerhardt;
-    public Color32 colorRichardt;
-    public Color32 colorRheinhardt;
 
     private int index;
     public float typingSpeed;
 
-    public bool canTalk = false;
+    public bool canTalk = true;
 
     //UI-Elemente für den Dialog
     public GameObject continueButton;
@@ -71,15 +61,6 @@ public class Dialog : MonoBehaviour
         dialogBox.SetActive(false);
     }
 
-    //Summary
-    ////Wenn der Dialogtext der letzte Text aus dem Array ist, wird der NextButton deaktiviert.
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape) && isInteracting)
-        {
-            CloseChat();
-        }
-    }
 
     //Summary
     //Wenn der IEnumerator aufgerufen wird, wird ein Tippsound gespielt,
@@ -89,28 +70,28 @@ public class Dialog : MonoBehaviour
     IEnumerator Type()
     {
 
-        typeAudio.PlayOneShot(typeSound);
-
-        if (sentences[index].Contains("   "))
+        if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "npc")
         {
-            nameText.text = npcName;
-            nameText.color = nameTextColor;
-            icon.sprite = npcIcon;
+            nameText.text = closestObject.GetComponent<NPCdialog>().npcName;
+            nameText.color = closestObject.GetComponent<NPCdialog>().npcColor;
+            icon.sprite = closestObject.GetComponent<NPCdialog>().npcSprite;
         }
-        else
+        else if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "player")
         {
             nameText.text = playerName;
             nameText.color = new Color32(255, 0, 0, 255);
             icon.sprite = playerIcon;
         }
 
-        foreach (char letter in sentences[index].ToCharArray())
+        typeAudio.PlayOneShot(typeSound);
+
+        foreach (char letter in closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex].ToCharArray())
         {
             text.text += letter;
-            if (text.text == sentences[index])
+            if (text.text == closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex])
             {
                 typeAudio.Stop();
-                if (index != sentences.Length -1)
+                if (closestObject.GetComponent<NPCdialog>().npcIndex != closestObject.GetComponent<NPCdialog>().dialog.Length -1)
                 {
                     continueButton.SetActive(true);
                 }
@@ -130,8 +111,13 @@ public class Dialog : MonoBehaviour
     public void CloseChat()
     {
         StopAllCoroutines();
-        index = 0;
+        closestObject.GetComponent<NPCdialog>().npcIndex = 0;
+        runThrough = 0;
         text.text = "";
+        manager.GetComponent<Manager>().inputActions.Enable();
+        manager.GetComponent<Manager>().barIndicators.SetActive(true);
+        manager.GetComponent<Manager>().questAvatar.SetActive(true);
+        manager.GetComponent<Manager>().eggHealthRadiation.gameObject.SetActive(true);
         manager.GetComponent<Manager>().inventoryHotbar.SetActive(true);
         manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(true);
         manager.GetComponent<Manager>().PauseGame();
@@ -141,7 +127,7 @@ public class Dialog : MonoBehaviour
         continueButton.SetActive(false);
         dialogBox.SetActive(false);
         icon.enabled = false;
-        pc.GetComponent<PlayerController>().canMove = true;
+        player.GetComponent<PlayerController>().canMove = true;
     }
 
     //Summary
@@ -151,9 +137,9 @@ public class Dialog : MonoBehaviour
     public void NextDialog()
     {
         continueButton.SetActive(false);
-        if (index < sentences.Length - 1)
+        if (closestObject.GetComponent<NPCdialog>().npcIndex < closestObject.GetComponent<NPCdialog>().dialog.Length - 1)
         {
-            index++;
+            closestObject.GetComponent<NPCdialog>().npcIndex ++;
             text.text = "";
             StartCoroutine(Type());
         }
@@ -163,55 +149,6 @@ public class Dialog : MonoBehaviour
     //Wenn der Spieler einer der NPC Collision Felder betritt wird der jeweilige Array (der jeweiligen Sätze) verwiesen; inklusive der Farbe und des Namens des NPCs.
     //Zusätzlich wird das "E" Symbol, das dem Spieler vermittelt, dass er den NPC ansprechen kann, sichtbar gemacht.
     //Der canTalk bool ist dafür das der Dialog nicht sofort aufgerufen wird sondern der Spieler selbst ihn öffnen kann mittels der Interact Funktion
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "NPC-Gerhardt")
-        {
-            sentences = sentencesGerhardt;
-            nameTextColor = colorGerhardt;
-            npcName = "Gerhardt";
-            npcIcon = gerhardtIcon;
-
-            e.enabled = true;
-            canTalk = true;
-        }
-        else if (collision.gameObject.name == "NPC-Rheinhardt")
-        {
-            sentences = sentencesRheinhardt;
-            nameTextColor = colorRheinhardt;
-            npcName = "Rheinhardt";
-            npcIcon = rheinhardtIcon;
-
-            e.enabled = true;
-            canTalk = true;
-        }
-        else if (collision.gameObject.name == "NPC-Richardt")
-        {
-            sentences = sentencesRichardt;
-            nameTextColor = colorRichardt;
-            npcName = "Richardt";
-            npcIcon = richardtIcon;
-
-            e.enabled = true;
-            canTalk = true;
-        }
-
-    }
-
-    //Summary
-    //Wenn die Interact Funktion mittels des neuen Input Systems aufgerufen wird, wird der bool isInteracting aktiviert/deaktiviert.
-    public void Interact(InputAction.CallbackContext context)
-    {
-        if(context.performed)
-        {
-            isInteracting = true;
-        }
-        if(context.canceled)
-        {
-            isInteracting = false;
-        }
-    }
-
     //Summary
     //Wenn der Spieler in einem der NPC Kollisionsboxen steht,
     //er mit ihm reden kann und die Kamera Animation nicht in der Kamera Animation ist, welche gestartet wird,
@@ -222,38 +159,58 @@ public class Dialog : MonoBehaviour
     //-Die Koroutine für den Ersten Index im Array wird gestartet
     //-Ein Mittelpunkt um die Kamera auf NPC und Spieler zu fokussieren wird erstellt und als ankerpunkt der Kamera gesetzt
     //-Eine Kamerafahrt(Zoom in die Mitte des NPCs und des Spielers) wird eingeleitet
-    private void OnTriggerStay2D(Collider2D other)
+
+    public void OpenChat()
     {
-        if (canTalk && isInteracting && !virtualCamera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CameraPanOut"))
+        if (canTalk)
         {
-            GameObject Gerhardt = GameObject.Find("NPC-Gerhardt");
-            Gerhardt.GetComponent<DialogBox>().PlayerIsTalking();
-            GameObject Rheinhardt = GameObject.Find("NPC-Rheinhardt");
-            Rheinhardt.GetComponent<DialogBox>().PlayerIsTalking();
-            GameObject Richardt = GameObject.Find("NPC-Richardt");
-            Richardt.GetComponent<DialogBox>().PlayerIsTalking();
-
-
+            manager.GetComponent<Manager>().inputActions.Disable();
+            manager.GetComponent<Manager>().barIndicators.SetActive(false);
+            manager.GetComponent<Manager>().questAvatar.SetActive(false);
+            manager.GetComponent<Manager>().eggHealthRadiation.gameObject.SetActive(false);
             manager.GetComponent<Manager>().inventoryHotbar.SetActive(false);
             manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(false);
             manager.GetComponent<Manager>().PauseGame();
             canTalk = false;
-            e.enabled = false;
             text.enabled = true;
             dialogBox.SetActive(true);
-            StartCoroutine(Type());
+
             icon.enabled = true;
-            pc.GetComponent<PlayerController>().canMove = false;
+            player.GetComponent<PlayerController>().canMove = false;
+
+            npcIcon = closestObject.GetComponent<NPCdialog>().npcSprite;
+            npcName = closestObject.GetComponent<NPCdialog>().npcName;
+            StartCoroutine(Type());
         }
     }
 
-    //Summary
-    //Wenn der Spieler aus einem der NPC Collision Felder geht wird das E-Symbol deaktiviert.
-    private void OnTriggerExit2D(Collider2D collision)
+
+
+
+
+
+
+
+
+    public void CheckClosestNPC()
     {
-        if (collision.gameObject.name == "NPC-Rheinhardt" || collision.gameObject.name == "NPC-Richardt" || collision.gameObject.name == "NPC-Gerhardt")
+        closestObject = null;
+        closestDistance = Mathf.Infinity;
+
+        foreach (GameObject obj in npcArray)
         {
-            e.enabled = false;
+            float distance = Vector2.Distance(transform.position, obj.transform.position);
+            if (distance < closestDistance)
+            {
+                closestObject = obj;
+                closestDistance = distance;
+            }
         }
+
+        if (closestDistance < 4f)
+        {
+            OpenChat();
+        }
+
     }
 }

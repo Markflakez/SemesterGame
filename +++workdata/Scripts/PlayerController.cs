@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public Animator cylinder001;
     public Animator plane;
 
+    private bool canThrowEgg = true;
+
     public bool isTyping = false;
 
     public GameObject GhoulPrefab;
@@ -43,13 +45,14 @@ public class PlayerController : MonoBehaviour
     public float speed;
 
     [SerializeField]
-    public bool isDashing = false;
     public bool isAttacking;
-    private bool canDash = true;
-    private float dashSpeed = 16;
-    private float dashDuration = .125f;
 
-    private float cooldownTime = 1.0f;
+
+    public float dashSpeed;
+    public float dashDuration;
+    public float dashCooldown;
+    private float lastDash;
+    private Vector2 dashVelocity;
 
     private bool onCooldown = false;
 
@@ -89,25 +92,12 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Access
-    PlayerControls inputActions;
     Animator anim;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     TrailRenderer tr;
     #endregion
 
-    #region OnEnable/Disable
-    private void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Disable();
-    }
-    #endregion
-    
     public void ToggleTyping()
     {
         canMove = !canMove;
@@ -164,47 +154,46 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && !onCooldown)
         {
-            if (idleState == 1)
-            {
-                // set x direction to 0 and y direction to 1
-                // execute dash with dashSpeed in the y direction for dashDuration
-                transform.DOLocalMoveY(dashSpeed, dashDuration);
-            }
-            else if (idleState == 2)
-            {
-                // set x direction to 0 and y direction to -1
-                // execute dash with dashSpeed in the -y direction for dashDuration
-                transform.DOLocalMoveY(-dashSpeed, dashDuration);
-            }
-            else if (idleState == 3)
-            {
-                // set x direction to -1 and y direction to 0
-                // execute dash with dashSpeed in the -x direction for dashDuration
-                transform.DOLocalMoveX(-dashSpeed, dashDuration);
-            }
-            else if (idleState == 4)
-            {
-                // set x direction to 1 and y direction to 0
-                // execute dash with dashSpeed in the x direction for dashDuration
-                transform.DOLocalMoveX(dashSpeed, dashDuration);
-            }
-            onCooldown = true;
-            isDashing = true;
-            Invoke("ResetCooldown", cooldownTime);
+            
             
         }
 
-        if (isDashing)
+    }
+
+
+
+    public void PerformDash()
+    {
+        Debug.Log("ye");
+        if (idleState == 1)
         {
-            Instantiate(ghostEffect).transform.position = this.transform.position;
+            // set x direction to 0 and y direction to 1
+            dashVelocity = new Vector2(0f, dashSpeed);
+        }
+        else if (idleState == 2)
+        {
+            // set x direction to 0 and y direction to -1
+            dashVelocity = new Vector2(0f, -dashSpeed);
+        }
+        else if (idleState == 3)
+        {
+            // set x direction to -1 and y direction to 0
+            dashVelocity = new Vector2(-dashSpeed, 0f);
+        }
+        else if (idleState == 4)
+        {
+            // set x direction to 1 and y direction to 0
+            dashVelocity = new Vector2(dashSpeed, 0f);
         }
 
-    }
-    void StopDash()
-    {
-        isDashing = false;
+        rb.velocity = dashVelocity;
+        Invoke("StopDash", dashDuration);
     }
 
+    private void StopDash()
+    {
+        rb.velocity = Vector2.zero;
+    }
 
     void ResetCooldown()
     {
@@ -218,15 +207,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        inputActions = new PlayerControls();
         anim.SetFloat("idleState", idleState);
-
-        inputActions.Movement.Movement.performed += ctx => Movement(ctx.ReadValue<Vector2>());
-        inputActions.Movement.Movement.canceled += ctx => Movement(ctx.ReadValue<Vector2>());
     }
 
     #region Movement
-    void Movement(Vector2 directions)
+    public void Movement(Vector2 directions)
     {
             movementX = directions.x;
             movementY = directions.y;
@@ -248,11 +233,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    public void ThrowEgg(InputAction.CallbackContext context)
+    public void ItemLMB()
     {
         if (!manager.isPaused)
         {
-            if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            if (inventoryManager.selectedItemName == "Egg" && canThrowEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
                 //Instantiates the object to throw
                 GameObject thrownObject = Instantiate(eggThrowablePrefab, eggThrowSpawn.position, Quaternion.identity);
@@ -268,82 +253,53 @@ public class PlayerController : MonoBehaviour
                 thrownObject.GetComponent<Rigidbody2D>().AddTorque(rotationSpeed, ForceMode2D.Impulse);
                 Destroy(thrownObject, 3f);
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                canThrowEgg = false;
+                Invoke("EggThrowCoaldown", .5f);
             }
-            if (context.performed && inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            if (inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
-                Attack();
+                gameObject.GetComponent<PlayerCombat>().Attack();
             }
             inventoryManager.CheckSelectedItem();
         }
     }
 
-    public void EatEgg(InputAction.CallbackContext context)
+    public void ItemRMB()
     {
-        if (context.performed && inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0 && eggHealthRadiation.eggMat.GetFloat("_RemovedSegments") > 10)
+        if (!manager.isPaused)
         {
-            inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
-            eggHealthRadiation.AddEggs(1);
+            if (inventoryManager.selectedItemName == "Egg" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            {
+                inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                eggHealthRadiation.AddEggs(1);
+            }
+            inventoryManager.CheckSelectedItem();
         }
     }
+
+
+    void EggThrowCoaldown()
+    {
+        canThrowEgg = true;
+    }
+
+
 
 
     private void FixedUpdate()
     {
         if (canMove)
         {
-            inputActions.Enable();
             Vector2 move;
             move = new Vector2(movementX * speed, movementY * speed);
             rb.velocity = move;
         }
         else
         {
-            inputActions.Disable();
             Vector2 stop;
             stop = new Vector2(movementX * 0, movementY * 0);
             rb.velocity = stop;
         }
-    }
-
-    public void Attack()
-    {
-        if (idleState == 2)
-        {
-            anim.Play("PlayerAttackSwordDown");
-        }
-        else if (idleState == 0)
-        {
-            anim.Play("PlayerAttackSwordUp");
-        }
-        else if (idleState == 1)
-        {
-            anim.Play("PlayerAttackSwordRight");
-        }
-        else if (idleState == 3)
-        {
-            anim.Play("PlayerAttackSwordLeft");
-        }
-
-
-        if (!isAttacking && !manager.isPaused && IsInRange())
-        {
-            
-            //Gets all the enemies within range
-            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
-
-            //Applys a force to each enemy to knock them back
-            foreach (Collider2D enemy in enemies)
-            {
-                Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();
-                if (enemyRigidbody != null)
-                {
-                    Vector2 forceDirection = enemyRigidbody.transform.position - transform.position;
-                    enemyRigidbody.AddForce(forceDirection.normalized * force, ForceMode2D.Impulse);
-                    enemy.gameObject.GetComponent<GhoulEnemy>().OnHit(Random.Range(12, 18));
-                }
-            }
-        }
-        
     }
 
 

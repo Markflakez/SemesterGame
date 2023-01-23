@@ -26,13 +26,13 @@ public class GhostEffect : MonoBehaviour
     private void StartGhost()
     {
         sr.sprite = pc.GetComponent<SpriteRenderer>().sprite;
-        if(pc.isDashing)
+        //if(pc.isDashing)
         {
-            Invoke("SpawnGhost", invokeSpeed);
+            //Invoke("SpawnGhost", invokeSpeed);
         }
-        else
+        //else
         {
-            Destroy(this.gameObject);
+           // Destroy(this.gameObject);
         }
     }
     private void SpawnGhost()

@@ -17,8 +17,7 @@ public class Item : ScriptableObject
     public bool stackable = true;
     
     [Header("Both")]
-    public Sprite imageIngame;
-    public Sprite imageUI;
+    public Sprite image;
 
 
     public enum ItemType

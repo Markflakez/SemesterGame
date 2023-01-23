@@ -17,7 +17,7 @@ public class WorldspaceItem : MonoBehaviour
 
     private void Start()
     {
-        sr.sprite = item.imageIngame;
+        sr.sprite = item.image;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
