@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!manager.isPaused)
         {
-            if (inventoryManager.selectedItemName == "Egg" && canEatEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            if (inventoryManager.selectedItemName == "Egg" && canEatEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0 && eggHealthRadiation.eggs < 91)
             {
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
                 eggHealthRadiation.AddEggs(1);

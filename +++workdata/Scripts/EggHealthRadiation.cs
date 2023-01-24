@@ -163,8 +163,8 @@ public class EggHealthRadiation : MonoBehaviour
         }
 
         manager.inputActions.Disable();
-        DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 8.5f).SetEase(Ease.OutFlash);
-        Invoke("BlackFade", 3);
+        
+        Invoke("BlackFade", 1);
         manager.inGameSound.PlayOneShot(manager.cough);
     }
 
@@ -182,7 +182,7 @@ public class EggHealthRadiation : MonoBehaviour
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3;
 
-
+        DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 6.5f).SetEase(Ease.OutFlash);
         DOTween.To(() => manager.blackCircle.GetComponent<Material>().color, x => manager.blackCircle.GetComponent<Material>().color = x, endColor, time);
         DOTween.To(() => healthCircle.GetComponent<Material>().color, x => healthCircle.GetComponent<Material>().color = x, endColor, time);
         DOTween.To(() => radiationCircle.GetComponent<Material>().color, x => radiationCircle.GetComponent<Material>().color = x, endColor, time);

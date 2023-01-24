@@ -157,7 +157,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             LOADFILE();
 
-            SaturationFade();
+            //SaturationFade();
             eggHealthRadiation.RadiationOverTime();
 
             playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
@@ -211,11 +211,30 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     private void LoadFileNames()
     {
-        saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
-        
-        saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
-
-        saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
+        if (PlayerPrefs.HasKey("FILETIME-" + "1"))
+        {
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
+        }
+        else
+        {
+            saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = "New Game";
+        }
+        if (PlayerPrefs.HasKey("FILETIME-" + "2"))
+        {
+            saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "2");
+        }
+        else
+        {
+            saveFile2.GetComponentInChildren<TextMeshProUGUI>().text = "New Game";
+        }
+        if (PlayerPrefs.HasKey("FILETIME-" + "3"))
+        {
+            saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "3");
+        }
+        else
+        {
+            saveFile3.GetComponentInChildren<TextMeshProUGUI>().text = "New Game";
+        }
     }
     public void PauseGame()
     {
@@ -852,19 +871,28 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     #endregion LOADSAVE
 
-    public void SAVEFILE(int file)
+    public void SAVEFILE(Button button)
     {
-        DateTime currentDate = DateTime.Today;
-        savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("SAVEFILE", button));
+        }
 
-        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
-        savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
+        if (sceneSwitch)
+        {
 
-        //Saves the current Player Health and Position
-        //SAVE_PLAYER_HEALTH(file);
-        //SAVE_PLAYER_LOCATION(file);
+            int file = PlayerPrefs.GetInt("CurrentFile");
 
-        SAVE_INVENTORY();
+            DateTime currentDate = DateTime.Today;
+            PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+
+            //Saves the current Player Health and Position
+            //SAVE_PLAYER_HEALTH(file);
+            //SAVE_PLAYER_LOCATION(file);
+
+            SAVE_INVENTORY();
+        }
+        ButtonAnimation(button);
     }
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH(int file)

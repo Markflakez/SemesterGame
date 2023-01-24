@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1e51ddd3ad71c4d43927d9a62bd2beed, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -477,6 +477,9 @@ MonoBehaviour:
   - npc
   - player
   npcSprite: {fileID: 786098734, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
+  dialogText: {fileID: 0}
+  randomSentencees: []
+  dialogBox: {fileID: 0}
 --- !u!95 &6210660345451354841
 Animator:
   serializedVersion: 5
