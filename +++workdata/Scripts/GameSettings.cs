@@ -93,9 +93,14 @@ public class GameSettings : MonoBehaviour
             int framerate = Mathf.RoundToInt(frameCount / elapsedTime);
 
             //Updates the text with the current framerate
-            if (SceneManager.GetActiveScene().name == "InGame")
+            if (SceneManager.GetActiveScene().name == "InGame" && framerate <= Application.targetFrameRate)
             {
                 fpsDisplay.text = "FPS: " + framerate;
+            }
+            else
+            {
+                fpsDisplay.text = "";
+                fpsDisplay.text = "FPS: " + Application.targetFrameRate;
             }
 
             //Resets the counters

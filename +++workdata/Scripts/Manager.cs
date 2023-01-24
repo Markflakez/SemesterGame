@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -66,6 +67,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject controlsPanel;
     public GameObject audioPanel;
 
+    public CinemachineBrain brain;
 
     private float buttonDelay = .15f;
     private GameObject saveFiles;
@@ -82,23 +84,32 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Vector2 playerPos;
 
     public Volume postProcessingVolume;
-    private ColorAdjustments colorAdjustments;
+    public ColorAdjustments colorAdjustments;
     public RectTransform uiPanel;
 
     public string sceneName;
 
     public InputActionAsset inputActions;
 
+
+    public GameObject blackCircle;
+
     public Item[] items;
     private Item currentItem;
 
     public bool isPaused = false;
-
+    public GameObject itemIndicators;
     public GameObject eggIndicator;
 
     public bool canThrowEgg = true;
 
+
+    public AudioSource inGameSound;
+    public AudioClip cough;
+    public AudioClip piano;
+
     public GameObject barIndicators;
+    public GameObject playerCamera;
 
     public TextMeshProUGUI infoText;
 
@@ -148,6 +159,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
             SaturationFade();
             eggHealthRadiation.RadiationOverTime();
+
+            playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
+            playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
         }
 
         if (sceneName != "LoadGame")
@@ -221,6 +235,8 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
+        playerCamera.GetComponent<CinemachineBrain>().m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+        brain.m_IgnoreTimeScale = true;
     }
     private void ButtonSound()
     {

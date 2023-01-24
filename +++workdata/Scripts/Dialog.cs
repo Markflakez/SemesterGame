@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,11 @@ public class Dialog : MonoBehaviour
 {
     public GameObject player;
     public GameObject manager;
+
+    private GameObject middlePoint;
+    private GameObject quarterPoint;
+
+    private float time;
 
     private string[] currentDialog;
 
@@ -61,6 +67,12 @@ public class Dialog : MonoBehaviour
         dialogBox.SetActive(false);
     }
 
+    private void Start()
+    {
+        middlePoint = new GameObject();
+        quarterPoint = new GameObject();
+    }
+
 
     //Summary
     //Wenn der IEnumerator aufgerufen wird, wird ein Tippsound gespielt,
@@ -69,19 +81,33 @@ public class Dialog : MonoBehaviour
     //Wenn der Dialogtext dem Text aus dem jetzigen Index des Arrays entspricht, wird der NextButton aktiviert und der Tippsound gestoppt.
     IEnumerator Type()
     {
+        CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
+
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3;
 
         if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "npc")
         {
             nameText.text = closestObject.GetComponent<NPCdialog>().npcName;
             nameText.color = closestObject.GetComponent<NPCdialog>().npcColor;
             icon.sprite = closestObject.GetComponent<NPCdialog>().npcSprite;
+
+            quarterPoint.transform.position = (middlePoint.transform.position + closestObject.transform.position) / 2;
+
+            vcam.Follow = quarterPoint.transform;
         }
         else if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "player")
         {
             nameText.text = playerName;
             nameText.color = new Color32(255, 0, 0, 255);
             icon.sprite = playerIcon;
+
+            quarterPoint.transform.position = (middlePoint.transform.position + player.transform.position) / 2;
+
+            vcam.Follow = quarterPoint.transform;
         }
+
+        
 
         typeAudio.PlayOneShot(typeSound);
 
@@ -110,17 +136,24 @@ public class Dialog : MonoBehaviour
     //Außerdem wird der instantiierte Mittelpunkt als Referenz für die Kamera gelöscht.
     public void CloseChat()
     {
+        CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
+
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+        CinemachineZoomOut();
+        Manager managerr = manager.GetComponent<Manager>();
         StopAllCoroutines();
         closestObject.GetComponent<NPCdialog>().npcIndex = 0;
         runThrough = 0;
         text.text = "";
-        manager.GetComponent<Manager>().inputActions.Enable();
-        manager.GetComponent<Manager>().barIndicators.SetActive(true);
-        manager.GetComponent<Manager>().questAvatar.SetActive(true);
-        manager.GetComponent<Manager>().eggHealthRadiation.gameObject.SetActive(true);
-        manager.GetComponent<Manager>().inventoryHotbar.SetActive(true);
-        manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(true);
-        manager.GetComponent<Manager>().PauseGame();
+        managerr.inputActions.Enable();
+        managerr.itemIndicators.SetActive(true);
+        managerr.barIndicators.SetActive(true);
+        managerr.questAvatar.SetActive(true);
+        managerr.eggHealthRadiation.gameObject.SetActive(true);
+        managerr.inventoryHotbar.SetActive(true);
+        managerr.inventoryHotbarBackBoard.SetActive(true);
+        managerr.PauseGame();
         canTalk = true;
         typeAudio.Stop();
         text.enabled = false;
@@ -162,15 +195,29 @@ public class Dialog : MonoBehaviour
 
     public void OpenChat()
     {
+        Manager managerr = manager.GetComponent<Manager>();
         if (canTalk)
         {
-            manager.GetComponent<Manager>().inputActions.Disable();
-            manager.GetComponent<Manager>().barIndicators.SetActive(false);
-            manager.GetComponent<Manager>().questAvatar.SetActive(false);
-            manager.GetComponent<Manager>().eggHealthRadiation.gameObject.SetActive(false);
-            manager.GetComponent<Manager>().inventoryHotbar.SetActive(false);
-            manager.GetComponent<Manager>().inventoryHotbarBackBoard.SetActive(false);
-            manager.GetComponent<Manager>().PauseGame();
+            // Find all objects in the scene with the NPCScript script attached
+            NPCdialog[] npcs = FindObjectsOfType<NPCdialog>();
+
+            // Iterate through the list of NPCs
+            foreach (NPCdialog npc in npcs)
+            {
+                // Execute the DoAction function on each NPC
+                npc.HideWorldSpaceDialog();
+            }
+
+
+            CinemachineZoomIn();
+            managerr.inputActions.Disable();
+            managerr.itemIndicators.SetActive(false);
+            managerr.barIndicators.SetActive(false);
+            managerr.questAvatar.SetActive(false);
+            managerr.eggHealthRadiation.gameObject.SetActive(false);
+            managerr.inventoryHotbar.SetActive(false);
+            managerr.inventoryHotbarBackBoard.SetActive(false);
+            managerr.PauseGame();
             canTalk = false;
             text.enabled = true;
             dialogBox.SetActive(true);
@@ -185,14 +232,37 @@ public class Dialog : MonoBehaviour
     }
 
 
+    private void CinemachineZoomIn()
+    {
+        float finalSize = 3;
+        float duration = 1;
+
+        CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
+
+        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens);
+
+        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestObject.transform.position) / 2;
 
 
+        manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = middlePoint.transform;
+    }
+    private void CinemachineZoomOut()
+    {
+        float finalSize = 5;
+        float duration = (float)1.5;
+
+        CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
+
+        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens);
+
+        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestObject.transform.position) / 2;
 
 
+        manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = manager.GetComponent<Manager>().player.transform;
+    }
 
 
-
-    public void CheckClosestNPC()
+public void CheckClosestNPC()
     {
         closestObject = null;
         closestDistance = Mathf.Infinity;

@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Cinemachine;
+using UnityEngine.InputSystem;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 public class EggHealthRadiation : MonoBehaviour
 {
 
@@ -15,6 +20,11 @@ public class EggHealthRadiation : MonoBehaviour
     public Material eggMat;
     public Material healthMat;
     public Material radiationMat;
+
+    private GameObject deathPoint;
+
+
+    public Manager manager;
 
     public GameObject eggCircle;
     public GameObject healthCircle;
@@ -30,6 +40,10 @@ public class EggHealthRadiation : MonoBehaviour
     public float damageDealt;
     public float eggs;
 
+    public Color startColor;
+    public Color endColor;
+
+
     public float startValue = 0;
     public float endValue = 101;
     public float duration = 10;
@@ -38,6 +52,8 @@ public class EggHealthRadiation : MonoBehaviour
     public GameObject avatarIcon;
     void Start()
     {
+        deathPoint = new GameObject();
+
         health = 100;
 
         radiationRemovedSegments = 100;
@@ -79,6 +95,11 @@ public class EggHealthRadiation : MonoBehaviour
                 {
                     timePassed = 0;
                     UpdateRadiation(startValue);
+                }
+
+                if (startValue >= 100)
+                {
+                    Death();
                 }
             });
     }
@@ -140,7 +161,38 @@ public class EggHealthRadiation : MonoBehaviour
         {
             playerController.GetComponent<Animator>().Play("PlayerDeathLeft");
         }
+
+        manager.inputActions.Disable();
+        DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 8.5f).SetEase(Ease.OutFlash);
+        Invoke("BlackFade", 3);
+        manager.inGameSound.PlayOneShot(manager.cough);
     }
+
+
+    public void BlackFade()
+    {
+        float finalSize = (float)3.5;
+        float duration = 7;
+        float time = 2;
+        manager.inGameSound.PlayOneShot(manager.piano);
+        
+
+        CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
+
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
+        vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3;
+
+
+        DOTween.To(() => manager.blackCircle.GetComponent<Material>().color, x => manager.blackCircle.GetComponent<Material>().color = x, endColor, time);
+        DOTween.To(() => healthCircle.GetComponent<Material>().color, x => healthCircle.GetComponent<Material>().color = x, endColor, time);
+        DOTween.To(() => radiationCircle.GetComponent<Material>().color, x => radiationCircle.GetComponent<Material>().color = x, endColor, time);
+        DOTween.To(() => eggCircle.GetComponent<Material>().color, x => eggCircle.GetComponent<Material>().color = x, endColor, time);
+
+        DOTween.To(() => manager.uiPanel.GetComponent<CanvasGroup>().alpha, x => manager.uiPanel.GetComponent<CanvasGroup>().alpha = x, 0, time);
+
+        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens).SetEase(Ease.InBack);
+    }
+
 
 
     public void UpdateRadiation(float timePased)
@@ -210,8 +262,11 @@ public class EggHealthRadiation : MonoBehaviour
         else if (startValue >= 100)
         {
             health = 0;
+            removedSegments = 100;
             damageDealt = 100;
             removedSegments = 100;
+            currentRadiationText.text = "100";
+            currentHealthText.text = "0";
             maxHealthText.text = health.ToString();
         }
         else
