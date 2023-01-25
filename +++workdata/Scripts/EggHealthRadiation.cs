@@ -22,7 +22,7 @@ public class EggHealthRadiation : MonoBehaviour
     public Material radiationMat;
 
     private GameObject deathPoint;
-
+    private bool died = false;
 
     public Manager manager;
 
@@ -115,7 +115,10 @@ public class EggHealthRadiation : MonoBehaviour
 
         if (health <= 0)
         {
-            Death();
+            if (!died)
+            {
+                Death();
+            }
         }
         else
         {
@@ -141,10 +144,12 @@ public class EggHealthRadiation : MonoBehaviour
         {
             playerController.GetComponent<Animator>().Play("PlayerHitLeft");
         }
+        manager.inGameSound.PlayOneShot(manager.hurtSound);
     }
 
     private void Death()
     {
+        died = true;
         if (playerController.idleState == 0)
         {
             playerController.GetComponent<Animator>().Play("PlayerDeathUp");
@@ -166,23 +171,23 @@ public class EggHealthRadiation : MonoBehaviour
         
         Invoke("BlackFade", 1);
         manager.inGameSound.PlayOneShot(manager.cough);
+        if (manager.postProcessingVolume.profile.TryGet(out manager.colorAdjustments))
+        {
+            DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 12f).SetEase(Ease.InOutSine);
+        }
     }
 
 
     public void BlackFade()
     {
-        float finalSize = (float)3.5;
-        float duration = 7;
-        float time = 2;
+        float finalSize = (float)2.5;
+        float duration = 6;
+        float time = 3;
         manager.inGameSound.PlayOneShot(manager.piano);
         
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
-
-        vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
-        vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3;
-
-        DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 6.5f).SetEase(Ease.OutFlash);
+        
         DOTween.To(() => manager.blackCircle.GetComponent<Material>().color, x => manager.blackCircle.GetComponent<Material>().color = x, endColor, time);
         DOTween.To(() => healthCircle.GetComponent<Material>().color, x => healthCircle.GetComponent<Material>().color = x, endColor, time);
         DOTween.To(() => radiationCircle.GetComponent<Material>().color, x => radiationCircle.GetComponent<Material>().color = x, endColor, time);

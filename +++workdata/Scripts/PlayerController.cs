@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public bool isAttacking;
 
+    private bool isWalking = false;
 
     public float dashSpeed;
     public float dashDuration;
@@ -180,22 +181,24 @@ public class PlayerController : MonoBehaviour
     #region Movement
     public void Movement(Vector2 directions)
     {
-            movementX = directions.x;
-            movementY = directions.y;
+        movementX = directions.x;
+        movementY = directions.y;
 
-            if (movementY == 1)
-                idleState = 0;
-            else if (movementX == 1)
-                idleState = 1;
-            else if (movementY == -1)
-                idleState = 2;
-            else if (movementX == -1)
-                idleState = 3;
+        if (movementY == 1)
+            idleState = 0;
+        else if (movementX == 1)
+            idleState = 1;
+        else if (movementY == -1)
+            idleState = 2;
+        else if (movementX == -1)
+            idleState = 3;
 
+        anim.SetFloat("xDirection", movementX);
+        anim.SetFloat("yDirection", movementY);
 
-            anim.SetFloat("idleState", idleState);
-            anim.SetFloat("xDirection", movementX);
-            anim.SetFloat("yDirection", movementY);
+        
+        anim.SetFloat("idleState", idleState);
+
     }
     #endregion
 
@@ -221,13 +224,21 @@ public class PlayerController : MonoBehaviour
                 Destroy(thrownObject, 3f);
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
                 canThrowEgg = false;
-                Invoke("EggThrowCoaldown", .5f);
+                Invoke("EggThrowCoaldown", .125f);
+                manager.inGameSound.PlayOneShot(manager.eggThrowSound);
+                inventoryManager.CheckSelectedItem();
             }
-            if (inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            else if (inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
                 gameObject.GetComponent<PlayerCombat>().Attack();
+                manager.inGameSound.PlayOneShot(manager.swordSwingSound);
+                inventoryManager.CheckSelectedItem();
             }
-            inventoryManager.CheckSelectedItem();
+            else
+            {
+                inventoryManager.CheckSelectedItem();
+                return;
+            }
         }
     }
 
@@ -262,6 +273,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDashing && canDash)
         {
+            manager.inGameSound.PlayOneShot(manager.dashSound);
             isDashing = true;
             canDash = false;
             StartCoroutine(DashCoaldown((float)1));
@@ -340,26 +352,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        isWalking = true;
+
+
         if(isDashing)
         {
-            anim.speed = 4;
+            anim.speed = 2;
         }
         else
         {
             anim.speed = 1;
-        }
-
-        anim.SetFloat("idleState", idleState);
-        anim.SetFloat("xDirection", movementX);
-        anim.SetFloat("yDirection", movementY);
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.name == "NPC-Laurel2")
-        {
-            yes = collision.gameObject.GetComponent<NPCMovement>();
         }
     }
 }

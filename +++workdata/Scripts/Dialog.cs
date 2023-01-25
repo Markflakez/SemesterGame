@@ -62,9 +62,12 @@ public class Dialog : MonoBehaviour
     //Dialog-Elemente werden deaktiviert
     private void Awake()
     {
-        text.enabled = false;
-        continueButton.SetActive(false);
-        dialogBox.SetActive(false);
+        if (manager.GetComponent<Manager>().sceneName == "InGame")
+        {
+            text.enabled = false;
+            continueButton.SetActive(false);
+            dialogBox.SetActive(false);
+        }
     }
 
     private void Start()
@@ -253,7 +256,7 @@ public class Dialog : MonoBehaviour
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 
-        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens);
+        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens).SetEase(Ease.InOutSine);
 
         middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestObject.transform.position) / 2;
 

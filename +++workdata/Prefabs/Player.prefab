@@ -266,8 +266,9 @@ GameObject:
   - component: {fileID: 5523723489648766062}
   - component: {fileID: 5523723489648766058}
   - component: {fileID: 5010586743985958775}
-  - component: {fileID: 5523723489648766039}
   - component: {fileID: 8053581215198172407}
+  - component: {fileID: 1172664363}
+  - component: {fileID: 6429723203281250053}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -327,6 +328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   force: 10
   range: 2
+  isDashing: 0
+  canDash: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -341,8 +344,10 @@ MonoBehaviour:
   eggHealthRadiation: {fileID: 0}
   eggThrowSpawn: {fileID: 1090005112148275015}
   speed: 5
-  isDashing: 0
   isAttacking: 1
+  dashSpeed: 10
+  dashDuration: 0.5
+  dashCooldown: 2
   physicsMaterial2D: {fileID: 6200000, guid: e8c30e3bf61eee74583aeaba8105a9a4, type: 2}
   hardCollisions:
     serializedVersion: 2
@@ -375,7 +380,6 @@ MonoBehaviour:
   attackRange: 3
   attackDamage: 30
   knockbackForce: 50
-  inputActions: {fileID: -944628639613478452, guid: b476c4eaf9b5c964981da588da8fbb4f, type: 3}
 --- !u!114 &5523723489648766037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,62 +392,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd397d41c235a347bc225a076c38987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pc: {fileID: 5523723489648766061}
   player: {fileID: 5523723489648766061}
   manager: {fileID: 0}
   typeSound: {fileID: 8300000, guid: 29b4b5a7daaaf4d458d1cb056f33ab90, type: 3}
   typeAudio: {fileID: 0}
-  interaction:
-    m_Name: Interaction
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: b90d277f-00f5-4f69-b3cd-6e06f32c1d29
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   virtualCamera: {fileID: 0}
   playerName: Player
   nameText: {fileID: 0}
-  gerhardtIcon: {fileID: 786098734, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
-  richardtIcon: {fileID: 802433152, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
-  rheinhardtIcon: {fileID: 247560727, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
   playerIcon: {fileID: -1190291757, guid: 56245f1780c6b814ebb86c81599e797d, type: 3}
   icon: {fileID: 0}
+  npcArray:
+  - {fileID: 0}
+  - {fileID: 0}
+  range: 5
+  checkPos: {x: 0, y: 0}
   text: {fileID: 0}
-  e: {fileID: 0}
-  sentencesGerhardt:
-  - "Hey k\xF6nnten sie mir..."
-  - 'Keine Interesse..   '
-  - ...
-  sentencesRichardt:
-  - 'Hallooo! Haben sie Interesse an Eiern?   '
-  - Hey, ehm.. Ja, warum nicht, Hunger habe ich.
-  - 'Wieviele wollen sie denn? Meine Eier kommen direkt aus der Region. Wurden gestern
-    erst gelegt und...   '
-  - "Ich h\xE4tte gerne acht Eier."
-  - "Bittesch\xF6n! Sie sehen aus, als kommen sie nicht von hier. Die kriegen sie
-    auf's Haus! Besuchen sie mich gerne wieder!   "
-  - Danke, das werd' ich.
-  sentencesRheinhardt:
-  - 'Hey Wilder!   '
-  - Hallo?
-  - "Willst du mir helfen meine ausgebrochenen Schafe wiederzufinden? Du kriegst
-    auch eine gro\xDFz\xFCgige Belohnung. Na wie w\xE4r's?   "
-  - Ok, ich helf dir. Aber wo soll ich anfang zu suchen?
-  - "Das ist wunderbar!! Die Schafe sind in Richtung Norden gelaufen, mehr wei\xDF
-    ich auch nicht. Viel Erfolg beim Suchen!   "
-  colorGerhardt:
-    serializedVersion: 2
-    rgba: 4294967295
-  colorRichardt:
-    serializedVersion: 2
-    rgba: 4289528005
-  colorRheinhardt:
-    serializedVersion: 2
-    rgba: 4294956694
   typingSpeed: 0.01
-  canTalk: 0
+  canTalk: 1
   continueButton: {fileID: 0}
   closeButton: {fileID: 0}
   dialogBox: {fileID: 0}
@@ -467,7 +432,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 1e51ddd3ad71c4d43927d9a62bd2beed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -555,7 +520,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.03875947, y: -0.0845654}
@@ -571,27 +536,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4387469, y: 2.0183318}
   m_EdgeRadius: 0
---- !u!114 &5523723489648766039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523723489648766061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a38cbb3d4294d4e4ba77cfa7b2c5bf43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distancePerStep: 0.1
-  stepInterval: 0.4
-  walkSounds:
-  - {fileID: 8300000, guid: 3ed1d0850563002479445e4d220a8e86, type: 3}
-  - {fileID: 8300000, guid: 2659c0a61276f95448aa85cc5f3784b7, type: 3}
-  - {fileID: 8300000, guid: 358e32520bb451a4587bbf327c2d4ad2, type: 3}
-  - {fileID: 8300000, guid: 4c260e8ca13485848b37c6791820e9ea, type: 3}
-  - {fileID: 8300000, guid: 0c36ee8dd878cca49b27153f8e63f46b, type: 3}
-  soundPlayer: {fileID: 0}
 --- !u!81 &8053581215198172407
 AudioListener:
   m_ObjectHideFlags: 0
@@ -600,3 +544,115 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5523723489648766061}
   m_Enabled: 1
+--- !u!114 &1172664363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5523723489648766061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3e536293f7d1640a7faea859dc82ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 0}
+  grassSound: {fileID: 8300000, guid: 512ba04e2e6668a4194baca54771a81d, type: 3}
+  sandSound: {fileID: 8300000, guid: 3ed1d0850563002479445e4d220a8e86, type: 3}
+  waterSound: {fileID: 8300000, guid: f18f86b23bd6e4f4581f0814284c48dc, type: 3}
+--- !u!82 &6429723203281250053
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5523723489648766061}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

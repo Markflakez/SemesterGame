@@ -107,6 +107,12 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public AudioSource inGameSound;
     public AudioClip cough;
     public AudioClip piano;
+    public AudioClip eggThrowSound;
+    public AudioClip swordSwingSound;
+    public AudioClip eggSplash;
+    public AudioClip itemPickUp;
+    public AudioClip dashSound;
+    public AudioClip hurtSound;
 
     public GameObject barIndicators;
     public GameObject playerCamera;
@@ -241,13 +247,17 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if(Time.timeScale == 1)
         {
             player.GetComponent<PlayerController>().isAttacking = true;
+            inputActions.FindAction("Move").Disable();
             Time.timeScale = 0;
+            DOTween.PauseAll();
             isPaused = true;
         }
         else
         {
             player.GetComponent<PlayerController>().isAttacking = false;
+            inputActions.FindAction("Move").Enable();
             Time.timeScale = 1;
+            DOTween.PlayAll();
             isPaused = false;
         }
 
@@ -424,10 +434,12 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (!inventoryMain.activeSelf)
         {
             inventoryMain.SetActive(true);
+            inputActions.FindAction("Move").Disable();
         }
         else
         {
             inventoryMain.SetActive(false);
+            inputActions.FindAction("Move").Enable();
         }
         PauseGame();
     }
