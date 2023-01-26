@@ -19,7 +19,11 @@ public class PlayerController : MonoBehaviour
     public bool isDashing = false;
     public bool canDash = true;
 
-    public LayerMask enemyLayer;
+    public bool canSpawnGhost = true;
+    public GameObject ghostPrefab;
+    public float distance;
+    private float distanceTraveled;
+    private Vector3 startPosition;
 
     public Animator cylinder;
     public Animator cylinder001;
@@ -30,11 +34,13 @@ public class PlayerController : MonoBehaviour
 
     public bool isTyping = false;
 
-    public GameObject GhoulPrefab;
+    public GameObject EnemyPrefab;
     public GameObject eggThrowablePrefab;
     public Camera mainCamera;
 
     public InventoryManager inventoryManager;
+
+    public Transform enemySpawn;
 
     public EggHealthRadiation eggHealthRadiation;
 
@@ -82,6 +88,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource stepSoundPlayer;
     public AudioClip stepsounds;
 
+    private PlayerCombat playerCombat;
 
     public BoxCollider2D weaponCollision;
 
@@ -115,13 +122,7 @@ public class PlayerController : MonoBehaviour
         playerCurrentHealth = playerMaxHealth;
         weaponCollision.gameObject.SetActive(false);
         allowDash = true;
-    }
-
-    bool IsInRange()
-    {
-        //Gets all the enemies within range
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, range, enemyLayer);
-        return enemies.Length > 0;
+        startPosition = transform.position;
     }
 
     private void Update()
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.G))
         {
-            Instantiate(GhoulPrefab);
+            Instantiate(EnemyPrefab, null);
         }
 
         if (Input.GetKey(KeyCode.J))
@@ -175,6 +176,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        playerCombat = gameObject.GetComponent<PlayerCombat>();
         anim.SetFloat("idleState", idleState);
     }
 
@@ -184,21 +186,34 @@ public class PlayerController : MonoBehaviour
         movementX = directions.x;
         movementY = directions.y;
 
+        
+
         if (movementY == 1)
+        {
             idleState = 0;
+            playerCombat.colliderPosObj.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+        }
         else if (movementX == 1)
+        {
+            playerCombat.colliderPosObj.transform.position = new Vector3(transform.position.x + 1, transform.position.y + .5f, transform.position.z);
             idleState = 1;
+        }
         else if (movementY == -1)
+        {
+            playerCombat.colliderPosObj.transform.position = new Vector3(transform.position.x, transform.position.y + -.5f, transform.position.z);
             idleState = 2;
+        }
         else if (movementX == -1)
+        {
+            playerCombat.colliderPosObj.transform.position = new Vector3(transform.position.x + -1, transform.position.y + .5f, transform.position.z);
             idleState = 3;
+        }
 
         anim.SetFloat("xDirection", movementX);
         anim.SetFloat("yDirection", movementY);
-
-        
         anim.SetFloat("idleState", idleState);
 
+        
     }
     #endregion
 
@@ -209,8 +224,36 @@ public class PlayerController : MonoBehaviour
         {
             if (inventoryManager.selectedItemName == "Egg" && canThrowEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
+                GameObject eggSpawn = null;
+
+                if(idleState == 0)
+                {
+                    eggSpawn = manager.eggBack;
+                }
+                else if (idleState == 1)
+                {
+                    eggSpawn = manager.eggRight;
+                }
+                else if (idleState == 2)
+                {
+                    eggSpawn = manager.eggFront;
+                }
+                else if (idleState == 3)
+                {
+                    eggSpawn = manager.eggLeft;
+                }
+
+
                 //Instantiates the object to throw
-                GameObject thrownObject = Instantiate(eggThrowablePrefab, eggThrowSpawn.position, Quaternion.identity);
+                GameObject thrownObject = Instantiate(eggThrowablePrefab, eggSpawn.transform.position, Quaternion.identity);
+                if (idleState == 0 || idleState == 3)
+                {
+                    thrownObject.GetComponent<SpriteRenderer>().sortingOrder = -1;
+                }
+                else
+                {
+                    thrownObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                }
 
                 //Gets the direction to the mouse cursor
                 Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -231,7 +274,6 @@ public class PlayerController : MonoBehaviour
             else if (inventoryManager.selectedItemName == "Sword" && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
                 gameObject.GetComponent<PlayerCombat>().Attack();
-                manager.inGameSound.PlayOneShot(manager.swordSwingSound);
                 inventoryManager.CheckSelectedItem();
             }
             else
@@ -246,7 +288,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!manager.isPaused)
         {
-            if (inventoryManager.selectedItemName == "Egg" && canEatEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0 && eggHealthRadiation.eggs < 91)
+            if (inventoryManager.selectedItemName == "Egg" && canEatEgg && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0 && eggHealthRadiation.eggs < 100)
             {
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
                 eggHealthRadiation.AddEggs(1);
@@ -354,14 +396,26 @@ public class PlayerController : MonoBehaviour
 
         isWalking = true;
 
+        distanceTraveled = Vector3.Distance(transform.position, startPosition);
 
-        if(isDashing)
+        if (isDashing)
         {
             anim.speed = 2;
+            if (distanceTraveled >= distance)
+            {
+                InstantiateObject();
+                startPosition = transform.position;
+            }
         }
         else
         {
             anim.speed = 1;
         }
+    }
+
+    void InstantiateObject()
+    {
+        GameObject newObject = Instantiate(ghostPrefab, transform.position, Quaternion.identity);
+        newObject.GetComponent<SpriteRenderer>().sprite = GetComponent<SpriteRenderer>().sprite;
     }
 }

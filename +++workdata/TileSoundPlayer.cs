@@ -25,7 +25,7 @@ public class TileSoundPlayer : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         previousTilePos = tilemap.WorldToCell(transform.position);
         rb2d = GetComponent<Rigidbody2D>();
-
+        
         grassSounds = Resources.LoadAll<AudioClip>("Footsteps - Essentials/Footsteps_Grass/Footsteps_Grass_Walk");
         dirtSounds = Resources.LoadAll<AudioClip>("Footsteps - Essentials/Footsteps_DirtyGround/Footsteps_DirtyGround_Walk");
         stoneSounds = Resources.LoadAll<AudioClip>("Footsteps - Essentials/Footsteps_Rock/Footsteps_Rock_Walk");

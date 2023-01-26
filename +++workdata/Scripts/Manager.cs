@@ -12,6 +12,7 @@ using UnityEngine.Events;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Video;
 using UnityEngine.Rendering;
 
 public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -85,7 +86,14 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public Volume postProcessingVolume;
     public ColorAdjustments colorAdjustments;
+    public ChromaticAberration chromaticAberration;
     public RectTransform uiPanel;
+
+    public GameObject eggFront;
+    public GameObject eggLeft;
+    public GameObject eggRight;
+    public GameObject eggBack;
+
 
     public string sceneName;
 
@@ -112,7 +120,11 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public AudioClip eggSplash;
     public AudioClip itemPickUp;
     public AudioClip dashSound;
-    public AudioClip hurtSound;
+    public AudioClip hurtSound1;
+    public AudioClip hurtSound2;
+    public AudioClip hurtSound3;
+    public AudioClip ghoulHitSound;
+    public AudioClip ghoulDeathSound;
 
     public GameObject barIndicators;
     public GameObject playerCamera;
@@ -126,6 +138,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject healthPopup;
     public GameObject eggsPopup;
     public GameObject radiationPopup;
+
+
+    public VideoPlayer videoPlayer;
 
     [HideInInspector]
     public Transform originalSlot;
@@ -149,22 +164,24 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LoadFileNames();
         }
         FindInputActions();
+
     }
 
     private void Start()
     {
 
-        if(Application.isEditor)
+        if (Application.isEditor)
         {
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
 
         if (sceneName == "InGame")
         {
+            PlayIntroSequence();
+            uiPanel.GetComponent<CanvasGroup>().alpha = 0;
             LOADFILE();
 
             //SaturationFade();
-            eggHealthRadiation.RadiationOverTime();
 
             playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
             playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
@@ -175,8 +192,24 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             LoadSettings();
             Debug.Log("hallo");
         }
-        
+
     }
+
+    private void PlayIntroSequence()
+    {
+        videoPlayer.Prepare();
+        videoPlayer.enabled = true;
+        videoPlayer.Play();
+        Invoke("BlackInFade", 14);
+        Invoke("DestroyVideo", 25);
+        inputActions.Disable();
+    }
+
+    private void DestroyVideo()
+    {
+        Destroy(videoPlayer.gameObject);
+    }
+
 
 
     public void SaturationFade()
@@ -189,22 +222,26 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public void BlackInFade()
     {
-        Vector3 startPos = uiPanel.anchoredPosition;
-        startPos.y = -500;
-        uiPanel.anchoredPosition = startPos;
-
-        if (postProcessingVolume.profile.TryGet(out colorAdjustments))
-        {
-            colorAdjustments.postExposure.value = -6;
-            DOTween.To(() => colorAdjustments.postExposure.value, x => colorAdjustments.postExposure.value = x, (float)-0.2, 7.5f).OnComplete(SlideInUi);
-        }
+        float currentAlpha = 1;
+        DOTween.To(() => currentAlpha, x => currentAlpha = x, 0, 5f).OnUpdate(() => UpdateAlpha(currentAlpha));
+        Invoke("EnableInput", 4.5f);
     }
-    private void SlideInUi()
+
+    private void UpdateAlpha(float alpha)
     {
-        Vector3 startPos = uiPanel.anchoredPosition;
-        startPos.y = -300;
-        uiPanel.anchoredPosition = startPos;
-        uiPanel.DOAnchorPosY(0, 3.5f).OnComplete(eggHealthRadiation.RadiationOverTime);
+        videoPlayer.targetCameraAlpha = alpha;
+    }
+
+    private void UpdateUIAlpha(float alpha)
+    {
+        uiPanel.GetComponent<CanvasGroup>().alpha = alpha;
+    }
+
+    public void EnableInput()
+    {
+        inputActions.Enable();
+        float currentAlpha = 0;
+        DOTween.To(() => currentAlpha, x => currentAlpha = x, 0, 2f).OnUpdate(() => UpdateUIAlpha(currentAlpha));
     }
 
     private void HideAllPanels()
@@ -250,6 +287,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             inputActions.FindAction("Move").Disable();
             Time.timeScale = 0;
             DOTween.PauseAll();
+            StopCheckDistance();
             isPaused = true;
         }
         else
@@ -258,15 +296,38 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             inputActions.FindAction("Move").Enable();
             Time.timeScale = 1;
             DOTween.PlayAll();
+
+            StartCheckDistance();
             isPaused = false;
         }
 
         DOTween.Init();
-        DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
         playerCamera.GetComponent<CinemachineBrain>().m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
         brain.m_IgnoreTimeScale = true;
     }
+
+
+    public void StartCheckDistance()
+    {
+        DistanceCheck[] scriptObjects = GameObject.FindObjectsOfType<DistanceCheck>();
+
+        foreach (DistanceCheck script in scriptObjects)
+        {
+            script.StartCheck();
+        }
+    }
+
+    public void StopCheckDistance()
+    {
+        DistanceCheck[] scriptObjects = GameObject.FindObjectsOfType<DistanceCheck>();
+
+        foreach (DistanceCheck script in scriptObjects)
+        {
+            script.StopCheck();
+        }
+    }
+
     private void ButtonSound()
     {
         uiSound.PlayOneShot(buttonClick);

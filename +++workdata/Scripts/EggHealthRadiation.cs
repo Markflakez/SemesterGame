@@ -44,9 +44,23 @@ public class EggHealthRadiation : MonoBehaviour
     public Color endColor;
 
 
-    public float startValue = 0;
-    public float endValue = 101;
-    public float duration = 10;
+    public float hungerStartTime;
+    public float speed = 0;
+    public float targetSpeed = 100;
+    public float increaseTime = 100;
+
+
+    public float endValue = 0;
+
+    public float hungerSpeed;
+    public float hungerDuration;
+
+    private float currentValue;
+    private float startTime;
+
+    private float hungerStart;
+
+
     public float executeEvery = 0.1f;
 
     public GameObject avatarIcon;
@@ -62,6 +76,10 @@ public class EggHealthRadiation : MonoBehaviour
 
         eggMat.SetFloat("_RemovedSegments", 20);
         radiationMat.SetFloat("_RemovedSegments", 100);
+
+
+        StartCoroutine(RadiationOverTime2());
+        StartCoroutine(HungerOverTime());
     }
 
     //Updates is called once per frame
@@ -83,26 +101,114 @@ public class EggHealthRadiation : MonoBehaviour
         }
     }
 
-    public void RadiationOverTime()
-    {
-        float timePassed = 0;
-        DOTween.To(() => startValue, x => startValue = x, endValue, duration)
-            .SetEase(Ease.Linear)
-            .OnUpdate(() =>
-            {
-                timePassed += Time.deltaTime;
-                if (timePassed >= executeEvery)
-                {
-                    timePassed = 0;
-                    UpdateRadiation(startValue);
-                }
 
-                if (startValue >= 100)
-                {
-                    Death();
-                }
-            });
+    void MyFunction()
+    {
+        if(eggs < 10)
+        {
+            targetSpeed = 450;
+        }
+        else if(eggs < 20)
+        {
+            targetSpeed = 300;
+        }
+        else if (eggs < 30)
+        {
+            targetSpeed = 220;
+        }
+        else if (eggs < 40)
+        {
+            targetSpeed = 150;
+        }
+        else if (eggs < 50)
+        {
+            targetSpeed = 100;
+        }
+        else if (eggs < 60)
+        {
+            targetSpeed = 80;
+        }
+        else if (eggs < 70)
+        {
+            targetSpeed = 60;
+        }
+        else if (eggs < 80)
+        {
+            targetSpeed = 40;
+        }
+        else
+        {
+            targetSpeed = 20;
+        }
+
+        if(manager.postProcessingVolume.profile.TryGet(out manager.chromaticAberration)) 
+        {
+            if(speed >= 50)
+            manager.chromaticAberration.intensity.value = speed / 2 / increaseTime;
+        }
+        UpdateRadiation(speed);
+
+        if (speed >= 100 && !died)
+        {
+            Death();
+        }
     }
+
+
+
+
+    public IEnumerator RadiationOverTime2()
+    {
+        float startTime = Time.time;
+        while (speed < targetSpeed)
+        {
+            speed += (targetSpeed / increaseTime) * Time.deltaTime;
+            if ((Time.time - startTime) % 0.0125f < Time.deltaTime)
+            {
+                UpdateRadiation(speed);
+            }
+            yield return null;
+        }
+
+
+    }
+
+    public IEnumerator HungerOverTime()
+    {
+        
+        while (eggs < hungerDuration)
+        {
+            hungerStart += Time.time;
+            if (eggs <= 0)
+            {
+                hungerStart = 0;
+                eggs = 0;
+            }
+            else
+            {
+                eggs -= (hungerSpeed / hungerDuration) * Time.deltaTime;
+            }
+            
+            int[] numbersToCheck = { 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 };
+            foreach (int number in numbersToCheck)
+            {
+                {
+                    if (number == (int)eggs)
+                    {
+                        UpdateEggs();
+                        break;
+                    }
+                }
+            }
+            yield return null;
+        }
+    }
+
+    public void PauseTime()
+    {
+        hungerStartTime = Time.time;
+    }
+
 
 
     public void Damage(int damage)
@@ -144,7 +250,14 @@ public class EggHealthRadiation : MonoBehaviour
         {
             playerController.GetComponent<Animator>().Play("PlayerHitLeft");
         }
-        manager.inGameSound.PlayOneShot(manager.hurtSound);
+        
+
+        AudioClip[] sounds = { manager.hurtSound1, manager.hurtSound2, manager.hurtSound3 };
+        int randomIndex = Random.Range(0, sounds.Length);
+        manager.inGameSound.PlayOneShot(sounds[randomIndex]);
+
+
+        playerController.gameObject.transform.DOShakePosition((float).25, (float).1, 0, 90, false, true);
     }
 
     private void Death()
@@ -167,6 +280,8 @@ public class EggHealthRadiation : MonoBehaviour
             playerController.GetComponent<Animator>().Play("PlayerDeathLeft");
         }
 
+        playerController.gameObject.transform.DOShakePosition((float).25, (float).1, 0, 90, false, true);
+
         manager.inputActions.Disable();
         
         Invoke("BlackFade", 1);
@@ -188,10 +303,9 @@ public class EggHealthRadiation : MonoBehaviour
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
         
-        DOTween.To(() => manager.blackCircle.GetComponent<Material>().color, x => manager.blackCircle.GetComponent<Material>().color = x, endColor, time);
-        DOTween.To(() => healthCircle.GetComponent<Material>().color, x => healthCircle.GetComponent<Material>().color = x, endColor, time);
-        DOTween.To(() => radiationCircle.GetComponent<Material>().color, x => radiationCircle.GetComponent<Material>().color = x, endColor, time);
-        DOTween.To(() => eggCircle.GetComponent<Material>().color, x => eggCircle.GetComponent<Material>().color = x, endColor, time);
+        DOTween.To(() => manager.blackCircle.GetComponent<Image>().color, x => manager.blackCircle.GetComponent<Image>().color = x, endColor, (float)1.5);
+        DOTween.To(() => radiationCircle.GetComponent<Image>().color, x => radiationCircle.GetComponent<Image>().color = x, endColor, (float)1.5);
+        DOTween.To(() => eggCircle.GetComponent<Image>().color, x => eggCircle.GetComponent<Image>().color = x, endColor, (float)1.5);
 
         DOTween.To(() => manager.uiPanel.GetComponent<CanvasGroup>().alpha, x => manager.uiPanel.GetComponent<CanvasGroup>().alpha = x, 0, time);
 
@@ -212,6 +326,10 @@ public class EggHealthRadiation : MonoBehaviour
     public void AddEggs(int eggNumber)
     {
         eggs += eggNumber * 10;
+        if(eggs > 100)
+        {
+            eggs = 100;
+        }
         UpdateEggs();
     }
 
@@ -223,21 +341,15 @@ public class EggHealthRadiation : MonoBehaviour
         eggMat.SetFloat("_RemovedSegments", (int)eggRemovedSegments + eggMat.GetFloat("_SegmentCount"));
         if(eggs == 100)
         {
-            Invoke("ResumeRadiation", 120);
+            Invoke("ResumeRadiation", 30);
         }
-    }
-
-    public void ResumeRadiation()
-    {
-        DOTween.Play(startValue);
-        AddEggs(-1);
     }
 
     public void UpdateHealth()
     {
         currentHealthText.text = "";
 
-        float restValue = 100 - startValue;
+        float restValue = 100 - speed;
 
         Animator avatar = avatarIcon.GetComponent<Animator>();
 
@@ -252,7 +364,6 @@ public class EggHealthRadiation : MonoBehaviour
 
         if (health <= 0)
         {
-            DOTween.Kill(startValue,false);
             health = 0;
             damageDealt = 100;
             removedSegments = 100;
@@ -262,9 +373,9 @@ public class EggHealthRadiation : MonoBehaviour
         {
             currentHealthText.text = Mathf.RoundToInt(health).ToString();
             damageDealt = 100 - health;
-            maxHealthText.text = Mathf.RoundToInt(100 - startValue).ToString();
+            maxHealthText.text = Mathf.RoundToInt(100 - speed).ToString();
         }
-        else if (startValue >= 100)
+        else if (speed >= 100)
         {
             health = 0;
             removedSegments = 100;
@@ -276,9 +387,9 @@ public class EggHealthRadiation : MonoBehaviour
         }
         else
         {
-            currentHealthText.text = Mathf.RoundToInt(100 - startValue).ToString();
-            maxHealthText.text = Mathf.RoundToInt(100 - startValue).ToString();
-            damageDealt = startValue;
+            currentHealthText.text = Mathf.RoundToInt(100 - speed).ToString();
+            maxHealthText.text = Mathf.RoundToInt(100 - speed).ToString();
+            damageDealt = speed;
         }
         
         
@@ -290,10 +401,10 @@ public class EggHealthRadiation : MonoBehaviour
 
     public void addHealth(int heartHealth)
     {
-        if (health >= 100 - startValue)
+        if (health >= 100 - speed)
         {
-            health = 100 - startValue;
-            damageDealt = startValue;
+            health = 100 - speed;
+            damageDealt = speed;
         }
         else
         {

@@ -47,7 +47,6 @@ public class EggDamage : MonoBehaviour
         
     }
 
-
     private void SpawnEggSplosion()
     {
         if (!Eggsploding)
@@ -68,12 +67,13 @@ public class EggDamage : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.name.Contains("Ghoul Enemy"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<Health>().TakeDamage(40);
-            Destroy(gameObject);
+            Debug.Log("ye");
+            other.gameObject.GetComponent<Health>().TakeDamage(40);
+            Invoke("DestroyItself", .1f);
         }
     }
 }

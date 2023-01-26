@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 75}
-  m_SizeDelta: {x: 100, y: 40}
+  m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &752320829730239276
 CanvasRenderer:
@@ -67,15 +67,15 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90f3b7e57cbb7904c9747b4136d1da72, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 00533e26a17f9c14997640ce1200b16c, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_UseSpriteMesh: 1
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &752320829854391957
 GameObject:
@@ -137,7 +137,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &752320829854391944
 MonoBehaviour:
@@ -245,19 +245,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-'
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8e05d07344676f348bbeb61a1777ee58, type: 2}
-  m_sharedMaterial: {fileID: -5790844319625227376, guid: 8e05d07344676f348bbeb61a1777ee58, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7ba6c1b3b35a42349ab80fd3a7bf734c, type: 2}
+  m_sharedMaterial: {fileID: -5790844319625227376, guid: 7ba6c1b3b35a42349ab80fd3a7bf734c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4290301662
+  m_fontColor: {r: 0.87058824, g: 0.80784315, b: 0.72156864, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -274,12 +272,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10
-  m_fontSizeBase: 10
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 0
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -310,7 +308,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 5.667431, y: 9.531914, z: 5.290863, w: 23.91512}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -462,6 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: Richardt
+  randomInt: 0
   dialog:
   - Hey Fremder!
   - hallo?
@@ -477,9 +476,9 @@ MonoBehaviour:
   - npc
   - player
   npcSprite: {fileID: 786098734, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
-  dialogText: {fileID: 0}
+  dialogText: {fileID: 752320831033244836}
   randomSentencees: []
-  dialogBox: {fileID: 0}
+  dialogBox: {fileID: 752320829730239273}
 --- !u!95 &6210660345451354841
 Animator:
   serializedVersion: 5

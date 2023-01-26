@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class NPCdialog : MonoBehaviour
 {
     private SpriteRenderer sr;
 
     public string npcName;
+
+    public int randomInt;
 
     public string[] dialog;
 
@@ -25,6 +29,9 @@ public class NPCdialog : MonoBehaviour
     public string[] randomSentencees;
     public GameObject dialogBox;
 
+    private Color endColor = Color.white;
+
+    private bool visibleBox = false;
 
 
     private void Awake()
@@ -40,7 +47,17 @@ public class NPCdialog : MonoBehaviour
 
     public void HideWorldSpaceDialog()
     {
+        dialogText.text = "";
         dialogBox.SetActive(false);
+    }
+
+    private void RandomSentence()
+    {
+        if (dialogText.text == "")
+        {
+            dialogText.text = "";
+            dialogText.text = randomSentencees[Random.Range(0, randomSentencees.Length)];
+        }
     }
 
 
@@ -50,22 +67,54 @@ public class NPCdialog : MonoBehaviour
         float distance = Vector3.Distance(player.transform.position, gameObject.transform.position);
 
         // Check if the distance is less than 10 units
-        if (distance > 1000000f)
+        if (distance < 5f)
         {
-            // Generate a random number between 0 and 1
-            float randomNumber = Random.Range(0f, 1f);
-
-            // Check if the random number is less than 0.3
-            if (randomNumber < 0.3f)
-            {
-                // Execute the first function
-                dialogBox.SetActive(true);
-            }
-            else
-            {
-                // Execute the second function
-                dialogBox.SetActive(false);
-            }
+            FadeInWorldspaceDialog();
+        }
+        else if(distance > 8f)
+        {
+            FadeOutWorldspaceDialog();
         }
     }
+
+
+    public void FadeOutWorldspaceDialog()
+    {
+        if (!DOTween.IsTweening(dialogBox) && visibleBox)
+        {
+            visibleBox = false;
+            Vector2 normalScale = new Vector2(1, 1);
+            dialogBox.transform.DOScale((normalScale * (float).8) * 1f, 1);
+            DOTween.To(() => dialogBox.GetComponent<Image>().color, x => dialogBox.GetComponent<Image>().color = x, Color.clear, 1).OnComplete(() => HideWorldSpaceDialog());
+            DOTween.To(() => dialogBox.GetComponentInChildren<TextMeshProUGUI>().color, x => dialogBox.GetComponentInChildren<TextMeshProUGUI>().color = x, Color.clear, 1);
+        }
+        return;
+    }
+
+    public void FadeInWorldspaceDialog()
+    {
+        if (!DOTween.IsTweening(dialogBox) && !visibleBox)
+        {
+            visibleBox = true;
+            randomInt = Random.Range(1, 2);
+            if (randomInt == 1)
+            {
+                randomInt = -1;
+                dialogBox.transform.localScale = new Vector2((float).8, (float).8);
+                dialogBox.SetActive(true);
+                dialogBox.GetComponent<Image>().color = Color.clear;
+                dialogBox.GetComponentInChildren<TextMeshProUGUI>().color = Color.clear;
+
+                RandomSentence();
+
+                Vector2 normalScale = new Vector2(1, 1);
+
+                dialogBox.transform.DOScale(normalScale * 1f, 1);
+                DOTween.To(() => dialogBox.GetComponent<Image>().color, x => dialogBox.GetComponent<Image>().color = x, endColor, 1);
+                DOTween.To(() => dialogBox.GetComponentInChildren<TextMeshProUGUI>().color, x => dialogBox.GetComponentInChildren<TextMeshProUGUI>().color = x, endColor, 1);
+            }
+        }
+        return;
+    }
+
 }
