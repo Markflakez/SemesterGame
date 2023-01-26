@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Health : MonoBehaviour
 {
     public int currentHealth;
 
     public int maxHealth;
-
+    public Color hit;
     Manager manager;
 
 
@@ -21,12 +22,12 @@ public class Health : MonoBehaviour
 
         manager = GameObject.Find("Manager").GetComponent<Manager>();
 
-        healthBar.enabled = false;
+        healthBar.gameObject.SetActive(false);
     }
 
     public void TakeDamage(int damage)
     {
-        healthBar.enabled = true;
+        healthBar.gameObject.SetActive(true);
         currentHealth -= damage;
         healthBar.value = currentHealth;
 
@@ -39,6 +40,12 @@ public class Health : MonoBehaviour
         {
             manager.inGameSound.PlayOneShot(manager.ghoulHitSound);
         }
+
+
+        gameObject.GetComponent<SpriteRenderer>().DOColor(Color.clear, .125f)
+     // then fade it back to clear over 3 seconds
+     .OnComplete(() => gameObject.GetComponent<SpriteRenderer>().DOColor(Color.white, .25f));
+
     }
 
     public void DestroyItself()

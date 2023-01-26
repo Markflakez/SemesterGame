@@ -150,6 +150,11 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         sceneName = SceneManager.GetActiveScene().name;
 
+        if(sceneName == "InGame")
+        {
+            videoPlayer.Prepare();
+        }
+
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
@@ -197,7 +202,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void PlayIntroSequence()
     {
-        videoPlayer.Prepare();
         videoPlayer.enabled = true;
         videoPlayer.Play();
         Invoke("BlackInFade", 14);
@@ -207,7 +211,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void DestroyVideo()
     {
-        Destroy(videoPlayer.gameObject);
+        videoPlayer.gameObject.SetActive(false);
     }
 
 
@@ -225,6 +229,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         float currentAlpha = 1;
         DOTween.To(() => currentAlpha, x => currentAlpha = x, 0, 5f).OnUpdate(() => UpdateAlpha(currentAlpha));
         Invoke("EnableInput", 4.5f);
+        Invoke("FadeInUi", 2f);
     }
 
     private void UpdateAlpha(float alpha)
@@ -237,11 +242,15 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         uiPanel.GetComponent<CanvasGroup>().alpha = alpha;
     }
 
+    private void FadeInUi()
+    {
+        float currentAlpha = 0;
+        DOTween.To(() => currentAlpha, x => currentAlpha = x, 1, 2f).OnUpdate(() => UpdateUIAlpha(currentAlpha));
+    }
+
     public void EnableInput()
     {
         inputActions.Enable();
-        float currentAlpha = 0;
-        DOTween.To(() => currentAlpha, x => currentAlpha = x, 0, 2f).OnUpdate(() => UpdateUIAlpha(currentAlpha));
     }
 
     private void HideAllPanels()
@@ -374,6 +383,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             PlayerPrefs.SetInt("CurrentFile", file);
             StartCoroutine(DelaySwitchScene("LoadSaveFile", button));
+
         }
         if (sceneSwitch)
         {

@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using UnityEngine;
 using UnityEngine.AI;
 using Pathfinding;
+using DG.Tweening;
 
 
 public class Enemy : MonoBehaviour
@@ -21,6 +22,7 @@ public class Enemy : MonoBehaviour
     public float minDistance;
     public float maxDistance;
 
+    public Color hit;
 
     public float knockbackForce;
     public bool attackCooldown;
@@ -95,6 +97,8 @@ public class Enemy : MonoBehaviour
         RandomPos();
         enemyAI.maxSpeed = runSpeed;
         hasBeenAttacked = true;
+        // Fade the color of the object from clear to purple over 3 seconds
+
         Invoke("hasBeenAttackedCoolDown", runAwayDuration);
     }
 

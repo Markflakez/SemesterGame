@@ -429,9 +429,6 @@ MonoBehaviour:
   canSpawnGhost: 1
   ghostPrefab: {fileID: 1399075159163129759, guid: 51ca487f58fed1f4e905261007f2489f, type: 3}
   distance: 0.6
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 64
   cylinder: {fileID: 0}
   cylinder001: {fileID: 0}
   plane: {fileID: 0}
@@ -482,8 +479,8 @@ MonoBehaviour:
   knockbackDistance: 20
   knockbackDuration: 1
   knockbackForce: 20
-  gizmoPos: {x: 0, y: 0, z: 0}
   isAttacking: 0
+  colliderPosObj: {fileID: 0}
   allowedToAttack: 1
 --- !u!114 &5523723489648766037
 MonoBehaviour:
@@ -537,7 +534,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1a48036a2758e004ba295578f6fc304f, type: 2}
+  - {fileID: 2100000, guid: 5a8cc0bc1a3e7b84dbc9a1ec55aea327, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
