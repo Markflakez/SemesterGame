@@ -13117,7 +13117,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 056c9440bf0e5f30000000005bca40a08dddd728
+  m_ApplyToSortingLayers: 056c9440bf0e5f30000000005bca40a08dddd72883218003
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 10000
@@ -41465,7 +41465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1670936996, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_OcclusionCulling
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1970246988, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_YawDamping
