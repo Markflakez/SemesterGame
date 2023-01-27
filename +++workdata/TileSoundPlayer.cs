@@ -59,7 +59,7 @@ public class TileSoundPlayer : MonoBehaviour
     void PlayRandomSound(AudioClip[] sounds)
     {
         float speed = rb2d.velocity.magnitude;
-        float volume = Mathf.InverseLerp(minSpeed, maxSpeed, speed);
+        float volume = Mathf.InverseLerp(minSpeed, maxSpeed, speed) * 0.2f;
         audioSource.PlayOneShot(sounds[Random.Range(0, sounds.Length)], volume);
     }
 }

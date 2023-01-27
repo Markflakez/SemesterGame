@@ -182,7 +182,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         if (sceneName == "InGame")
         {
-            PlayIntroSequence();
             uiPanel.GetComponent<CanvasGroup>().alpha = 0;
             LOADFILE();
 
@@ -190,6 +189,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
             playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
             playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+            StartCoroutine(PlayIntroSequence());
         }
 
         if (sceneName != "LoadGame")
@@ -200,17 +200,18 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     }
 
-    private void PlayIntroSequence()
+    public IEnumerator PlayIntroSequence()
     {
         videoPlayer.enabled = true;
         videoPlayer.Play();
-        Invoke("BlackInFade", 14);
-        Invoke("DestroyVideo", 25);
-        inputActions.Disable();
-    }
-
-    private void DestroyVideo()
-    {
+        PauseGame();
+        yield return new WaitForSecondsRealtime(14);
+        float currentVideoAlpha = 1;
+        DOTween.To(() => currentVideoAlpha, x => currentVideoAlpha = x, 0, 2f).OnUpdate(() => UpdateAlpha(currentVideoAlpha));
+        yield return new WaitForSecondsRealtime(2);
+        float currentUIAlpha = 0;
+        DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, 2f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
+        PauseGame();
         videoPlayer.gameObject.SetActive(false);
     }
 
@@ -224,33 +225,19 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             DOTween.To(() => colorAdjustments.saturation.value, x => colorAdjustments.saturation.value = x, 10, 5f);
         }
     }
-    public void BlackInFade()
-    {
-        float currentAlpha = 1;
-        DOTween.To(() => currentAlpha, x => currentAlpha = x, 0, 5f).OnUpdate(() => UpdateAlpha(currentAlpha));
-        Invoke("EnableInput", 4.5f);
-        Invoke("FadeInUi", 2f);
-    }
 
-    private void UpdateAlpha(float alpha)
+    public void UpdateAlpha(float alpha)
     {
         videoPlayer.targetCameraAlpha = alpha;
+        if (alpha == 0)
+        {
+            videoPlayer.gameObject.transform.position = new Vector3(-1000, 0, 0);
+        }
     }
 
-    private void UpdateUIAlpha(float alpha)
+    public void UpdateUIAlpha(float alpha)
     {
         uiPanel.GetComponent<CanvasGroup>().alpha = alpha;
-    }
-
-    private void FadeInUi()
-    {
-        float currentAlpha = 0;
-        DOTween.To(() => currentAlpha, x => currentAlpha = x, 1, 2f).OnUpdate(() => UpdateUIAlpha(currentAlpha));
-    }
-
-    public void EnableInput()
-    {
-        inputActions.Enable();
     }
 
     private void HideAllPanels()
@@ -297,6 +284,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             Time.timeScale = 0;
             DOTween.PauseAll();
             StopCheckDistance();
+            eggHealthRadiation.StopCoroutine(eggHealthRadiation.RadiationOverTime2());
+            eggHealthRadiation.StopCoroutine(eggHealthRadiation.HungerOverTime());
+            eggHealthRadiation.StopCoroutine(eggHealthRadiation.RegerateHealth());
             isPaused = true;
         }
         else
@@ -305,8 +295,11 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             inputActions.FindAction("Move").Enable();
             Time.timeScale = 1;
             DOTween.PlayAll();
-
+            
             StartCheckDistance();
+            eggHealthRadiation.StartCoroutine(eggHealthRadiation.RadiationOverTime2());
+            eggHealthRadiation.StartCoroutine(eggHealthRadiation.HungerOverTime());
+            eggHealthRadiation.StartCoroutine(eggHealthRadiation.RegerateHealth());
             isPaused = false;
         }
 
@@ -461,7 +454,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         inputActions.FindAction("RMB").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
         inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
-        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().Dash();
+        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
         inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
         inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
 

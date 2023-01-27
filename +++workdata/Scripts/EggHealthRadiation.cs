@@ -37,6 +37,9 @@ public class EggHealthRadiation : MonoBehaviour
     [HideInInspector]
     public float removedSegments;
     public float health;
+    public float maxHealth;
+    public float regenerateSpeed;
+    public float regenerateDuration;
     public float damageDealt;
     public float eggs;
 
@@ -80,6 +83,7 @@ public class EggHealthRadiation : MonoBehaviour
 
         StartCoroutine(RadiationOverTime2());
         StartCoroutine(HungerOverTime());
+        StartCoroutine(RegerateHealth());
     }
 
     //Updates is called once per frame
@@ -163,20 +167,36 @@ public class EggHealthRadiation : MonoBehaviour
         while (speed < targetSpeed)
         {
             speed += (targetSpeed / increaseTime) * Time.deltaTime;
-            if ((Time.time - startTime) % 0.0125f < Time.deltaTime)
+            if ((Time.time - startTime) % 0.125f < Time.deltaTime)
             {
                 UpdateRadiation(speed);
             }
             yield return null;
         }
-
-
     }
+
+    public IEnumerator RegerateHealth()
+    {
+        float startTime = Time.time;
+        while (true)
+        {
+            if (health < maxHealth)
+            {
+                health += (regenerateSpeed / regenerateDuration) * Time.deltaTime;
+                if ((Time.time - startTime) % 0.125f < Time.deltaTime)
+                {
+                    UpdateHealth();
+                }
+            }
+            yield return null;
+        }
+    }
+
 
     public IEnumerator HungerOverTime()
     {
         
-        while (eggs < hungerDuration)
+        while (eggs < hungerDuration + 1)
         {
             hungerStart += Time.time;
             if (eggs <= 0)
@@ -187,6 +207,7 @@ public class EggHealthRadiation : MonoBehaviour
             else
             {
                 eggs -= (hungerSpeed / hungerDuration) * Time.deltaTime;
+                MyFunction();
             }
             
             int[] numbersToCheck = { 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 };
@@ -281,14 +302,27 @@ public class EggHealthRadiation : MonoBehaviour
         }
 
         playerController.gameObject.transform.DOShakePosition((float).25, (float).1, 0, 90, false, true);
-
-        manager.inputActions.Disable();
         
-        Invoke("BlackFade", 1);
+        StopCheckDistance();
+        manager.inputActions.Disable();
+
+        BlackFade();
         manager.inGameSound.PlayOneShot(manager.cough);
         if (manager.postProcessingVolume.profile.TryGet(out manager.colorAdjustments))
         {
             DOTween.To(() => manager.colorAdjustments.colorFilter.value, x => manager.colorAdjustments.colorFilter.value = x, endColor, 12f).SetEase(Ease.InOutSine);
+        }
+        
+    }
+
+
+    public void StopCheckDistance()
+    {
+        DistanceCheck[] scriptObjects = GameObject.FindObjectsOfType<DistanceCheck>();
+
+        foreach (DistanceCheck script in scriptObjects)
+        {
+            script.DisableScripts();
         }
     }
 

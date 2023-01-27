@@ -134,10 +134,10 @@ TextureImporter:
       name: Chara01_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 60
-        width: 16
-        height: 20
+        width: 15
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,10 +155,10 @@ TextureImporter:
       name: Chara01_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 17
         y: 60
-        width: 16
-        height: 20
+        width: 15
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,10 +176,10 @@ TextureImporter:
       name: Chara01_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 33
         y: 60
-        width: 16
-        height: 20
+        width: 15
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -197,10 +197,10 @@ TextureImporter:
       name: Chara01_3
       rect:
         serializedVersion: 2
-        x: 48
+        x: 49
         y: 60
-        width: 16
-        height: 20
+        width: 207
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,10 +218,10 @@ TextureImporter:
       name: Chara01_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 60
-        width: 16
-        height: 20
+        x: 2
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,10 +239,10 @@ TextureImporter:
       name: Chara01_5
       rect:
         serializedVersion: 2
-        x: 80
-        y: 60
-        width: 16
-        height: 20
+        x: 18
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -260,10 +260,10 @@ TextureImporter:
       name: Chara01_6
       rect:
         serializedVersion: 2
-        x: 96
-        y: 60
-        width: 16
-        height: 20
+        x: 34
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,10 +281,10 @@ TextureImporter:
       name: Chara01_7
       rect:
         serializedVersion: 2
-        x: 112
-        y: 60
-        width: 16
-        height: 20
+        x: 50
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,10 +302,10 @@ TextureImporter:
       name: Chara01_8
       rect:
         serializedVersion: 2
-        x: 128
-        y: 60
-        width: 16
-        height: 20
+        x: 66
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -323,10 +323,10 @@ TextureImporter:
       name: Chara01_9
       rect:
         serializedVersion: 2
-        x: 144
-        y: 60
-        width: 16
-        height: 20
+        x: 82
+        y: 40
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -344,10 +344,10 @@ TextureImporter:
       name: Chara01_10
       rect:
         serializedVersion: 2
-        x: 160
-        y: 60
-        width: 16
-        height: 20
+        x: 98
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -365,10 +365,10 @@ TextureImporter:
       name: Chara01_11
       rect:
         serializedVersion: 2
-        x: 176
-        y: 60
-        width: 16
-        height: 20
+        x: 114
+        y: 40
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: Chara01_12
       rect:
         serializedVersion: 2
-        x: 192
-        y: 60
-        width: 16
-        height: 20
+        x: 130
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -407,10 +407,10 @@ TextureImporter:
       name: Chara01_13
       rect:
         serializedVersion: 2
-        x: 208
-        y: 60
-        width: 16
-        height: 20
+        x: 146
+        y: 40
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,10 +428,10 @@ TextureImporter:
       name: Chara01_14
       rect:
         serializedVersion: 2
-        x: 224
-        y: 60
-        width: 16
-        height: 20
+        x: 162
+        y: 40
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -449,10 +449,10 @@ TextureImporter:
       name: Chara01_15
       rect:
         serializedVersion: 2
-        x: 240
-        y: 60
-        width: 16
-        height: 20
+        x: 178
+        y: 40
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -470,10 +470,10 @@ TextureImporter:
       name: Chara01_16
       rect:
         serializedVersion: 2
-        x: 0
+        x: 194
         y: 40
-        width: 16
-        height: 20
+        width: 13
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -491,10 +491,10 @@ TextureImporter:
       name: Chara01_17
       rect:
         serializedVersion: 2
-        x: 16
+        x: 210
         y: 40
-        width: 16
-        height: 20
+        width: 13
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -512,10 +512,10 @@ TextureImporter:
       name: Chara01_18
       rect:
         serializedVersion: 2
-        x: 32
+        x: 226
         y: 40
-        width: 16
-        height: 20
+        width: 13
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -533,10 +533,10 @@ TextureImporter:
       name: Chara01_19
       rect:
         serializedVersion: 2
-        x: 48
+        x: 242
         y: 40
-        width: 16
-        height: 20
+        width: 13
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -554,10 +554,10 @@ TextureImporter:
       name: Chara01_20
       rect:
         serializedVersion: 2
-        x: 64
-        y: 40
-        width: 16
-        height: 20
+        x: 0
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -575,10 +575,10 @@ TextureImporter:
       name: Chara01_21
       rect:
         serializedVersion: 2
-        x: 80
-        y: 40
-        width: 16
-        height: 20
+        x: 16
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -596,10 +596,10 @@ TextureImporter:
       name: Chara01_22
       rect:
         serializedVersion: 2
-        x: 96
-        y: 40
-        width: 16
-        height: 20
+        x: 32
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -617,10 +617,10 @@ TextureImporter:
       name: Chara01_23
       rect:
         serializedVersion: 2
-        x: 112
-        y: 40
-        width: 16
-        height: 20
+        x: 48
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -638,10 +638,10 @@ TextureImporter:
       name: Chara01_24
       rect:
         serializedVersion: 2
-        x: 128
-        y: 40
-        width: 16
-        height: 20
+        x: 64
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -659,10 +659,10 @@ TextureImporter:
       name: Chara01_25
       rect:
         serializedVersion: 2
-        x: 144
-        y: 40
-        width: 16
-        height: 20
+        x: 80
+        y: 20
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -680,10 +680,10 @@ TextureImporter:
       name: Chara01_26
       rect:
         serializedVersion: 2
-        x: 160
-        y: 40
-        width: 16
-        height: 20
+        x: 96
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -701,10 +701,10 @@ TextureImporter:
       name: Chara01_27
       rect:
         serializedVersion: 2
-        x: 176
-        y: 40
-        width: 16
-        height: 20
+        x: 112
+        y: 20
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -722,10 +722,10 @@ TextureImporter:
       name: Chara01_28
       rect:
         serializedVersion: 2
-        x: 192
-        y: 40
-        width: 16
-        height: 20
+        x: 128
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -743,10 +743,10 @@ TextureImporter:
       name: Chara01_29
       rect:
         serializedVersion: 2
-        x: 208
-        y: 40
-        width: 16
-        height: 20
+        x: 144
+        y: 20
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -764,10 +764,10 @@ TextureImporter:
       name: Chara01_30
       rect:
         serializedVersion: 2
-        x: 224
-        y: 40
-        width: 16
-        height: 20
+        x: 160
+        y: 20
+        width: 14
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -785,10 +785,10 @@ TextureImporter:
       name: Chara01_31
       rect:
         serializedVersion: 2
-        x: 240
-        y: 40
-        width: 16
-        height: 20
+        x: 176
+        y: 20
+        width: 14
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -806,10 +806,10 @@ TextureImporter:
       name: Chara01_32
       rect:
         serializedVersion: 2
-        x: 0
+        x: 193
         y: 20
-        width: 16
-        height: 20
+        width: 13
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -827,10 +827,10 @@ TextureImporter:
       name: Chara01_33
       rect:
         serializedVersion: 2
-        x: 16
+        x: 209
         y: 20
-        width: 16
-        height: 20
+        width: 13
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -848,10 +848,10 @@ TextureImporter:
       name: Chara01_34
       rect:
         serializedVersion: 2
-        x: 32
+        x: 225
         y: 20
-        width: 16
-        height: 20
+        width: 13
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -869,10 +869,10 @@ TextureImporter:
       name: Chara01_35
       rect:
         serializedVersion: 2
-        x: 48
+        x: 241
         y: 20
-        width: 16
-        height: 20
+        width: 13
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -890,10 +890,10 @@ TextureImporter:
       name: Chara01_36
       rect:
         serializedVersion: 2
-        x: 64
-        y: 20
-        width: 16
-        height: 20
+        x: 0
+        y: 0
+        width: 15
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -911,10 +911,10 @@ TextureImporter:
       name: Chara01_37
       rect:
         serializedVersion: 2
-        x: 80
-        y: 20
-        width: 16
-        height: 20
+        x: 16
+        y: 0
+        width: 15
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -932,10 +932,10 @@ TextureImporter:
       name: Chara01_38
       rect:
         serializedVersion: 2
-        x: 96
-        y: 20
-        width: 16
-        height: 20
+        x: 32
+        y: 0
+        width: 15
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -953,10 +953,10 @@ TextureImporter:
       name: Chara01_39
       rect:
         serializedVersion: 2
-        x: 112
-        y: 20
-        width: 16
-        height: 20
+        x: 48
+        y: 0
+        width: 15
+        height: 17
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -974,10 +974,10 @@ TextureImporter:
       name: Chara01_40
       rect:
         serializedVersion: 2
-        x: 128
-        y: 20
-        width: 16
-        height: 20
+        x: 64
+        y: 0
+        width: 159
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -995,10 +995,10 @@ TextureImporter:
       name: Chara01_41
       rect:
         serializedVersion: 2
-        x: 144
-        y: 20
-        width: 16
-        height: 20
+        x: 224
+        y: 0
+        width: 31
+        height: 18
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1008,468 +1008,6 @@ TextureImporter:
       bones: []
       spriteID: 0c31e607ec9fb0c45969e7725a0d1c09
       internalID: 209814242
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_42
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 22f47d3aeb5e9b24983b22611702b5d7
-      internalID: 815426664
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_43
-      rect:
-        serializedVersion: 2
-        x: 176
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0451eb6fb11ed774d84353e8217ccd7c
-      internalID: -602946696
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_44
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2c125b8bcbd5c6641ace8d9d60f38960
-      internalID: 1253063877
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_45
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 90871821632d56640a08696677f28bcd
-      internalID: 1340356332
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_46
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c34dcab199b92946b9e4143950aa9ea
-      internalID: 1241012107
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_47
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 20
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c6b9518c9a3e68c4c9cfc17d9f07c679
-      internalID: 2012420112
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_48
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a9346daeeca2e244d8a46358c3f40e39
-      internalID: -494178351
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_49
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8cf8579e560aa214582bda9bedd3d63d
-      internalID: -1402741214
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_50
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bdb6e9a50fb25644f83045e248c3e92a
-      internalID: 751015992
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_51
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a51982183429fd44aa145c0b05b093f4
-      internalID: -1789989477
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_52
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1266883564c26a7448f8f83ef22d31b5
-      internalID: -639606592
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_53
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48b7e59adcee42c43b6a1765c46610ce
-      internalID: -66866606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_54
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e9466fb40fd90984fbbd6262a223adce
-      internalID: -745795737
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_55
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e21082e1612572d46bc2295c53337e79
-      internalID: -1196079797
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_56
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d4221b63d6051494b8e67bcbc1746e9f
-      internalID: -1784256977
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_57
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 54e2722a61c25d5449d1d30a894981ad
-      internalID: -208319957
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_58
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b0101dcc6111344f9c744287515327b
-      internalID: 902477866
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_59
-      rect:
-        serializedVersion: 2
-        x: 176
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 73be8f4600192dd49b87bcb83a627c6b
-      internalID: 1353855197
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_60
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c3e846809fab98f4eae70f0e2364e46e
-      internalID: 1267167073
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_61
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fa7cb0aa31f442c42b30f589f3fb05dd
-      internalID: -1208397019
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_62
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ca07f2d7da6a694981eaed3660bc72c
-      internalID: -148544135
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Chara01_63
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 16
-        height: 20
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7d93a7436dcde784485bd926d90aca9b
-      internalID: -519108124
       vertices: []
       indices: 
       edges: []
@@ -1486,67 +1024,45 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Chara01_19: 1819071145
-      Chara01_59: 1353855197
       Chara01_33: 1095604780
-      Chara01_42: 815426664
-      Chara01_43: -602946696
+      Chara01_24: 192143934
+      Chara01_2: -1059021104
+      Chara01_13: 1879319361
       Chara01_14: 786098734
-      Chara01_57: -208319957
+      Chara01_4: 247560727
       Chara01_0: 149024106
       Chara01_10: 802433152
       Chara01_7: -1982491386
-      Chara01_37: -932967837
-      Chara01_49: -1402741214
-      Chara01_47: 2012420112
-      Chara01_62: -148544135
-      Chara01_31: 1403514398
-      Chara01_27: 88073438
-      Chara01_3: 278721926
-      Chara01_18: 144807345
-      Chara01_29: -2142126930
-      Chara01_30: 133528347
-      Chara01_15: -213064773
-      Chara01_53: -66866606
-      Chara01_58: 902477866
-      Chara01_60: 1267167073
-      Chara01_54: -745795737
-      Chara01_35: 1356625756
-      Chara01_17: 1924147338
-      Chara01_46: 1241012107
-      Chara01_22: -1478640799
-      Chara01_5: -1729304465
-      Chara01_25: 1445050592
-      Chara01_50: 751015992
-      Chara01_45: 1340356332
-      Chara01_24: 192143934
-      Chara01_56: -1784256977
-      Chara01_2: -1059021104
-      Chara01_13: 1879319361
-      Chara01_28: -1480317973
-      Chara01_4: 247560727
-      Chara01_63: -519108124
-      Chara01_12: 1375835641
-      Chara01_48: -494178351
-      Chara01_20: 1699617874
-      Chara01_16: -469294698
       Chara01_8: -52131207
       Chara01_6: 1476123782
-      Chara01_23: -645597434
+      Chara01_16: -469294698
+      Chara01_12: 1375835641
       Chara01_9: 340271798
-      Chara01_51: -1789989477
-      Chara01_39: 1678904868
-      Chara01_40: -1088356220
-      Chara01_26: 1806344762
-      Chara01_36: -24252370
+      Chara01_23: -645597434
+      Chara01_28: -1480317973
+      Chara01_27: 88073438
+      Chara01_20: 1699617874
+      Chara01_3: 278721926
+      Chara01_18: 144807345
       Chara01_1: -388963159
       Chara01_21: 49520686
-      Chara01_52: -639606592
-      Chara01_44: 1253063877
+      Chara01_15: -213064773
+      Chara01_29: -2142126930
+      Chara01_26: 1806344762
+      Chara01_31: 1403514398
+      Chara01_30: 133528347
+      Chara01_39: 1678904868
+      Chara01_35: 1356625756
       Chara01_11: 258024183
-      Chara01_55: -1196079797
+      Chara01_17: 1924147338
+      Chara01_40: -1088356220
+      Chara01_22: -1478640799
+      Chara01_37: -932967837
+      Chara01_5: -1729304465
       Chara01_32: 2066660944
+      Chara01_25: 1445050592
       Chara01_38: 673318517
-      Chara01_61: -1208397019
+      Chara01_36: -24252370
       Chara01_41: 209814242
       Chara01_34: -442859821
   mipmapLimitGroupName: 

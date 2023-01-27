@@ -860,9 +860,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1606366629
-  m_SortingLayer: -2
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -12492,7 +12492,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 32
+  m_RootOrder: 31
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &121903482
 GameObject:
@@ -12819,7 +12819,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &137471678 stripped
 MonoBehaviour:
@@ -29576,6 +29576,9 @@ MonoBehaviour:
   eggRemovedSegments: 0
   removedSegments: 0
   health: 100
+  maxHealth: 100
+  regenerateSpeed: 10
+  regenerateDuration: 100
   damageDealt: 0
   eggs: 0
   startColor: {r: 1, g: 1, b: 1, a: 1}
@@ -36270,90 +36273,6 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
---- !u!1 &1882388649
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1882388651}
-  - component: {fileID: 1882388650}
-  m_Layer: 0
-  m_Name: GameObject (8)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!212 &1882388650
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882388649}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 06a83f4663c705a46b08ee4b5fbd3ecc, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &1882388651
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882388649}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.52, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 29
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1890644235 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7802986897225230789, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
@@ -36383,10 +36302,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 0
+  m_FocusTracking: 2
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
-  m_Profile: {fileID: 0}
+  m_Profile: {fileID: 11400000, guid: 754520b901927fd41a072b531f6e8330, type: 2}
 --- !u!4 &1892362468 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4399909138544334395, guid: 8c0f3a76132af80429236143e85df36d, type: 3}
@@ -37044,7 +36963,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 31
+  m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1941196298
 GameObject:
@@ -40679,6 +40598,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: m_MaskInteraction
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5523723489648766063, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
       propertyPath: volume
       value: 
@@ -41528,8 +41455,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230396, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
+      propertyPath: orthographic size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7802986897225230396, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_OcclusionCulling
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230397, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -41546,6 +41477,10 @@ PrefabInstance:
     - target: {fileID: 7802986897225230788, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_Lens.NearClipPlane
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7802986897225230788, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7802986897225230789, guid: 45ec3eb3ec144914dbda91de02784f1f, type: 3}
       propertyPath: m_Name

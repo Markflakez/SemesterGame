@@ -138,6 +138,18 @@ public class PlayerController : MonoBehaviour
             cylinder.Play("CylinderAction");
         }
 
+        if(Input.GetKeyUp(KeyCode.N))
+        {
+            manager.StopAllCoroutines();
+            manager.CancelInvoke();
+            if (manager.isPaused)
+            {
+                manager.PauseGame();
+            }
+            manager.UpdateUIAlpha(1);
+            manager.videoPlayer.gameObject.SetActive(false);
+        }
+
         if (rb.velocity != Vector2.zero)
             isMoving = true;
         else
@@ -310,32 +322,18 @@ public class PlayerController : MonoBehaviour
         canEatEgg = true;
     }
 
-
-    public void Dash()
+    public IEnumerator Dash()
     {
         if (!isDashing && canDash)
         {
             manager.inGameSound.PlayOneShot(manager.dashSound);
             isDashing = true;
             canDash = false;
-            StartCoroutine(DashCoaldown((float)1));
-            StartCoroutine(DashLength((float).4));
+            yield return new WaitForSeconds(.25f);
+            isDashing = false;
+            yield return new WaitForSeconds(1);
+            canDash = true;
         }
-    }
-
-    IEnumerator DashCoaldown(float length)
-    {
-        // Wait for the specified length of time
-        yield return new WaitForSeconds(length);
-        isDashing = false;
-        canDash = true;
-    }
-
-    IEnumerator DashLength(float length)
-    {
-        // Wait for the specified length of time
-        yield return new WaitForSeconds(length);
-        isDashing = false;
     }
 
 
