@@ -94,6 +94,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject eggRight;
     public GameObject eggBack;
 
+    public Color uiFontColor;
 
     public string sceneName;
 
@@ -125,6 +126,20 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public AudioClip hurtSound3;
     public AudioClip ghoulHitSound;
     public AudioClip ghoulDeathSound;
+    public AudioClip eggGroundHit;
+    public AudioClip eggEnemyHit;
+
+
+    public TextMeshProUGUI escControl;
+    public TextMeshProUGUI attackControl;
+    public TextMeshProUGUI interactControl;
+    public TextMeshProUGUI useItemControl;
+    public TextMeshProUGUI dropItemControl;
+
+    public GameObject chalkCheckmark;
+    public GameObject candlesCheckmark;
+    public GameObject goatSkullCheckmark;
+    public GameObject goldenEggCheckmark;
 
     public GameObject barIndicators;
     public GameObject playerCamera;

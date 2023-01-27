@@ -48,8 +48,10 @@ public class InventoryManager : MonoBehaviour
         }
         inventorySlots[newValue].Select();
         selectedSlot = newValue;
+        
         CheckSelectedItem();
     }
+
 
     public void CheckSelectedItem()
     {
@@ -67,11 +69,19 @@ public class InventoryManager : MonoBehaviour
 
         if (selectedItemName == "Egg")
         {
-            manager.eggIndicator.SetActive(true);
+            manager.escControl.color = Color.gray;
+            manager.attackControl.color = manager.uiFontColor;
+            manager.interactControl.color = Color.gray;
+            manager.useItemControl.color = manager.uiFontColor;
+            manager.dropItemControl.color = manager.uiFontColor;
         }
-        else
+        else if (selectedItemName == "Sword")
         {
-            manager.eggIndicator.SetActive(false);
+            manager.escControl.color = Color.gray;
+            manager.attackControl.color = manager.uiFontColor;
+            manager.interactControl.color = Color.gray;
+            manager.useItemControl.color = Color.gray;
+            manager.dropItemControl.color = manager.uiFontColor;
         }
     }
 
@@ -85,6 +95,7 @@ public class InventoryManager : MonoBehaviour
             itemInSlot.RefreshCount();
             if(itemInSlot.count == 0)
             {
+                CheckSelectedItem();
                 Destroy(itemInSlot.gameObject);
             }
         }
@@ -93,7 +104,7 @@ public class InventoryManager : MonoBehaviour
 
 
     public bool AddItem(Item item)
-    {
+        {
 
         for (int i = 0; i < inventorySlots.Length; i++)
         {

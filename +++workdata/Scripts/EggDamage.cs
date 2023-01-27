@@ -47,11 +47,12 @@ public class EggDamage : MonoBehaviour
         
     }
 
+    //tud mir Leid Joachim
     private void SpawnEggSplosion()
     {
         if (!Eggsploding)
         {
-            manager.inGameSound.PlayOneShot(manager.eggSplash);
+            manager.inGameSound.PlayOneShot(manager.eggGroundHit);
             manager.inGameSound.pitch = Random.Range((float).7, (float)1.3);
             Eggsploding = true;
             sr.sprite = eggSplosionSprite;

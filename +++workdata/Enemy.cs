@@ -65,30 +65,40 @@ public class Enemy : MonoBehaviour
     {
         distance = Vector2.Distance(gameObject.transform.position, player.transform.position);
 
-
-        if (enemyAI.velocity.x > 0 && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack"))
+        if (!eggHealthRadiation.died)
         {
-            sr.flipX = true;
+            if (enemyAI.velocity.x > 0 && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack"))
+            {
+                sr.flipX = true;
+            }
+            else if (enemyAI.velocity.x < 0 && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack"))
+            {
+                sr.flipX = false;
+            }
+
+            if (distance < attackRange && !attackCooldown)
+            {
+                Attack();
+            }
+
+            if (enemyAI.reachedDestination && !hasBeenAttacked)
+            {
+                Invoke("FollowPlayer", runAwayDuration);
+            }
+
+
+
+
+            if (enemyAI.velocity != null && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulWalk"))
+            {
+                anim.Play("GhoulWalk");
+            }
         }
-        else if(enemyAI.velocity.x < 0 && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack"))
-        {
-            sr.flipX = false;
-        }
 
-        if(distance < attackRange && !attackCooldown)
+        else
         {
-            Attack();
-        }
-
-        if(enemyAI.reachedDestination && !hasBeenAttacked)
-        {
-            Invoke("FollowPlayer", runAwayDuration);
-        }
-
-
-        if (enemyAI.velocity != null && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulAttack") && !anim.GetCurrentAnimatorStateInfo(0).IsName("GhoulWalk"))
-        {
-            anim.Play("GhoulWalk");
+            anim.Play("GhoulIdle");
+            gameObject.GetComponent<DistanceCheck>().DisableScripts();
         }
     }
 

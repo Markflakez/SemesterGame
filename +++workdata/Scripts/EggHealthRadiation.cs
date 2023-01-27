@@ -22,7 +22,7 @@ public class EggHealthRadiation : MonoBehaviour
     public Material radiationMat;
 
     private GameObject deathPoint;
-    private bool died = false;
+    public bool died = false;
 
     public Manager manager;
 
