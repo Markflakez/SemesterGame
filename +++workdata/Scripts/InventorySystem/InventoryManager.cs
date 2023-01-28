@@ -112,7 +112,8 @@ public class InventoryManager : MonoBehaviour
 
 
     public bool AddItem(Item item)
-        {
+    {
+        item.isDropped = false;
 
         for (int i = 0; i < inventorySlots.Length; i++)
         {

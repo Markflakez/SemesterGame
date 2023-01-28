@@ -13,6 +13,8 @@ public class Item : ScriptableObject
     public int itemCount;
     public int attackDamage;
     public int healthBoost;
+
+    public bool isDropped = false;
     public ItemType type;
 
     [Header("UI")]

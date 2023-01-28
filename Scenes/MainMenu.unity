@@ -2554,7 +2554,7 @@ PrefabInstance:
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: creditsButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 551201727}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: graphicsPanel
       value: 

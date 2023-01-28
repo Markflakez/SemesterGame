@@ -69,9 +69,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RMB",
+                    "name": "UseItem",
                     "type": "Button",
                     "id": "785bd9b9-b86d-4fdd-9e73-2aea19c51887",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DropItem",
+                    "type": "Button",
+                    "id": "f175097f-2d45-4691-9b2f-c93103100110",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -225,11 +234,22 @@
                 {
                     "name": "",
                     "id": "85aa3860-69ba-4c74-9d7b-c17655ec4c74",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RMB",
+                    "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73048933-cafd-4297-8a15-990ca1a3725c",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

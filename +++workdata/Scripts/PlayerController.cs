@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform eggThrowSpawn;
 
+
     #region Variables
     float movementX, movementY; 
     [SerializeField]
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
     public bool isAttacking;
 
     private bool isWalking = false;
+    private bool canDropItem = true;
 
     public float dashSpeed;
     public float dashDuration;
@@ -90,10 +92,14 @@ public class PlayerController : MonoBehaviour
 
     private PlayerCombat playerCombat;
 
+    private GameObject droppedItem;
+
     public BoxCollider2D weaponCollision;
 
     Vector2 ghoulSpawn;
     public HealthBar healthBar;
+
+    private Vector2 dropDirection;
 
     [SerializeField]
     public int playerCurrentHealth;
@@ -138,7 +144,13 @@ public class PlayerController : MonoBehaviour
             cylinder.Play("CylinderAction");
         }
 
-        if(Input.GetKeyUp(KeyCode.N))
+        if (Input.GetKey(KeyCode.M))
+        {
+            PlayerPrefs.DeleteAll();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (Input.GetKeyUp(KeyCode.N))
         {
             manager.StopAllCoroutines();
             manager.CancelInvoke();
@@ -311,11 +323,90 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void DropItem()
+    {
+        if (!manager.isPaused)
+        {
+            if (canDropItem && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
+            {
+                inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().item.isDropped = true;
+                if (inventoryManager.selectedItemName == "Egg")
+                {
+                    GameObject dropped = manager.eggPrefab;
+                    StartCoroutine(activateTrigger(dropped));
+
+                }
+                else if (inventoryManager.selectedItemName == "Sword")
+                {
+                    GameObject dropped = manager.swordPrefab;
+                    StartCoroutine(activateTrigger(dropped));
+                }
+                inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                canDropItem = false;
+                Invoke("canDropItemCooldown", .125f);
+            }
+            inventoryManager.CheckSelectedItem();
+        }
+    }
+
+    private IEnumerator activateTrigger(GameObject prefabItem)
+    {
+        GameObject eggSpawn = null;
+
+        if (idleState == 0)
+        {
+            eggSpawn = manager.eggBack;
+            droppedItem = Instantiate(prefabItem, eggSpawn.transform.position, transform.rotation);
+            dropDirection = new Vector2(2, 5);
+        }
+        else if (idleState == 1)
+        {
+            eggSpawn = manager.eggRight;
+            droppedItem = Instantiate(prefabItem, eggSpawn.transform.position, transform.rotation);
+            dropDirection = new Vector2(5, -2);
+        }
+        else if (idleState == 2)
+        {
+            eggSpawn = manager.eggFront;
+            droppedItem = Instantiate(prefabItem, eggSpawn.transform.position, transform.rotation);
+            dropDirection = new Vector2(-2, -5);
+        }
+        else if (idleState == 3)
+        {
+            eggSpawn = manager.eggLeft;
+            droppedItem = Instantiate(prefabItem, eggSpawn.transform.position, transform.rotation);
+            dropDirection = new Vector2(-5, 2);
+        }
+
+        if (idleState == 0 || idleState == 3)
+        {
+            droppedItem.GetComponent<SpriteRenderer>().sortingOrder = -1;
+        }
+        else
+        {
+            droppedItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        }
+
+        droppedItem.GetComponent<BoxCollider2D>().enabled = false;
+        droppedItem.GetComponent<CircleCollider2D>().enabled = false;
+
+        droppedItem.GetComponent<Rigidbody2D>().AddForce(dropDirection, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(2f);
+        droppedItem.GetComponent<BoxCollider2D>().enabled = true;
+        droppedItem.GetComponent<CircleCollider2D>().enabled = true;
+    }
 
     void EggThrowCoaldown()
     {
         canThrowEgg = true;
     }
+
+    void canDropItemCooldown()
+    {
+        canDropItem = true;
+    }
+
 
     void EggEatCoaldown()
     {

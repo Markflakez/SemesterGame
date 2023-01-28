@@ -53,6 +53,11 @@ public class Manager : MonoBehaviour
     public GameObject questHeaderText;
     public InventoryManager inventoryManager;
 
+
+
+    public GameObject eggPrefab;
+    public GameObject swordPrefab;
+
     public Item egg;
     public Item sword;
 
@@ -169,6 +174,7 @@ public class Manager : MonoBehaviour
     public GameObject eggsPopup;
     public GameObject radiationPopup;
 
+    private GameObject spawnItem;
 
     public VideoPlayer videoPlayer;
 
@@ -203,7 +209,6 @@ public class Manager : MonoBehaviour
         {
             LoadFileNames();
         }
-        inputActions.Enable();
         FindInputActions();
 
     }
@@ -477,10 +482,12 @@ public class Manager : MonoBehaviour
 
     private void FindInputActions()
     {
+        inputActions.Enable();
         if (sceneName == "InGame")
         {
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
-            inputActions.FindAction("RMB").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
+            inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
+            inputActions.FindAction("DropItem").performed += ctx => player.GetComponent<PlayerController>().DropItem();
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
@@ -886,11 +893,95 @@ public class Manager : MonoBehaviour
         //LOAD_PLAYER_LOCATION(file);
 
         LOAD_INVENTORY();
+        LOAD_WORLDSPACEITEMS();
         LOAD_PLAYER_LOCATION();
         LOAD_PLAYER_HEALTH();
         LOAD_PLAYER_HUNGER();
 
     }
+
+    public void LOAD_WORLDSPACEITEMS()
+    {
+        int i = 1;
+        int maxIterations = 17;
+        while (i <= maxIterations)
+        {
+            string savedItem = "droppedItem" + i + file;
+            string savedItemPosX = "droppedItem" + i + file + "PosX";
+            string savedItemPosY = "droppedItem" + i + file + "PosY";
+            if (PlayerPrefs.HasKey(savedItem))
+            {
+                SpawnItem(PlayerPrefs.GetString(savedItem), PlayerPrefs.GetFloat(savedItemPosX), PlayerPrefs.GetFloat(savedItemPosY));
+                i++;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    private void DeleteOldPlayerPrefs()
+    {
+        int i = 1;
+        while (PlayerPrefs.HasKey("droppedItem" + i + file))
+        {
+            PlayerPrefs.DeleteKey("droppedItem" + i + file);
+            PlayerPrefs.DeleteKey("droppedItem" + i + file + "PosX");
+            PlayerPrefs.DeleteKey("droppedItem" + i + file + "PosY");
+            i++;
+        }
+    }
+
+    public void SpawnItem(string savedItem, float posX, float posY)
+    {
+        spawnItem = new GameObject();
+        spawnItem.transform.position = new Vector2(posX, posY);
+        if (savedItem == "Egg")
+        {
+            Instantiate(eggPrefab, spawnItem.transform);
+        }
+        else if (savedItem == "Sword")
+        {
+            Instantiate(swordPrefab, spawnItem.transform);
+        }
+    }
+
+    public void SaveItems()
+    {
+        DeleteOldPlayerPrefs();
+        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            WorldspaceItem inventoryItem = obj.GetComponent<WorldspaceItem>();
+            if (inventoryItem != null && inventoryItem.item.isDropped)
+            {
+                SaveAndExecute(obj);
+            }
+        }
+    }
+
+    public void SaveAndExecute(GameObject obj)
+    {
+        int i = 1;
+        while (true)
+        {
+            string savedItem = "droppedItem" + i + file;
+            string savedItemPosX = "droppedItem" + i + file + "PosX";
+            string savedItemPosY = "droppedItem" + i + file + "PosY";
+            if (PlayerPrefs.HasKey(savedItem))
+            {
+                i++;
+                continue;
+            }
+            PlayerPrefs.SetString(savedItem, obj.GetComponent<WorldspaceItem>().item.name);
+            PlayerPrefs.SetFloat(savedItemPosX, obj.transform.position.x);
+            PlayerPrefs.SetFloat(savedItemPosY, obj.transform.position.y);
+            PlayerPrefs.Save();
+            break;
+        }
+    }
+
     public void LOAD_PLAYER_HEALTH()
     {
         //Sets the current Player Health, Health Text and Healthbar to the values from the selected Save File
@@ -964,6 +1055,7 @@ public class Manager : MonoBehaviour
         //SAVE_PLAYER_LOCATION(file);
 
         SAVE_INVENTORY();
+        SaveItems();
         SAVE_PLAYER_LOCATION();
         SAVE_PLAYER_HEALTH();
         SAVE_PLAYER_HUNGER();
