@@ -11,6 +11,8 @@ public class Item : ScriptableObject
     public string itemName;
     public string itemDescription;
     public int itemCount;
+    public int attackDamage;
+    public int healthBoost;
     public ItemType type;
 
     [Header("UI")]

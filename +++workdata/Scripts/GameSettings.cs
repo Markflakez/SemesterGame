@@ -97,7 +97,7 @@ public class GameSettings : MonoBehaviour
             {
                 fpsDisplay.text = "FPS: " + framerate;
             }
-            else
+            else if(SceneManager.GetActiveScene().name == "InGame")
             {
                 fpsDisplay.text = "";
                 fpsDisplay.text = "FPS: " + Application.targetFrameRate;

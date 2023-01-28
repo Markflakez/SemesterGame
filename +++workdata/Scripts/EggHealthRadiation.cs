@@ -73,17 +73,21 @@ public class EggHealthRadiation : MonoBehaviour
 
         health = 100;
 
-        radiationRemovedSegments = 100;
-        eggRemovedSegments = 20;
+        if (!PlayerPrefs.HasKey("PLAYER_HUNGER -" + manager.file))
+        {
+            eggRemovedSegments = 20;
+            eggMat.SetFloat("_RemovedSegments", 20);
+        }
+        if (!PlayerPrefs.HasKey("PLAYER_HUNGER -" + manager.file))
+        {
+            radiationRemovedSegments = 100;
+            radiationMat.SetFloat("_RemovedSegments", 100);
+        }
+
+
+
+
         removedSegments = 0;
-
-        eggMat.SetFloat("_RemovedSegments", 20);
-        radiationMat.SetFloat("_RemovedSegments", 100);
-
-
-        StartCoroutine(RadiationOverTime2());
-        StartCoroutine(HungerOverTime());
-        StartCoroutine(RegerateHealth());
     }
 
     //Updates is called once per frame
@@ -142,7 +146,7 @@ public class EggHealthRadiation : MonoBehaviour
         }
         else
         {
-            targetSpeed = 20;
+            targetSpeed = 0;
         }
 
         if(manager.postProcessingVolume.profile.TryGet(out manager.chromaticAberration)) 
@@ -164,12 +168,16 @@ public class EggHealthRadiation : MonoBehaviour
     public IEnumerator RadiationOverTime2()
     {
         float startTime = Time.time;
-        while (speed < targetSpeed)
+        while (speed < targetSpeed +1)
         {
             speed += (targetSpeed / increaseTime) * Time.deltaTime;
-            if ((Time.time - startTime) % 0.125f < Time.deltaTime)
+            Color currentColor = Color.Lerp(Color.white, manager.radiationColor, speed * 0.01f);
+            manager.AvatarIcon.GetComponent<Image>().color = currentColor;
+            UpdateRadiation(speed);
+
+            if (speed >= 100 && !died)
             {
-                UpdateRadiation(speed);
+                Death();
             }
             yield return null;
         }
@@ -183,10 +191,7 @@ public class EggHealthRadiation : MonoBehaviour
             if (health < maxHealth)
             {
                 health += (regenerateSpeed / regenerateDuration) * Time.deltaTime;
-                if ((Time.time - startTime) % 0.125f < Time.deltaTime)
-                {
-                    UpdateHealth();
-                }
+                UpdateHealth();
             }
             yield return null;
         }
@@ -208,18 +213,7 @@ public class EggHealthRadiation : MonoBehaviour
             {
                 eggs -= (hungerSpeed / hungerDuration) * Time.deltaTime;
                 MyFunction();
-            }
-            
-            int[] numbersToCheck = { 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0 };
-            foreach (int number in numbersToCheck)
-            {
-                {
-                    if (number == (int)eggs)
-                    {
-                        UpdateEggs();
-                        break;
-                    }
-                }
+                UpdateEggs();
             }
             yield return null;
         }
@@ -373,10 +367,6 @@ public class EggHealthRadiation : MonoBehaviour
     {
         eggRemovedSegments = eggMat.GetFloat("_SegmentCount") / 200 * -eggs;
         eggMat.SetFloat("_RemovedSegments", (int)eggRemovedSegments + eggMat.GetFloat("_SegmentCount"));
-        if(eggs == 100)
-        {
-            Invoke("ResumeRadiation", 30);
-        }
     }
 
     public void UpdateHealth()

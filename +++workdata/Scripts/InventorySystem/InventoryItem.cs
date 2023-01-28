@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+using DG.Tweening;
+public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler
 {
     [HideInInspector] public Item item;
     public int count = 1;
@@ -82,18 +83,48 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         infoText.text = "";
         infoText.text += "</size>" + "\n" + "\n" + item.itemDescription;
+        manager.itemNameHovered.text = item.itemName;
+        manager.itemHovered.sprite = item.image;
+        if (item.attackDamage != 0)
+        {
+            manager.itemAttackDamage.text = item.attackDamage.ToString();
+            manager.itemAttackDamage.gameObject.transform.parent.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            manager.itemAttackDamage.text = "";
+            manager.itemAttackDamage.gameObject.transform.parent.transform.parent.gameObject.SetActive(false);
+        }
+        if (item.healthBoost != 0)
+        {
+            manager.itemhealthBoost.text = item.healthBoost.ToString();
+            manager.itemhealthBoost.gameObject.transform.parent.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            manager.itemhealthBoost.text = "";
+            manager.itemhealthBoost.gameObject.transform.parent.transform.parent.gameObject.SetActive(false);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(manager.mainInventoryBG2.anchoredPosition.x == 270)
+        {
+            manager.mainInventoryBG2.DOAnchorPosX(506, .75f).SetEase(Ease.InOutSine);
+        }
         RefreshItemDescription();
 
         
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void nothin()
     {
         infoText.text = "";
+        manager.itemAttackDamage.text = "";
+        manager.itemhealthBoost.text = "";
+        manager.itemHovered.sprite = manager.invisibleSprite;
+        manager.itemNameHovered.text = "";
     }
 
 

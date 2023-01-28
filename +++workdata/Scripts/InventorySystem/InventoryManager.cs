@@ -69,19 +69,27 @@ public class InventoryManager : MonoBehaviour
 
         if (selectedItemName == "Egg")
         {
-            manager.escControl.color = Color.gray;
+            manager.escControl.color = manager.uiFontColorDisabled;
             manager.attackControl.color = manager.uiFontColor;
-            manager.interactControl.color = Color.gray;
+            manager.interactControl.color = manager.uiFontColorDisabled;
             manager.useItemControl.color = manager.uiFontColor;
             manager.dropItemControl.color = manager.uiFontColor;
         }
         else if (selectedItemName == "Sword")
         {
-            manager.escControl.color = Color.gray;
+            manager.escControl.color = manager.uiFontColorDisabled;
             manager.attackControl.color = manager.uiFontColor;
-            manager.interactControl.color = Color.gray;
-            manager.useItemControl.color = Color.gray;
+            manager.interactControl.color = manager.uiFontColorDisabled;
+            manager.useItemControl.color = manager.uiFontColorDisabled;
             manager.dropItemControl.color = manager.uiFontColor;
+        }
+        else
+        {
+            manager.escControl.color = manager.uiFontColorDisabled;
+            manager.attackControl.color = manager.uiFontColorDisabled;
+            manager.interactControl.color = manager.uiFontColorDisabled;
+            manager.useItemControl.color = manager.uiFontColorDisabled;
+            manager.dropItemControl.color = manager.uiFontColorDisabled;
         }
     }
 

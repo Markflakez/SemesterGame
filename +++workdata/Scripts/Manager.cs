@@ -15,7 +15,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.Video;
 using UnityEngine.Rendering;
 
-public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Manager : MonoBehaviour
 {
     [Header("Main Menu/InGame")]
 
@@ -30,7 +30,8 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
-    private int file;
+    [HideInInspector]
+    public int file;
 
     private string activeSceneName;
 
@@ -94,7 +95,21 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject eggRight;
     public GameObject eggBack;
 
+    public RectTransform mainInventoryBG2;
+
     public Color uiFontColor;
+    public Color uiFontColorDisabled;
+    public Color radiationColor;
+
+    public Sprite invisibleSprite;
+    public Image itemHovered;
+    public TextMeshProUGUI itemNameHovered;
+    public TextMeshProUGUI itemAttackDamage;
+    public TextMeshProUGUI itemhealthBoost;
+
+    
+
+    public GameObject AvatarIcon;
 
     public string sceneName;
 
@@ -164,10 +179,9 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void Awake()
     {
         sceneName = SceneManager.GetActiveScene().name;
-
-        if(sceneName == "InGame")
+        if (sceneName == "InGame")
         {
-            videoPlayer.Prepare();
+            file = PlayerPrefs.GetInt("CurrentFile");
         }
 
         DOTween.Init();
@@ -179,13 +193,21 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
+
+        if(sceneName == "InGame")
+        {
+            LOADFILE();
+        }
+
         if (sceneName != "MainMenu")
         {
             LoadFileNames();
         }
+        inputActions.Enable();
         FindInputActions();
 
     }
+
 
     private void Start()
     {
@@ -198,7 +220,7 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (sceneName == "InGame")
         {
             uiPanel.GetComponent<CanvasGroup>().alpha = 0;
-            LOADFILE();
+            
 
             //SaturationFade();
 
@@ -419,17 +441,17 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (delaySwitchScene == false)
         {
             uiSound.PlayOneShot(buttonHover);
-            if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
+            if (button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
             {
-                button.gameObject.GetComponent<Image>().color = new Color32(120, 120, 120, 255);
+                button.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
             }
         }
     }
     public void exitHover(Button button)
     {
-        if (button.gameObject.name != "CreditsButton" && button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
+        if (button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
         {
-            button.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            button.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
         }
     }
     
@@ -453,28 +475,28 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     #region InputAction
 
-    private void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Disable();
-    }
-
     private void FindInputActions()
     {
-        inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
-        inputActions.FindAction("RMB").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
-        inputActions.FindAction("Escape").performed += ctx => EscapeInput();
-        inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
-        inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
-        inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
-        inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
+        if (sceneName == "InGame")
+        {
+            inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
+            inputActions.FindAction("RMB").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
+            inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
+            inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
+            inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
+            inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
+            inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
+            inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
+        }
+        else
+        {
+            inputActions.FindAction("Escape").performed += ctx => EscapeInput();
+        }
+        
+        
 
-        inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
-        inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
+
+
     }
     public void EscapeInput()
     {
@@ -608,40 +630,6 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         sceneSwitch = false;
     }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (eventData.pointerCurrentRaycast.gameObject.name == "HeartIcon" && healthPopup.activeSelf)
-        {
-            healthPopup.SetActive(true);
-        }
-        else if (eventData.pointerCurrentRaycast.gameObject.name == "SkullIcon" && radiationPopup.activeSelf)
-        {
-            radiationPopup.SetActive(true);
-        }
-        else if (eventData.pointerCurrentRaycast.gameObject.name == "EggIcon" && eggsPopup.activeSelf)
-        {
-            eggsPopup.SetActive(true);
-        }
-
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (eventData.pointerEnter.gameObject.name == "HeartIcon" && healthPopup.activeSelf)
-        {
-            healthPopup.SetActive(false);
-        }
-        else if (eventData.selectedObject.gameObject.name == "SkullIcon" && radiationPopup.activeSelf)
-        {
-            radiationPopup.SetActive(false);
-        }
-        else if (eventData.selectedObject.gameObject.name == "EggIcon" && eggsPopup.activeSelf)
-        {
-            eggsPopup.SetActive(false);
-        }
-    }
-
 
     public void LoadGame(Button button)
     {
@@ -897,28 +885,29 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //LOAD_PLAYER_HEALTH(file);
         //LOAD_PLAYER_LOCATION(file);
 
-        if (!Application.isEditor)
-        {
-            LOAD_INVENTORY();
-        }
+        LOAD_INVENTORY();
+        LOAD_PLAYER_LOCATION();
+        LOAD_PLAYER_HEALTH();
+        LOAD_PLAYER_HUNGER();
 
     }
-    void LOAD_PLAYER_HEALTH(int file)
+    public void LOAD_PLAYER_HEALTH()
     {
         //Sets the current Player Health, Health Text and Healthbar to the values from the selected Save File
         eggHealthRadiation.health = PlayerPrefs.GetFloat("PLAYER_HEALTH-" + file);
         eggHealthRadiation.damageDealt = PlayerPrefs.GetFloat("PLAYER_DAMAGEDEALT-" + file);
         eggHealthRadiation.healthMat.SetFloat("_RemovedSegments", PlayerPrefs.GetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file));
 
-
-        if(!PlayerPrefs.HasKey("PLAYER_HEALTH-" + file))
-        {
-            eggHealthRadiation.health = 50;
-            eggHealthRadiation.damageDealt = 0;
-        }
         eggHealthRadiation.UpdateHealth();
     }
-    void LOAD_PLAYER_LOCATION(int file)
+
+    public void LOAD_PLAYER_HUNGER()
+    {
+        eggHealthRadiation.eggs = PlayerPrefs.GetFloat("PLAYER_HUNGER-" + file);
+        eggHealthRadiation.eggMat.SetFloat("_RemovedSegments", PlayerPrefs.GetFloat("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file));
+        eggHealthRadiation.UpdateEggs();
+    }
+    public void LOAD_PLAYER_LOCATION()
     {
         //Sets the current Player Position to the values from the selected Save File
         player.transform.position = new Vector2(PlayerPrefs.GetFloat("PLAYER_LOCATION_X-" + file), PlayerPrefs.GetFloat("PLAYER_LOCATION_Y-" + file));
@@ -962,42 +951,48 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     #endregion LOADSAVE
 
-    public void SAVEFILE(Button button)
+    public void SAVEFILE()
     {
-        if (!sceneSwitch)
-        {
-            StartCoroutine(DelaySwitchScene("SAVEFILE", button));
-        }
+        int file = PlayerPrefs.GetInt("CurrentFile");
 
-        if (sceneSwitch)
-        {
+        DateTime currentDate = DateTime.Today;
+        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+        PlayerPrefs.Save();
 
-            int file = PlayerPrefs.GetInt("CurrentFile");
+        //Saves the current Player Health and Position
+        //SAVE_PLAYER_HEALTH(file);
+        //SAVE_PLAYER_LOCATION(file);
 
-            DateTime currentDate = DateTime.Today;
-            PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
-
-            //Saves the current Player Health and Position
-            //SAVE_PLAYER_HEALTH(file);
-            //SAVE_PLAYER_LOCATION(file);
-
-            SAVE_INVENTORY();
-        }
-        ButtonAnimation(button);
+        SAVE_INVENTORY();
+        SAVE_PLAYER_LOCATION();
+        SAVE_PLAYER_HEALTH();
+        SAVE_PLAYER_HUNGER();
     }
     #region SAVESAVE
-    void SAVE_PLAYER_HEALTH(int file)
+    void SAVE_PLAYER_HEALTH()
     {
         //Saves the current Player Health
         PlayerPrefs.SetFloat("PLAYER_HEALTH-" + file, eggHealthRadiation.health);
         PlayerPrefs.SetFloat("PLAYER_DAMAGEDEALT-" + file, eggHealthRadiation.damageDealt);
         PlayerPrefs.SetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.removedSegments);
+        PlayerPrefs.Save();
     }
-    void SAVE_PLAYER_LOCATION(int file)
+
+    void SAVE_PLAYER_HUNGER()
+    {
+        //Saves the current Player Hunger
+        PlayerPrefs.SetFloat("PLAYER_HUNGER-" + file, eggHealthRadiation.eggs);
+        PlayerPrefs.SetFloat("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.eggRemovedSegments);
+        PlayerPrefs.Save();
+    }
+
+
+    void SAVE_PLAYER_LOCATION()
     {
         //Saves the current Player Position
         PlayerPrefs.SetFloat("PLAYER_LOCATION_X-" + file, player.transform.position.x);
         PlayerPrefs.SetFloat("PLAYER_LOCATION_Y-" + file, player.transform.position.y);
+        PlayerPrefs.Save();
     }
     public void SAVE_INVENTORY()
     {
@@ -1012,16 +1007,15 @@ public class Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 PlayerPrefs.SetString("INVENTORY-ITEM-NAME" + file + i, itemInSlot.item.itemName);
                 PlayerPrefs.SetInt("INVENTORY-ITEM-COUNT" + file + i, itemInSlot.count);
                 PlayerPrefs.SetInt("INVENTORY-ITEM-SLOT" + file + i, i);
-
-                Debug.Log(PlayerPrefs.GetInt("INVENTORY-ITEM-COUNT" + file + i));
-                Debug.Log(PlayerPrefs.GetString("INVENTORY-ITEM-NAME" + file + i));
+                PlayerPrefs.Save();
             }
             else
             {
                 PlayerPrefs.DeleteKey("INVENTORY-ITEM-NAME" + file + i);
                 PlayerPrefs.DeleteKey("INVENTORY-ITEM-COUNT" + file + i);
+                PlayerPrefs.Save();
             }
-            PlayerPrefs.Save();
+            
         }
         
 
