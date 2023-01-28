@@ -177,11 +177,6 @@ public class PlayerController : MonoBehaviour
             stepSoundPlayer.Stop();
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-
         if (Input.GetKeyDown(KeyCode.LeftShift) && !onCooldown)
         {
             
@@ -308,7 +303,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ItemRMB()
+    public void UseItem()
     {
         if (!manager.isPaused)
         {

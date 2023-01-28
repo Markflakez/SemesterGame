@@ -31,15 +31,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         infoText = manager.infoText;
         RefreshCount();
-        ScaleInventoryItem();
-        
     }
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
         image.sprite = newItem.image;
         RefreshCount();
-        ScaleInventoryItem();
     }
 
     public void RefreshCount()
@@ -73,7 +70,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         image.raycastTarget = true;
         countText.raycastTarget = true;
         isDragging = false;
-        ScaleInventoryItem();
         inventoryManager.CheckSelectedItem();
     }
 
@@ -125,19 +121,5 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         manager.itemhealthBoost.text = "";
         manager.itemHovered.sprite = manager.invisibleSprite;
         manager.itemNameHovered.text = "";
-    }
-
-
-    public void ScaleInventoryItem()
-    {
-
-        if (gameObject.transform.parent.transform.parent.name == "Inventory-Hotbar")
-        {
-            gameObject.transform.localScale = new Vector3(1, 1, 1);
-        }
-        else if (gameObject.transform.parent.transform.parent.name == "Inventory-Main")
-        {
-            gameObject.transform.localScale = new Vector3((float)1.3, (float)1.3, (float)1.3);
-        }
     }
 }

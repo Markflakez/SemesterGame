@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -70,18 +71,18 @@ public class InventoryManager : MonoBehaviour
         if (selectedItemName == "Egg")
         {
             manager.escControl.color = manager.uiFontColorDisabled;
-            manager.attackControl.color = manager.uiFontColor;
+            manager.attackControl.color = Color.white;
             manager.interactControl.color = manager.uiFontColorDisabled;
-            manager.useItemControl.color = manager.uiFontColor;
-            manager.dropItemControl.color = manager.uiFontColor;
+            manager.useItemControl.color = Color.white;
+            manager.dropItemControl.color = Color.white;
         }
         else if (selectedItemName == "Sword")
         {
             manager.escControl.color = manager.uiFontColorDisabled;
-            manager.attackControl.color = manager.uiFontColor;
+            manager.attackControl.color = Color.white;
             manager.interactControl.color = manager.uiFontColorDisabled;
             manager.useItemControl.color = manager.uiFontColorDisabled;
-            manager.dropItemControl.color = manager.uiFontColor;
+            manager.dropItemControl.color = Color.white;
         }
         else
         {
@@ -134,7 +135,6 @@ public class InventoryManager : MonoBehaviour
             if(itemInSlot == null)
             {
                 SpawnNewItem(item, slot);
-                ScaleInventoryItem(slot);
                 return true;
             }
         }
@@ -150,18 +150,5 @@ public class InventoryManager : MonoBehaviour
         inventoryItem.InitialiseItem(item);
         CheckSelectedItem();
 
-    }
-
-    public void ScaleInventoryItem(InventorySlot inventoryItem)
-    {
-
-        if (inventoryItem.transform.parent.name == "Inventory-Hotbar")
-        {
-            inventoryItem.transform.GetChild(0).localScale = new Vector3((float).8, (float).8, (float).8);
-        }
-        else
-        {
-            inventoryItem.transform.GetChild(0).localScale = new Vector3((float)1.3, (float)1.3, (float)1.3);
-        }
     }
 }

@@ -48,6 +48,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         }
         inventoryManager.CheckSelectedItem();
 
+
         //inventoryItem.ScaleInventoryItem();
         //inventoryItem2.ScaleInventoryItem();
     }

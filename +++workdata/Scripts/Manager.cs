@@ -486,7 +486,7 @@ public class Manager : MonoBehaviour
         if (sceneName == "InGame")
         {
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
-            inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().ItemRMB();
+            inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().UseItem();
             inputActions.FindAction("DropItem").performed += ctx => player.GetComponent<PlayerController>().DropItem();
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
