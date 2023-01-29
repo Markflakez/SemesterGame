@@ -105,7 +105,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(manager.mainInventoryBG2.anchoredPosition.x == 270)
+        if(manager.mainInventoryBG2.anchoredPosition.x == 270 && manager.inventoryMain.activeSelf)
         {
             manager.mainInventoryBG2.DOAnchorPosX(506, .5f).SetEase(Ease.InOutSine);
         }

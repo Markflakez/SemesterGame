@@ -75,7 +75,7 @@ public class Manager : MonoBehaviour
 
     public CinemachineBrain brain;
 
-    private float buttonDelay = .15f;
+    public float buttonDelay = .15f;
     private GameObject saveFiles;
     private GameSettings gameSettings;
     public GameObject dialogBox;
@@ -103,6 +103,8 @@ public class Manager : MonoBehaviour
     public GameObject QuestPanel2;
     public GameObject QuestPanel3;
 
+    public Image blackCanvas;
+
     public RectTransform mainInventoryBG2;
 
     public Color uiFontColor;
@@ -116,6 +118,7 @@ public class Manager : MonoBehaviour
     public TextMeshProUGUI itemAttackDamage;
     public TextMeshProUGUI itemhealthBoost;
 
+    public bool saved = true;
     
 
     public GameObject AvatarIcon;
@@ -155,6 +158,7 @@ public class Manager : MonoBehaviour
     public AudioClip eggGroundHit;
     public AudioClip eggEnemyHit;
 
+    public Button saveButton;
 
     public TextMeshProUGUI escControl;
     public TextMeshProUGUI attackControl;
@@ -195,6 +199,16 @@ public class Manager : MonoBehaviour
     public GameObject TaskCheck2;
     public GameObject TaskCheck3;
 
+
+    public GameObject inputName;
+
+    public Image playerChatAvatar;
+    public Image laurelChatAvatar;
+    public Image morganChatAvatar;
+    public Image florusChatAvatar;
+    public Image pascalChatAvatar;
+
+
     private GameObject spawnItem;
 
     public VideoPlayer videoPlayer;
@@ -209,8 +223,6 @@ public class Manager : MonoBehaviour
         if (sceneName == "InGame")
         {
             file = PlayerPrefs.GetInt("CurrentFile");
-            playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(200, 0, 0);
-            LOADFILE();
         }
         
         DOTween.Init();
@@ -221,11 +233,6 @@ public class Manager : MonoBehaviour
         if (sceneName != "LoadGame")
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
-        }
-
-        if (sceneName == "LoadGame")
-        {
-            LoadFileNames();
         }
         FindInputActions();
     }
@@ -241,40 +248,84 @@ public class Manager : MonoBehaviour
 
         if (sceneName == "InGame")
         {
-            uiPanel.GetComponent<CanvasGroup>().alpha = 0;
-            
+            if(PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
+            {
+                StopAllCoroutines();
+                CancelInvoke();
+                if (isPaused)
+                {
+                    PauseGame();
+                }
+                UpdateUIAlpha(1);
+                videoPlayer.gameObject.SetActive(false);
+                blackCanvas.enabled = false;
+                LOADFILE();
+            }
+            else
+            {
+                DeleteSaveFile(file);
+                inputActions.FindAction("Escape").Disable();
+                UpdateUIAlpha(0);
 
-            //SaturationFade();
+                //SaturationFade();
+                blackCanvas.enabled = true;
+                playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
+                playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+                
+                Button button = new GameObject().AddComponent<Button>();
+                button.name = "placeHolderButton";
+                SAVEFILE(button);
+                StartCoroutine(PlayIntroSequence());
+            }
 
-            playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
-            playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
-            StartCoroutine(PlayIntroSequence());
+        }
+
+        if (sceneName == "LoadGame")
+        {
+            LoadFileNames();
         }
 
         if (sceneName != "LoadGame")
         {
             LoadSettings();
-            Debug.Log("hallo");
         }
 
     }
 
     public IEnumerator PlayIntroSequence()
     {
+        if (!isPaused)
+        {
+            PauseGame();
+        }
         videoPlayer.enabled = true;
         videoPlayer.Play();
-        PauseGame();
-        yield return new WaitForSecondsRealtime(14);
-        playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(0, 0, 0);
-        float currentVideoAlpha = 1;
-        DOTween.To(() => currentVideoAlpha, x => currentVideoAlpha = x, 0, 2f).OnUpdate(() => UpdateAlpha(currentVideoAlpha));
         yield return new WaitForSecondsRealtime(2);
-        float currentUIAlpha = 0;
-        DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, 2f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
-        PauseGame();
-        videoPlayer.gameObject.SetActive(false);
+        inputName.SetActive(true);
+        yield return new WaitForSecondsRealtime(12);
+        
+
+        blackCanvas.DOColor(Color.clear, 5f).SetEase(Ease.Linear);
+        yield return new WaitForSecondsRealtime(2);
+        
+        yield return new WaitForSecondsRealtime(7);
+        blackCanvas.enabled = false;
+
     }
 
+    public void OnEnterName(TMP_InputField inputField)
+    {
+        if (inputField.text != "")
+        {
+            PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
+            player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
+            PauseGame();
+            inputName.SetActive(false);
+            inputActions.FindAction("Escape").Enable();
+            float currentUIAlpha = 0;
+            DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, .5f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
+        }
+    }
 
 
     public void SaturationFade()
@@ -283,15 +334,6 @@ public class Manager : MonoBehaviour
         {
             colorAdjustments.saturation.value = -100;
             DOTween.To(() => colorAdjustments.saturation.value, x => colorAdjustments.saturation.value = x, 10, 5f);
-        }
-    }
-
-    public void UpdateAlpha(float alpha)
-    {
-        videoPlayer.targetCameraAlpha = alpha;
-        if (alpha == 0)
-        {
-            videoPlayer.gameObject.transform.position = new Vector3(-1000, 0, 0);
         }
     }
 
@@ -307,11 +349,12 @@ public class Manager : MonoBehaviour
         mainMenuQ.SetActive(false);
         settingsMenu.SetActive(false);
     }
-    private void LoadFileNames()
+    public void LoadFileNames()
     {
         if (PlayerPrefs.HasKey("FILETIME-" + "1"))
         {
             saveFile1.GetComponentInChildren<TextMeshProUGUI>().text = PlayerPrefs.GetString("FILETIME-" + "1");
+            Debug.Log("yes");
         }
         else
         {
@@ -340,8 +383,12 @@ public class Manager : MonoBehaviour
         {
             player.GetComponent<PlayerController>().isAttacking = true;
             inputActions.FindAction("Move").Disable();
+            inputActions.FindAction("Attack").Disable();
+            inputActions.FindAction("UseItem").Disable();
+            inputActions.FindAction("DropItem").Disable();
+            inputActions.FindAction("Dash").Disable();
+            inputActions.FindAction("Interact").Disable();
             Time.timeScale = 0;
-            DOTween.PauseAll();
             StopCheckDistance();
             eggHealthRadiation.StopCoroutine(eggHealthRadiation.RadiationOverTime2());
             eggHealthRadiation.StopCoroutine(eggHealthRadiation.HungerOverTime());
@@ -354,8 +401,12 @@ public class Manager : MonoBehaviour
         {
             player.GetComponent<PlayerController>().isAttacking = false;
             inputActions.FindAction("Move").Enable();
+            inputActions.FindAction("Attack").Enable();
+            inputActions.FindAction("UseItem").Enable();
+            inputActions.FindAction("DropItem").Enable();
+            inputActions.FindAction("Dash").Enable();
+            inputActions.FindAction("Interact").Enable();
             Time.timeScale = 1;
-            DOTween.PlayAll();
             
             StartCheckDistance();
             eggHealthRadiation.StartCoroutine(eggHealthRadiation.RadiationOverTime2());
@@ -454,14 +505,40 @@ public class Manager : MonoBehaviour
         PlayerPrefs.DeleteKey("PLAYER_HEALTH-" + file);
         PlayerPrefs.DeleteKey("PLAYER_DAMAGEDEALT-" + file);
         PlayerPrefs.DeleteKey("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file);
-
         PlayerPrefs.DeleteKey("PLAYER_LOCATION_X-" + file);
         PlayerPrefs.DeleteKey("PLAYER_LOCATION_Y-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_RADIATION-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_RADIATION_REMOVED_SEGMENTS-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_HUNGER-" + file);
+        PlayerPrefs.DeleteKey("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file);
+        PlayerPrefs.DeleteKey("FILETIME-" + file);
 
-        PlayerPrefs.SetString("FILETIME-" + file, "-Empty-");
+        int i = 1;
+        string[] keysDropped = { "droppedItem", "droppedItemPosX", "droppedItemPosY" };
+        while (PlayerPrefs.HasKey("droppedItem" + i + file))
+        {
+            foreach (string key in keysDropped)
+            {
+                PlayerPrefs.DeleteKey(key + i + file);
+            }
+            i++;
+        }
+
+        string[] keysInventory = { "INVENTORY-ITEM-NAME", "INVENTORY-ITEM-COUNT", "INVENTORY-ITEM-SLOT" };
+        for (int e = 0; e < 18; e++)
+        {
+            foreach (string key in keysInventory)
+            {
+                PlayerPrefs.DeleteKey(key + file + e);
+            }
+        }
+
         PlayerPrefs.Save();
 
-        LoadFileNames();
+        if (sceneName == "LoadGame")
+        {
+            LoadFileNames();
+        }
     }
     
 
@@ -470,7 +547,10 @@ public class Manager : MonoBehaviour
         if (delaySwitchScene == false)
         {
             delaySwitchScene = true;
-            ButtonSound();
+            if (button.name != "placeHolderButton")
+            {
+                ButtonSound();
+            }
 
 
             yield return new WaitForSecondsRealtime(buttonDelay);
@@ -478,6 +558,7 @@ public class Manager : MonoBehaviour
             sceneSwitch = true;
             SendMessage(function, button);
             delaySwitchScene = false;
+
         }
     }
 
@@ -503,11 +584,6 @@ public class Manager : MonoBehaviour
         {
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         }
-        
-        
-
-
-
     }
     public void EscapeInput()
     {
@@ -732,15 +808,18 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
-    public void MainMenuQMenu()
+    public void MainMenuQMenu(Button button)
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (!sceneSwitch)
         {
-            pauseMenu.SetActive(false);
+            StartCoroutine(DelaySwitchScene("MainMenuQMenu", button));
+        }
+        else if (sceneSwitch)
+        {
+            SceneManager.LoadScene("MainMenu");
         }
 
-        mainMenuQ.SetActive(true);
-        
+        ButtonAnimation(button);
     }
     public void ResumeButton(Button button)
     {
@@ -752,7 +831,7 @@ public class Manager : MonoBehaviour
         {
             //Returns to the GameScene and unpauses the game
             PauseGame();
-            pauseMenu.SetActive(false);
+            HideAllPanels();
             sceneSwitch = false;
         }
 
@@ -864,11 +943,18 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            //Returns to the Main Menu
-            SceneManager.LoadScene("MainMenu");
-            sceneSwitch = false;
+            if(saved)
+            {
+                SceneManager.LoadScene("MainMenu");
+                sceneSwitch = false;
+            }
+            else
+            {
+                HideAllPanels();
+                mainMenuQ.SetActive(true);
+                sceneSwitch = false;
+            }
         }
-
         ButtonAnimation(button);
     }
     public void QuitGame(Button button)
@@ -879,8 +965,16 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            //Closes the application
-            Application.Quit();
+            if (saved)
+            {
+                Application.Quit();
+            }
+            else
+            {
+                HideAllPanels();
+                quitMenu.SetActive(true);
+            }
+            sceneSwitch = false;
         }
 
         ButtonAnimation(button);
@@ -907,6 +1001,7 @@ public class Manager : MonoBehaviour
         LOAD_PLAYER_HEALTH();
         LOAD_PLAYER_RADIATION();
         LOAD_PLAYER_HUNGER();
+        player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
     }
 
     public void LOAD_WORLDSPACEITEMS()
@@ -1020,6 +1115,7 @@ public class Manager : MonoBehaviour
     {
         //Sets the current Player Position to the values from the selected Save File
         player.transform.position = new Vector2(PlayerPrefs.GetFloat("PLAYER_LOCATION_X-" + file), PlayerPrefs.GetFloat("PLAYER_LOCATION_Y-" + file));
+        playerCamera.transform.position = new Vector2(PlayerPrefs.GetFloat("PLAYER_LOCATION_X-" + file), PlayerPrefs.GetFloat("PLAYER_LOCATION_Y-" + file));
     }
     public void LOAD_INVENTORY()
     {
@@ -1063,6 +1159,18 @@ public class Manager : MonoBehaviour
         if (!sceneSwitch)
         {
             StartCoroutine(DelaySwitchScene("SAVEFILE", button));
+            ButtonAnimation(button);
+        }
+        else if (sceneSwitch)
+        {
+            saved = true;
+            if (button.name != "placeHolderButton")
+            {
+                button.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
+            }
+
+            DateTime currentDate = DateTime.Today;
+            PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
 
             SAVE_INVENTORY();
             SAVE_WORLDSPACE_ITEMS();
@@ -1070,13 +1178,8 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_HEALTH();
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
-        }
-        else if (sceneSwitch)
-        {
             sceneSwitch = false;
         }
-
-        ButtonAnimation(button);
     }
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH()

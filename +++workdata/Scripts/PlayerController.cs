@@ -7,6 +7,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using Cinemachine;
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
 
@@ -159,7 +160,6 @@ public class PlayerController : MonoBehaviour
                 manager.PauseGame();
             }
             manager.UpdateUIAlpha(1);
-            manager.playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(0, 0, 0);
             manager.videoPlayer.gameObject.SetActive(false);
         }
 
@@ -206,7 +206,28 @@ public class PlayerController : MonoBehaviour
         movementX = directions.x;
         movementY = directions.y;
 
-        
+        manager.saved = false;
+        manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+
+        bool allValuesLower = false;
+        foreach (NPCdialog script in FindObjectsOfType<NPCdialog>())
+        {
+            if (script.distance < 3)
+            {
+                allValuesLower = true;
+                break;
+            }
+        }
+
+        if (allValuesLower)
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        }
+        else
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;  
+        }
 
         if (movementY == 1)
         {

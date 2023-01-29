@@ -30,8 +30,6 @@ public class Dialog : MonoBehaviour
     public TextMeshProUGUI nameText;
 
     public Sprite playerIcon;
-    private Sprite npcIcon;
-    public Image icon;
 
     private float closestDistance = Mathf.Infinity;
     private int runThrough;
@@ -93,8 +91,36 @@ public class Dialog : MonoBehaviour
         {
             nameText.text = closestNPC.GetComponent<NPCdialog>().npcName;
             nameText.color = closestNPC.GetComponent<NPCdialog>().npcColor;
-            icon.sprite = closestNPC.GetComponent<NPCdialog>().npcSprite;
 
+            if(closestNPC.GetComponent<NPCdialog>().npcName == "Laurel")
+            {
+                manager.GetComponent<Manager>().laurelChatAvatar.enabled = true;
+                manager.GetComponent<Manager>().florusChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().pascalChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
+            }
+            else if (closestNPC.GetComponent<NPCdialog>().npcName == "Florus")
+            {
+                manager.GetComponent<Manager>().florusChatAvatar.enabled = true;
+                manager.GetComponent<Manager>().laurelChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().pascalChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
+            }
+            else if (closestNPC.GetComponent<NPCdialog>().npcName == "Morgan")
+            {
+                manager.GetComponent<Manager>().morganChatAvatar.enabled = true;
+                manager.GetComponent<Manager>().laurelChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().florusChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().pascalChatAvatar.enabled = false;
+            }
+            else if (closestNPC.GetComponent<NPCdialog>().npcName == "Pascal")
+            {
+                manager.GetComponent<Manager>().pascalChatAvatar.enabled = true;
+                manager.GetComponent<Manager>().laurelChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().florusChatAvatar.enabled = false;
+                manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
+            }
+            manager.GetComponent<Manager>().playerChatAvatar.enabled = false;
             quarterPoint.transform.position = (middlePoint.transform.position + closestNPC.transform.position) / 2;
 
             vcam.Follow = quarterPoint.transform;
@@ -103,7 +129,12 @@ public class Dialog : MonoBehaviour
         {
             nameText.text = playerName;
             nameText.color = new Color32(255, 0, 0, 255);
-            icon.sprite = playerIcon;
+            manager.GetComponent<Manager>().pascalChatAvatar.enabled = false;
+            manager.GetComponent<Manager>().laurelChatAvatar.enabled = false;
+            manager.GetComponent<Manager>().florusChatAvatar.enabled = false;
+            manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
+
+            manager.GetComponent<Manager>().playerChatAvatar.enabled = true;
 
             quarterPoint.transform.position = (middlePoint.transform.position + player.transform.position) / 2;
 
@@ -163,7 +194,11 @@ public class Dialog : MonoBehaviour
         text.enabled = false;
         continueButton.SetActive(false);
         dialogBox.SetActive(false);
-        icon.enabled = false;
+        manager.GetComponent<Manager>().florusChatAvatar.enabled = false;
+        manager.GetComponent<Manager>().laurelChatAvatar.enabled = false;
+        manager.GetComponent<Manager>().pascalChatAvatar.enabled = false;
+        manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
+        manager.GetComponent<Manager>().playerChatAvatar.enabled = false;
         player.GetComponent<PlayerController>().canMove = true;
     }
 
@@ -226,10 +261,8 @@ public class Dialog : MonoBehaviour
             text.enabled = true;
             dialogBox.SetActive(true);
 
-            icon.enabled = true;
             player.GetComponent<PlayerController>().canMove = false;
 
-            npcIcon = closestNPC.GetComponent<NPCdialog>().npcSprite;
             npcName = closestNPC.GetComponent<NPCdialog>().npcName;
             StartCoroutine(Type());
         }
@@ -266,7 +299,7 @@ public class Dialog : MonoBehaviour
     }
 
 
-public void CheckClosestNPC()
+    public void CheckClosestNPC()
     {
         closestNPC = null;
         closestDistance = Mathf.Infinity;

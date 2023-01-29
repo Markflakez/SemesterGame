@@ -9,6 +9,8 @@ public class NPCdialog : MonoBehaviour
 {
     private SpriteRenderer sr;
 
+    public float distance;
+
     public string npcName;
 
     public int randomInt;
@@ -22,8 +24,6 @@ public class NPCdialog : MonoBehaviour
     public int npcIndex = 0;
 
     public string[] dialogOrder;
-
-    public Sprite npcSprite;
 
     public Manager manager;
 
@@ -41,11 +41,6 @@ public class NPCdialog : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-    }
-
-    void Start()
-    {
-        sr.sprite = npcSprite;
     }
 
     public void HideWorldSpaceDialog()
@@ -67,7 +62,7 @@ public class NPCdialog : MonoBehaviour
     private void Update()
     {
         // Get the distance between the player and the object
-        float distance = Vector3.Distance(player.transform.position, gameObject.transform.position);
+        distance = Vector3.Distance(player.transform.position, gameObject.transform.position);
 
         // Check if the distance is less than 10 units
         if (distance < 5f)
@@ -77,14 +72,6 @@ public class NPCdialog : MonoBehaviour
         else if(distance > 8f)
         {
             FadeOutWorldspaceDialog();
-        }
-        if(distance < 3f)
-        {
-            manager.interactControl.color = Color.white;
-        }
-        else
-        {
-            manager.interactControl.color = manager.uiFontColorDisabled;
         }
     }
 
