@@ -135,23 +135,18 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKey(KeyCode.G))
+        if (Input.GetKey(KeyCode.Alpha9))
         {
             Instantiate(EnemyPrefab, null);
         }
 
-        if (Input.GetKey(KeyCode.J))
-        {
-            cylinder.Play("CylinderAction");
-        }
-
-        if (Input.GetKey(KeyCode.M))
+        if (Input.GetKey(KeyCode.Alpha8))
         {
             PlayerPrefs.DeleteAll();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        if (Input.GetKeyUp(KeyCode.N))
+        if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             manager.StopAllCoroutines();
             manager.CancelInvoke();
@@ -177,13 +172,6 @@ public class PlayerController : MonoBehaviour
         {
             stepSoundPlayer.Stop();
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !onCooldown)
-        {
-            
-            
-        }
-
     }
 
 

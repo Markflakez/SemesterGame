@@ -30,6 +30,9 @@ public class Manager : MonoBehaviour
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
+
+    public Light2D worldTime;
+
     [HideInInspector]
     public int file;
 
@@ -294,16 +297,15 @@ public class Manager : MonoBehaviour
 
     public IEnumerator PlayIntroSequence()
     {
-        if (!isPaused)
-        {
-            PauseGame();
-        }
+        PauseGame();
         videoPlayer.enabled = true;
         videoPlayer.Play();
         yield return new WaitForSecondsRealtime(2);
         inputName.SetActive(true);
         yield return new WaitForSecondsRealtime(12);
-        
+        videoPlayer.transform.position = new Vector3(9999, 0, 0);
+
+
 
         blackCanvas.DOColor(Color.clear, 5f).SetEase(Ease.Linear);
         yield return new WaitForSecondsRealtime(2);
@@ -315,7 +317,7 @@ public class Manager : MonoBehaviour
 
     public void OnEnterName(TMP_InputField inputField)
     {
-        if (inputField.text != "")
+        if (inputField.text != "" && inputName.activeSelf)
         {
             PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
             player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
@@ -579,6 +581,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
+            inputActions.FindAction("Enter").performed += ctx => OnEnterName(inputName.GetComponentInChildren<TMP_InputField>());
         }
         else
         {
@@ -1001,6 +1004,7 @@ public class Manager : MonoBehaviour
         LOAD_PLAYER_HEALTH();
         LOAD_PLAYER_RADIATION();
         LOAD_PLAYER_HUNGER();
+        LOAD_TIME();
         player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
     }
 
@@ -1085,6 +1089,21 @@ public class Manager : MonoBehaviour
             break;
         }
     }
+
+    public void SAVE_TIME()
+    {
+        PlayerPrefs.SetFloat("CURRENT-TIME" + file, worldTime.gameObject.GetComponent<DayNightCycle>().currentTime);
+    }
+
+    public void LOAD_TIME()
+    {
+        worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
+    }
+
+
+
+
+
 
     public void LOAD_PLAYER_HEALTH()
     {
@@ -1178,6 +1197,7 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_HEALTH();
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
+            SAVE_TIME();
             sceneSwitch = false;
         }
     }
