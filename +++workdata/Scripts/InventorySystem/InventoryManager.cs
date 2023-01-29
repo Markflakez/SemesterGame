@@ -72,7 +72,6 @@ public class InventoryManager : MonoBehaviour
         {
             manager.escControl.color = manager.uiFontColorDisabled;
             manager.attackControl.color = Color.white;
-            manager.interactControl.color = manager.uiFontColorDisabled;
             manager.useItemControl.color = Color.white;
             manager.dropItemControl.color = Color.white;
         }
@@ -80,7 +79,6 @@ public class InventoryManager : MonoBehaviour
         {
             manager.escControl.color = manager.uiFontColorDisabled;
             manager.attackControl.color = Color.white;
-            manager.interactControl.color = manager.uiFontColorDisabled;
             manager.useItemControl.color = manager.uiFontColorDisabled;
             manager.dropItemControl.color = Color.white;
         }
@@ -88,7 +86,6 @@ public class InventoryManager : MonoBehaviour
         {
             manager.escControl.color = manager.uiFontColorDisabled;
             manager.attackControl.color = manager.uiFontColorDisabled;
-            manager.interactControl.color = manager.uiFontColorDisabled;
             manager.useItemControl.color = manager.uiFontColorDisabled;
             manager.dropItemControl.color = manager.uiFontColorDisabled;
         }

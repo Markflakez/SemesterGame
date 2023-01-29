@@ -47,9 +47,9 @@ public class Manager : MonoBehaviour
     [Header("InGame")]
     public GameObject pauseMenu;
     public GameObject questLog;
-    public GameObject questText;
+    public TextMeshProUGUI questText;
     public GameObject questAvatar;
-    public GameObject questHeaderText;
+    public TextMeshProUGUI questHeaderText;
     public InventoryManager inventoryManager;
 
 
@@ -99,10 +99,15 @@ public class Manager : MonoBehaviour
     public GameObject eggRight;
     public GameObject eggBack;
 
+    public GameObject QuestPanel1;
+    public GameObject QuestPanel2;
+    public GameObject QuestPanel3;
+
     public RectTransform mainInventoryBG2;
 
     public Color uiFontColor;
     public Color uiFontColorDisabled;
+    public Color uiFontColorBrown;
     public Color radiationColor;
 
     public Sprite invisibleSprite;
@@ -177,6 +182,19 @@ public class Manager : MonoBehaviour
     public GameObject eggsPopup;
     public GameObject radiationPopup;
 
+
+    public TextMeshProUGUI Task1;
+    public TextMeshProUGUI Task2;
+    public TextMeshProUGUI Task3;
+
+    public TextMeshProUGUI ItemReward1;
+    public TextMeshProUGUI ItemReward2;
+    public TextMeshProUGUI ItemReward3;
+
+    public GameObject TaskCheck1;
+    public GameObject TaskCheck2;
+    public GameObject TaskCheck3;
+
     private GameObject spawnItem;
 
     public VideoPlayer videoPlayer;
@@ -192,6 +210,7 @@ public class Manager : MonoBehaviour
         {
             file = PlayerPrefs.GetInt("CurrentFile");
             playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(200, 0, 0);
+            LOADFILE();
         }
         
         DOTween.Init();
@@ -202,11 +221,6 @@ public class Manager : MonoBehaviour
         if (sceneName != "LoadGame")
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
-        }
-
-        if(sceneName == "InGame")
-        {
-            LOADFILE();
         }
 
         if (sceneName == "LoadGame")
@@ -401,7 +415,6 @@ public class Manager : MonoBehaviour
     }
     public void LoadSaveFile(Button button)
     {
-
         if (button.gameObject.name == "SaveFile-1")
         {
             file = 1;
@@ -415,7 +428,7 @@ public class Manager : MonoBehaviour
             file = 3;
         }
 
-
+        
         DateTime currentDate = DateTime.Today;
         savedTimeDate = button.gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -746,6 +759,29 @@ public class Manager : MonoBehaviour
         ButtonAnimation(button);
     }
 
+    public void OpenQuest(Button button)
+    {
+        if(button.gameObject.name == "FirstQuest")
+        {
+            questText.text = "Embark on a quest to collect eggs from various locations across the land. Explore, solve puzzles, defeat enemies within a set time limit to complete the task. Receive a valuable reward for your efforts.";
+            questAvatar.GetComponent<Image>().sprite = null;
+            questHeaderText.text = button.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToString();
+        }
+        else if (button.gameObject.name == "SecondQuest")
+        {
+            questText.text = "avarage Bartholomäuschen";
+            questAvatar.GetComponent<Image>().sprite = null;
+            questHeaderText.text = button.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToString();
+        }
+        else if (button.gameObject.name == "ThirdQuest")
+        {
+            questText.text = "YEEEEEEEEEE";
+            questAvatar.GetComponent<Image>().sprite = null;
+            questHeaderText.text = button.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToString();
+        }
+    }
+
+
     public void GraphicsButton(Button button)
     {
         if (!sceneSwitch)
@@ -869,8 +905,8 @@ public class Manager : MonoBehaviour
         LOAD_WORLDSPACEITEMS();
         LOAD_PLAYER_LOCATION();
         LOAD_PLAYER_HEALTH();
+        LOAD_PLAYER_RADIATION();
         LOAD_PLAYER_HUNGER();
-
     }
 
     public void LOAD_WORLDSPACEITEMS()
@@ -960,7 +996,7 @@ public class Manager : MonoBehaviour
         //Sets the current Player Health, Health Text and Healthbar to the values from the selected Save File
         eggHealthRadiation.health = PlayerPrefs.GetFloat("PLAYER_HEALTH-" + file);
         eggHealthRadiation.damageDealt = PlayerPrefs.GetFloat("PLAYER_DAMAGEDEALT-" + file);
-        eggHealthRadiation.healthMat.SetFloat("_RemovedSegments", PlayerPrefs.GetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file));
+        eggHealthRadiation.healthMat.SetInt("_RemovedSegments", PlayerPrefs.GetInt("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file));
 
         eggHealthRadiation.UpdateHealth();
     }
@@ -968,9 +1004,18 @@ public class Manager : MonoBehaviour
     public void LOAD_PLAYER_HUNGER()
     {
         eggHealthRadiation.eggs = PlayerPrefs.GetFloat("PLAYER_HUNGER-" + file);
-        eggHealthRadiation.eggMat.SetFloat("_RemovedSegments", PlayerPrefs.GetFloat("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file));
+        eggHealthRadiation.eggMat.SetInt("_RemovedSegments", PlayerPrefs.GetInt("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file));
+        
         eggHealthRadiation.UpdateEggs();
     }
+
+    public void LOAD_PLAYER_RADIATION()
+    {
+        eggHealthRadiation.speed = PlayerPrefs.GetFloat("PLAYER_RADIATION-" + file);
+        eggHealthRadiation.radiationMat.SetInt("_RemovedSegments", PlayerPrefs.GetInt("PLAYER_RADIATION_REMOVED_SEGMENTS-" + file));
+        eggHealthRadiation.MyFunction();
+    }
+
     public void LOAD_PLAYER_LOCATION()
     {
         //Sets the current Player Position to the values from the selected Save File
@@ -978,8 +1023,6 @@ public class Manager : MonoBehaviour
     }
     public void LOAD_INVENTORY()
     {
-        int file = PlayerPrefs.GetInt("CurrentFile");
-
         for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
         {
             if (PlayerPrefs.HasKey("INVENTORY-ITEM-NAME" + file + i))
@@ -1025,6 +1068,7 @@ public class Manager : MonoBehaviour
             SAVE_WORLDSPACE_ITEMS();
             SAVE_PLAYER_LOCATION();
             SAVE_PLAYER_HEALTH();
+            SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
         }
         else if (sceneSwitch)
@@ -1040,7 +1084,15 @@ public class Manager : MonoBehaviour
         //Saves the current Player Health
         PlayerPrefs.SetFloat("PLAYER_HEALTH-" + file, eggHealthRadiation.health);
         PlayerPrefs.SetFloat("PLAYER_DAMAGEDEALT-" + file, eggHealthRadiation.damageDealt);
-        PlayerPrefs.SetFloat("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.removedSegments);
+        PlayerPrefs.SetInt("PLAYER_HEALTH_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.removedSegments);
+        PlayerPrefs.Save();
+    }
+
+    void SAVE_PLAYER_RADIATION()
+    {
+        //Saves the current Player Health
+        PlayerPrefs.SetFloat("PLAYER_RADIATION-" + file, eggHealthRadiation.speed);
+        PlayerPrefs.SetInt("PLAYER_RADIATION_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.radiationRemovedSegments);
         PlayerPrefs.Save();
     }
 
@@ -1048,7 +1100,7 @@ public class Manager : MonoBehaviour
     {
         //Saves the current Player Hunger
         PlayerPrefs.SetFloat("PLAYER_HUNGER-" + file, eggHealthRadiation.eggs);
-        PlayerPrefs.SetFloat("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.eggRemovedSegments);
+        PlayerPrefs.SetInt("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file, (int)eggHealthRadiation.eggRemovedSegments);
         PlayerPrefs.Save();
     }
 
@@ -1062,8 +1114,6 @@ public class Manager : MonoBehaviour
     }
     public void SAVE_INVENTORY()
     {
-        int file = PlayerPrefs.GetInt("CurrentFile");
-
         for (int i = 0; i < inventoryManager.inventorySlots.Length; i++)
         {
             InventorySlot slot = inventoryManager.inventorySlots[i];

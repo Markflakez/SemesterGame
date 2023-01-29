@@ -25,6 +25,8 @@ public class NPCdialog : MonoBehaviour
 
     public Sprite npcSprite;
 
+    public Manager manager;
+
     public TextMeshProUGUI dialogText;
     public string[] randomSentencees;
     public GameObject dialogBox;
@@ -38,6 +40,7 @@ public class NPCdialog : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
     void Start()
@@ -74,6 +77,14 @@ public class NPCdialog : MonoBehaviour
         else if(distance > 8f)
         {
             FadeOutWorldspaceDialog();
+        }
+        if(distance < 3f)
+        {
+            manager.interactControl.color = Color.white;
+        }
+        else
+        {
+            manager.interactControl.color = manager.uiFontColorDisabled;
         }
     }
 

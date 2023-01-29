@@ -5,19 +5,57 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class HoverHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class HoverHighlight : MonoBehaviour, IPointerExitHandler, IPointerClickHandler
 {
     private Manager manager;
     private void Start()
     {
         manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
-    public void OnPointerEnter(PointerEventData eventData)
+
+    public void OnPointerClick(PointerEventData eventData)
     {
-        gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        if (gameObject.name == "FirstQuest" || gameObject.name == "SecondQuest" || gameObject.name == "ThirdQuest")
+        {
+            manager.QuestPanel1.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+            manager.QuestPanel1.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+
+            manager.QuestPanel2.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+            manager.QuestPanel2.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+
+            manager.QuestPanel3.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+            manager.QuestPanel3.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+        }
+
+        if (gameObject.name == "FirstQuest")
+        {
+            gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.white;
+        }
+        else if (gameObject.name == "SecondQuest")
+        {
+            gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.white;
+        }
+        else if (gameObject.name == "ThirdQuest")
+        {
+            gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.white;
+        }
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
-        gameObject.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;
+        if (gameObject.name == "FirstQuest" || gameObject.name == "SecondQuest" || gameObject.name == "ThirdQuest")
+        {
+            if (gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color != Color.white)
+            {
+                gameObject.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorBrown;
+            }
+        }
+        else
+        {
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;
+        }
     }
 }

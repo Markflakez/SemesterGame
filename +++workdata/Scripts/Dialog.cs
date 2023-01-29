@@ -40,7 +40,7 @@ public class Dialog : MonoBehaviour
     public float range;
     public Vector2 checkPos;
 
-    private GameObject closestObject;
+    private GameObject closestNPC;
 
 
     public TextMeshProUGUI text;
@@ -89,17 +89,17 @@ public class Dialog : MonoBehaviour
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3;
 
-        if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "npc")
+        if (closestNPC.GetComponent<NPCdialog>().dialogOrder[closestNPC.GetComponent<NPCdialog>().npcIndex].ToString() == "npc")
         {
-            nameText.text = closestObject.GetComponent<NPCdialog>().npcName;
-            nameText.color = closestObject.GetComponent<NPCdialog>().npcColor;
-            icon.sprite = closestObject.GetComponent<NPCdialog>().npcSprite;
+            nameText.text = closestNPC.GetComponent<NPCdialog>().npcName;
+            nameText.color = closestNPC.GetComponent<NPCdialog>().npcColor;
+            icon.sprite = closestNPC.GetComponent<NPCdialog>().npcSprite;
 
-            quarterPoint.transform.position = (middlePoint.transform.position + closestObject.transform.position) / 2;
+            quarterPoint.transform.position = (middlePoint.transform.position + closestNPC.transform.position) / 2;
 
             vcam.Follow = quarterPoint.transform;
         }
-        else if (closestObject.GetComponent<NPCdialog>().dialogOrder[closestObject.GetComponent<NPCdialog>().npcIndex].ToString() == "player")
+        else if (closestNPC.GetComponent<NPCdialog>().dialogOrder[closestNPC.GetComponent<NPCdialog>().npcIndex].ToString() == "player")
         {
             nameText.text = playerName;
             nameText.color = new Color32(255, 0, 0, 255);
@@ -114,13 +114,13 @@ public class Dialog : MonoBehaviour
 
         manager.GetComponent<Manager>().inGameSound.PlayOneShot(typeSound);
 
-        foreach (char letter in closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex].ToCharArray())
+        foreach (char letter in closestNPC.GetComponent<NPCdialog>().dialog[closestNPC.GetComponent<NPCdialog>().npcIndex].ToCharArray())
         {
             text.text += letter;
-            if (text.text == closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex])
+            if (text.text == closestNPC.GetComponent<NPCdialog>().dialog[closestNPC.GetComponent<NPCdialog>().npcIndex])
             {
                 manager.GetComponent<Manager>().inGameSound.Stop();
-                if (closestObject.GetComponent<NPCdialog>().npcIndex != closestObject.GetComponent<NPCdialog>().dialog.Length -1)
+                if (closestNPC.GetComponent<NPCdialog>().npcIndex != closestNPC.GetComponent<NPCdialog>().dialog.Length -1)
                 {
                     continueButton.SetActive(true);
                 }
@@ -146,7 +146,7 @@ public class Dialog : MonoBehaviour
         CinemachineZoomOut();
         Manager managerr = manager.GetComponent<Manager>();
         StopAllCoroutines();
-        closestObject.GetComponent<NPCdialog>().npcIndex = 0;
+        closestNPC.GetComponent<NPCdialog>().npcIndex = 0;
         runThrough = 0;
         text.text = "";
         managerr.inputActions.Enable();
@@ -156,6 +156,8 @@ public class Dialog : MonoBehaviour
         managerr.inventoryHotbar.SetActive(true);
         managerr.inventoryHotbarBackBoard.SetActive(true);
         managerr.itemList.SetActive(true);
+        managerr.controlsPanel.SetActive(true);
+        managerr.itemIndicators.SetActive(true);
         canTalk = true;
         manager.GetComponent<Manager>().inGameSound.Stop();
         text.enabled = false;
@@ -172,9 +174,9 @@ public class Dialog : MonoBehaviour
     public void NextDialog()
     {
         continueButton.SetActive(false);
-        if (closestObject.GetComponent<NPCdialog>().npcIndex < closestObject.GetComponent<NPCdialog>().dialog.Length - 1)
+        if (closestNPC.GetComponent<NPCdialog>().npcIndex < closestNPC.GetComponent<NPCdialog>().dialog.Length - 1)
         {
-            closestObject.GetComponent<NPCdialog>().npcIndex ++;
+            closestNPC.GetComponent<NPCdialog>().npcIndex ++;
             text.text = "";
             StartCoroutine(Type());
         }
@@ -227,8 +229,8 @@ public class Dialog : MonoBehaviour
             icon.enabled = true;
             player.GetComponent<PlayerController>().canMove = false;
 
-            npcIcon = closestObject.GetComponent<NPCdialog>().npcSprite;
-            npcName = closestObject.GetComponent<NPCdialog>().npcName;
+            npcIcon = closestNPC.GetComponent<NPCdialog>().npcSprite;
+            npcName = closestNPC.GetComponent<NPCdialog>().npcName;
             StartCoroutine(Type());
         }
     }
@@ -243,7 +245,7 @@ public class Dialog : MonoBehaviour
 
         DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens);
 
-        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestObject.transform.position) / 2;
+        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestNPC.transform.position) / 2;
 
 
         manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = middlePoint.transform;
@@ -257,7 +259,7 @@ public class Dialog : MonoBehaviour
 
         DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens).SetEase(Ease.InOutSine);
 
-        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestObject.transform.position) / 2;
+        middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestNPC.transform.position) / 2;
 
 
         manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = manager.GetComponent<Manager>().player.transform;
@@ -266,7 +268,7 @@ public class Dialog : MonoBehaviour
 
 public void CheckClosestNPC()
     {
-        closestObject = null;
+        closestNPC = null;
         closestDistance = Mathf.Infinity;
 
         foreach (GameObject obj in npcArray)
@@ -274,12 +276,12 @@ public void CheckClosestNPC()
             float distance = Vector2.Distance(transform.position, obj.transform.position);
             if (distance < closestDistance)
             {
-                closestObject = obj;
+                closestNPC = obj;
                 closestDistance = distance;
             }
         }
 
-        if (closestDistance < 4f)
+        if (closestDistance < 3f)
         {
             OpenChat();
         }

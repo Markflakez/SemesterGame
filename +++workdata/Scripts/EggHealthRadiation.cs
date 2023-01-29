@@ -71,23 +71,27 @@ public class EggHealthRadiation : MonoBehaviour
     {
         deathPoint = new GameObject();
 
-        health = 100;
-
-        if (!PlayerPrefs.HasKey("PLAYER_HUNGER -" + manager.file))
+        if (!PlayerPrefs.HasKey("PLAYER_HUNGER-" + manager.file))
         {
+            eggs = 5;
             eggRemovedSegments = 20;
             eggMat.SetFloat("_RemovedSegments", 20);
         }
-        if (!PlayerPrefs.HasKey("PLAYER_HUNGER -" + manager.file))
+        if (!PlayerPrefs.HasKey("PLAYER_RADIATION-" + manager.file))
         {
             radiationRemovedSegments = 100;
             radiationMat.SetFloat("_RemovedSegments", 100);
         }
 
+        if (!PlayerPrefs.HasKey("PLAYER_HEALTH-" + manager.file))
+        {
+            health = 100;
+            removedSegments = 100;
+            healthMat.SetFloat("_RemovedSegments", 100);
+        }
 
-
-        eggs = 5;
-        removedSegments = 0;
+            
+        
     }
 
     //Updates is called once per frame
@@ -110,7 +114,7 @@ public class EggHealthRadiation : MonoBehaviour
     }
 
 
-    void MyFunction()
+    public void MyFunction()
     {
         if(eggs < 10)
         {
@@ -218,12 +222,6 @@ public class EggHealthRadiation : MonoBehaviour
             yield return null;
         }
     }
-
-    public void PauseTime()
-    {
-        hungerStartTime = Time.time;
-    }
-
 
 
     public void Damage(int damage)
