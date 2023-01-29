@@ -86,7 +86,7 @@ public class EggHealthRadiation : MonoBehaviour
 
 
 
-
+        eggs = 5;
         removedSegments = 0;
     }
 
@@ -354,10 +354,11 @@ public class EggHealthRadiation : MonoBehaviour
     public void AddEggs(int eggNumber)
     {
         eggs += eggNumber * 10;
-        if(eggs > 100)
+        if(eggs > 105)
         {
-            eggs = 100;
+            eggs = 105;
         }
+
         UpdateEggs();
     }
 

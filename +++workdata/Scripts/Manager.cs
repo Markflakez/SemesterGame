@@ -45,7 +45,6 @@ public class Manager : MonoBehaviour
     public GameObject creditsButton;
 
     [Header("InGame")]
-    public GameObject saveMenu;
     public GameObject pauseMenu;
     public GameObject questLog;
     public GameObject questText;
@@ -133,6 +132,8 @@ public class Manager : MonoBehaviour
     public bool canThrowEgg = true;
 
 
+    public bool backgroundburning = true;
+
     public AudioSource inGameSound;
     public AudioClip cough;
     public AudioClip piano;
@@ -161,6 +162,8 @@ public class Manager : MonoBehaviour
     public GameObject goatSkullCheckmark;
     public GameObject goldenEggCheckmark;
 
+    public GameObject itemList;
+
     public GameObject barIndicators;
     public GameObject playerCamera;
 
@@ -188,8 +191,9 @@ public class Manager : MonoBehaviour
         if (sceneName == "InGame")
         {
             file = PlayerPrefs.GetInt("CurrentFile");
+            playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(200, 0, 0);
         }
-
+        
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
         DOTween.timeScale = 1;
@@ -205,12 +209,11 @@ public class Manager : MonoBehaviour
             LOADFILE();
         }
 
-        if (sceneName != "MainMenu")
+        if (sceneName == "LoadGame")
         {
             LoadFileNames();
         }
         FindInputActions();
-
     }
 
 
@@ -248,6 +251,7 @@ public class Manager : MonoBehaviour
         videoPlayer.Play();
         PauseGame();
         yield return new WaitForSecondsRealtime(14);
+        playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(0, 0, 0);
         float currentVideoAlpha = 1;
         DOTween.To(() => currentVideoAlpha, x => currentVideoAlpha = x, 0, 2f).OnUpdate(() => UpdateAlpha(currentVideoAlpha));
         yield return new WaitForSecondsRealtime(2);
@@ -285,7 +289,6 @@ public class Manager : MonoBehaviour
     private void HideAllPanels()
     {
         pauseMenu.SetActive(false);
-        saveMenu.SetActive(false);
         quitMenu.SetActive(false);
         mainMenuQ.SetActive(false);
         settingsMenu.SetActive(false);
@@ -329,6 +332,8 @@ public class Manager : MonoBehaviour
             eggHealthRadiation.StopCoroutine(eggHealthRadiation.RadiationOverTime2());
             eggHealthRadiation.StopCoroutine(eggHealthRadiation.HungerOverTime());
             eggHealthRadiation.StopCoroutine(eggHealthRadiation.RegerateHealth());
+            itemList.SetActive(false);
+            itemIndicators.SetActive(false);
             isPaused = true;
         }
         else
@@ -342,6 +347,8 @@ public class Manager : MonoBehaviour
             eggHealthRadiation.StartCoroutine(eggHealthRadiation.RadiationOverTime2());
             eggHealthRadiation.StartCoroutine(eggHealthRadiation.HungerOverTime());
             eggHealthRadiation.StartCoroutine(eggHealthRadiation.RegerateHealth());
+            itemList.SetActive(true);
+            itemIndicators.SetActive(true);
             isPaused = false;
         }
 
@@ -379,10 +386,12 @@ public class Manager : MonoBehaviour
     }
     private void ButtonAnimation(Button button)
     {
-        exitHover(button);
-
         Vector3 scale = button.gameObject.transform.localScale;
+        Vector3 rotation = button.gameObject.transform.localEulerAngles;
         
+        button.gameObject.transform.localScale = scale;
+        button.gameObject.transform.localEulerAngles = rotation;
+
         button.gameObject.transform.DOScale(scale * 0.8f, buttonDelay * .5f).OnComplete(() =>
         {
         button.gameObject.transform.DOScale(scale * 1f, buttonDelay * .5f);
@@ -390,7 +399,7 @@ public class Manager : MonoBehaviour
 
         button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
     }
-    public void LoadSaveFile(Button  button)
+    public void LoadSaveFile(Button button)
     {
 
         if (button.gameObject.name == "SaveFile-1")
@@ -408,7 +417,7 @@ public class Manager : MonoBehaviour
 
 
         DateTime currentDate = DateTime.Today;
-        savedTimeDate = GameObject.Find("savedTimeDate-" + file).GetComponent<TextMeshProUGUI>();
+        savedTimeDate = button.gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
         PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
         savedTimeDate.text = PlayerPrefs.GetString("FILETIME-" + file);
@@ -441,24 +450,6 @@ public class Manager : MonoBehaviour
 
         LoadFileNames();
     }
-    public void enterHover(Button button)
-    {
-        if (delaySwitchScene == false)
-        {
-            uiSound.PlayOneShot(buttonHover);
-            if (button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
-            {
-                button.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-            }
-        }
-    }
-    public void exitHover(Button button)
-    {
-        if (button.gameObject.name != "ControlsButton" && button.gameObject.name != "GraphicsButton" && button.gameObject.name != "AudioButton" && button.gameObject.name != "HeartIcon" && button.gameObject.name != "EggIcon" && button.gameObject.name != "SkullIcon")
-        {
-            button.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
-        }
-    }
     
 
     IEnumerator DelaySwitchScene(string function, Button button)
@@ -471,7 +462,6 @@ public class Manager : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(buttonDelay);
 
-            exitHover(button);
             sceneSwitch = true;
             SendMessage(function, button);
             delaySwitchScene = false;
@@ -494,6 +484,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
+            inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         }
         else
         {
@@ -542,36 +533,14 @@ public class Manager : MonoBehaviour
         if (!inventoryMain.activeSelf)
         {
             inventoryMain.SetActive(true);
-            inputActions.FindAction("Move").Disable();
         }
         else
         {
+            mainInventoryBG2.localPosition = new Vector3(270, mainInventoryBG2.localPosition.y, mainInventoryBG2.localPosition.z);
             inventoryMain.SetActive(false);
-            inputActions.FindAction("Move").Enable();
         }
         PauseGame();
     }
-    public void SaveMenu(Button button)
-    {
-        if (!sceneSwitch)
-        {
-            StartCoroutine(DelaySwitchScene("SaveMenu", button));
-        }
-        else if (sceneSwitch)
-        {
-            if (SceneManager.GetActiveScene().name == "InGame")
-            {
-                pauseMenu.SetActive(false);
-            }
-
-
-            saveMenu.SetActive(true);
-            sceneSwitch = false;
-        }
-
-        ButtonAnimation(button);
-    }
-
     public void HeartPopup(Button button)
     {
         if (!sceneSwitch)
@@ -681,7 +650,6 @@ public class Manager : MonoBehaviour
         else if (sceneSwitch)
         {
             pauseMenu.SetActive(true);
-            saveMenu.SetActive(false);
             settingsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
@@ -707,10 +675,6 @@ public class Manager : MonoBehaviour
             }
 
             settingsMenu.SetActive(true);
-            if (SceneManager.GetActiveScene().name != "MainMenu")
-            {
-                LoadFileNames();
-            }
             sceneSwitch = false;
         }
 
@@ -793,9 +757,12 @@ public class Manager : MonoBehaviour
             graphicsPanel.SetActive(true);
             controlsPanel.SetActive(false);
             audioPanel.SetActive(false);
-            graphicsButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            graphicsButton.transform.localScale = new Vector3((float)1.35, (float)1.35, (float)1.35);
             audioButton.transform.localScale = new Vector3(1, 1, 1);
             controlsButton.transform.localScale = new Vector3(1, 1, 1);
+            controlsButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
+            audioButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
+            graphicsButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
             sceneSwitch = false;
         }
 
@@ -813,9 +780,12 @@ public class Manager : MonoBehaviour
             audioPanel.SetActive(true);
             controlsPanel.SetActive(false);
             graphicsPanel.SetActive(false);
-            audioButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            audioButton.transform.localScale = new Vector3((float)1.35, (float)1.35, (float)1.35);
             graphicsButton.transform.localScale = new Vector3(1, 1, 1);
             controlsButton.transform.localScale = new Vector3(1, 1, 1);
+            controlsButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
+            audioButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+            graphicsButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
             sceneSwitch = false;
         }
 
@@ -833,9 +803,12 @@ public class Manager : MonoBehaviour
             controlsPanel.SetActive(true);
             audioPanel.SetActive(false);
             graphicsPanel.SetActive(false);
-            controlsButton.transform.localScale = new Vector3((float)1.2, (float)1.2, (float)1.2);
+            controlsButton.transform.localScale = new Vector3((float)1.35, (float)1.35, (float)1.35);
             audioButton.transform.localScale = new Vector3(1, 1, 1);
             graphicsButton.transform.localScale = new Vector3(1, 1, 1);
+            controlsButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+            audioButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
+            graphicsButton.GetComponentInChildren<TextMeshProUGUI>().color = uiFontColorDisabled;
             sceneSwitch = false;
         }
 
@@ -947,7 +920,7 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public void SaveItems()
+    public void SAVE_WORLDSPACE_ITEMS()
     {
         DeleteOldPlayerPrefs();
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
@@ -1042,23 +1015,24 @@ public class Manager : MonoBehaviour
     }
     #endregion LOADSAVE
 
-    public void SAVEFILE()
+    public void SAVEFILE(Button button)
     {
-        int file = PlayerPrefs.GetInt("CurrentFile");
+        if (!sceneSwitch)
+        {
+            StartCoroutine(DelaySwitchScene("SAVEFILE", button));
 
-        DateTime currentDate = DateTime.Today;
-        PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
-        PlayerPrefs.Save();
+            SAVE_INVENTORY();
+            SAVE_WORLDSPACE_ITEMS();
+            SAVE_PLAYER_LOCATION();
+            SAVE_PLAYER_HEALTH();
+            SAVE_PLAYER_HUNGER();
+        }
+        else if (sceneSwitch)
+        {
+            sceneSwitch = false;
+        }
 
-        //Saves the current Player Health and Position
-        //SAVE_PLAYER_HEALTH(file);
-        //SAVE_PLAYER_LOCATION(file);
-
-        SAVE_INVENTORY();
-        SaveItems();
-        SAVE_PLAYER_LOCATION();
-        SAVE_PLAYER_HEALTH();
-        SAVE_PLAYER_HUNGER();
+        ButtonAnimation(button);
     }
     #region SAVESAVE
     void SAVE_PLAYER_HEALTH()

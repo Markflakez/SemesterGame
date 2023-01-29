@@ -110,16 +110,16 @@ public class Dialog : MonoBehaviour
             vcam.Follow = quarterPoint.transform;
         }
 
-        
 
-        typeAudio.PlayOneShot(typeSound);
+
+        manager.GetComponent<Manager>().inGameSound.PlayOneShot(typeSound);
 
         foreach (char letter in closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex].ToCharArray())
         {
             text.text += letter;
             if (text.text == closestObject.GetComponent<NPCdialog>().dialog[closestObject.GetComponent<NPCdialog>().npcIndex])
             {
-                typeAudio.Stop();
+                manager.GetComponent<Manager>().inGameSound.Stop();
                 if (closestObject.GetComponent<NPCdialog>().npcIndex != closestObject.GetComponent<NPCdialog>().dialog.Length -1)
                 {
                     continueButton.SetActive(true);
@@ -150,15 +150,14 @@ public class Dialog : MonoBehaviour
         runThrough = 0;
         text.text = "";
         managerr.inputActions.Enable();
-        managerr.itemIndicators.SetActive(true);
         managerr.barIndicators.SetActive(true);
         managerr.questAvatar.SetActive(true);
         managerr.eggHealthRadiation.gameObject.SetActive(true);
         managerr.inventoryHotbar.SetActive(true);
         managerr.inventoryHotbarBackBoard.SetActive(true);
-        managerr.PauseGame();
+        managerr.itemList.SetActive(true);
         canTalk = true;
-        typeAudio.Stop();
+        manager.GetComponent<Manager>().inGameSound.Stop();
         text.enabled = false;
         continueButton.SetActive(false);
         dialogBox.SetActive(false);
@@ -220,7 +219,7 @@ public class Dialog : MonoBehaviour
             managerr.eggHealthRadiation.gameObject.SetActive(false);
             managerr.inventoryHotbar.SetActive(false);
             managerr.inventoryHotbarBackBoard.SetActive(false);
-            managerr.PauseGame();
+            managerr.itemList.SetActive(false);
             canTalk = false;
             text.enabled = true;
             dialogBox.SetActive(true);
@@ -237,8 +236,8 @@ public class Dialog : MonoBehaviour
 
     private void CinemachineZoomIn()
     {
-        float finalSize = 3;
-        float duration = 1;
+        float finalSize = 4;
+        float duration = 2;
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 

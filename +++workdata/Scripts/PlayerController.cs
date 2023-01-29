@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-
+using Cinemachine;
 public class PlayerController : MonoBehaviour
 {
 
@@ -159,6 +159,7 @@ public class PlayerController : MonoBehaviour
                 manager.PauseGame();
             }
             manager.UpdateUIAlpha(1);
+            manager.playerCamera.gameObject.GetComponent<CinemachineCameraOffset>().m_Offset = new Vector3(0, 0, 0);
             manager.videoPlayer.gameObject.SetActive(false);
         }
 

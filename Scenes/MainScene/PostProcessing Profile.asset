@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   skipIterations:
     m_OverrideState: 0
     m_Value: 1
@@ -47,6 +47,28 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-4869432442351912367
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 605214c209438034a935cdb9812bae62, type: 3}
+  m_Name: FastBlurVolume
+  m_EditorClassIdentifier: 
+  active: 1
+  Active:
+    m_OverrideState: 0
+    m_Value: 0
+  When:
+    m_OverrideState: 0
+    m_Value: 550
+  Scale:
+    m_OverrideState: 1
+    m_Value: 18.2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +85,9 @@ MonoBehaviour:
   - {fileID: -6329362081978445552}
   - {fileID: 1189218778215587453}
   - {fileID: 884250878517627779}
+  - {fileID: 8474934654970874239}
+  - {fileID: -4869432442351912367}
+  - {fileID: 8343320396647057237}
 --- !u!114 &884250878517627779
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -77,10 +102,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   postExposure:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.2
   contrast:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   colorFilter:
     m_OverrideState: 1
@@ -119,3 +144,41 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &8343320396647057237
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a81bb4d263f55354fb1bfb579f9dddf7, type: 3}
+  m_Name: SimpleEdgeVolume
+  m_EditorClassIdentifier: 
+  active: 1
+  Active:
+    m_OverrideState: 0
+    m_Value: 0
+  When:
+    m_OverrideState: 1
+    m_Value: 0
+  Multiplier:
+    m_OverrideState: 1
+    m_Value: 19.3
+--- !u!114 &8474934654970874239
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
+  m_Name: Tonemapping
+  m_EditorClassIdentifier: 
+  active: 1
+  mode:
+    m_OverrideState: 1
+    m_Value: 2

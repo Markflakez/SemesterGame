@@ -138,13 +138,13 @@ public class InventoryManager : MonoBehaviour
                 return true;
             }
         }
+        manager.inGameSound.PlayOneShot(manager.itemPickUp);
         CheckSelectedItem();
         return false;
     }
 
     public void SpawnNewItem(Item item, InventorySlot slot)
     {
-        manager.inGameSound.PlayOneShot(manager.itemPickUp);
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);

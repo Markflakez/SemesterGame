@@ -107,7 +107,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if(manager.mainInventoryBG2.anchoredPosition.x == 270)
         {
-            manager.mainInventoryBG2.DOAnchorPosX(506, .75f).SetEase(Ease.InOutSine);
+            manager.mainInventoryBG2.DOAnchorPosX(506, .5f).SetEase(Ease.InOutSine);
         }
         RefreshItemDescription();
 

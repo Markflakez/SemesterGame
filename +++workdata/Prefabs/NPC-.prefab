@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 752320829730239274}
   - component: {fileID: 752320829730239276}
   - component: {fileID: 752320829730239275}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 752320829854391945}
   - component: {fileID: 752320829854391944}
   - component: {fileID: 752320829854391959}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 752320831033244835}
   - component: {fileID: 752320831033244837}
   - component: {fileID: 752320831033244836}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
