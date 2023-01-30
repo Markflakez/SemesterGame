@@ -2223,10 +2223,18 @@ PrefabInstance:
     - target: {fileID: 1172664363, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
       propertyPath: tilemap
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3385586201495592805, guid: 992647b2f66201a43a817e610fca4e9d, type: 3}
     - target: {fileID: 1172664363, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172664363, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: dirtTileName
+      value: ' Tile_Map_2.1 (1) 1_21'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172664363, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: grassTileName
+      value: Tile_Map_2.1 (1) 1_23
       objectReference: {fileID: 0}
     - target: {fileID: 5523723489648766037, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
       propertyPath: icon
@@ -2357,7 +2365,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
       propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}
+      propertyPath: m_SortingLayerID
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5523723489648766062, guid: 98dfaa159d8abfe43a9d4beb4bc90675, type: 3}

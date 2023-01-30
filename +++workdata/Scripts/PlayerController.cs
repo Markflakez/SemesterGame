@@ -200,40 +200,50 @@ public class PlayerController : MonoBehaviour
         manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
 
-        bool allValuesLower = false;
+        manager.closestBuilding = null;
+        manager.closestDistanceBuilding = Mathf.Infinity;
 
-        foreach (NPCdialog script in FindObjectsOfType<NPCdialog>())
+        Building[] buildings = FindObjectsOfType<Building>();
+
+        // Iterate through the list of buildings
+        foreach (Building building in buildings)
         {
-            if (script.distance < 3)
+            float distance = Vector2.Distance(manager.player.transform.position, building.transform.position);
+            if (distance < manager.closestDistanceBuilding)
             {
-                allValuesLower = true;
-                break;
-            }
-        }
-        
-        float maxDistance = 2f;
-        Building[] objectsWithScript = FindObjectsOfType<Building>();
-        foreach (Building obj in objectsWithScript)
-        {
-            if (obj != this)
-            {
-                float distance = Vector3.Distance(gameObject.transform.position, obj.transform.position);
-                if (distance <= maxDistance)
-                {
-                    buildingInRange = true;
-                }
+                manager.closestBuilding = building.gameObject;
+                manager.closestDistanceBuilding = distance;
             }
         }
 
 
-        if (buildingInRange)
+        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
+
+        // Iterate through the list of NPCs
+        foreach (NPCdialog npc in npcArray)
         {
-            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+            manager.distanceNPC = Vector2.Distance(manager.player.transform.position, npc.transform.position);
+            if (manager.distanceNPC < 3)
+            {
+                manager.closestNPC = npc.gameObject;
+                manager.closestDistanceNPC = manager.distanceNPC;
+            }
         }
-        else if(!buildingInRange)
+
+        if (manager.closestDistanceBuilding < 1 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
         {
-            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;  
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.cyan;
         }
+
+        else if(manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.yellow;
+        }
+        else
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;
+        }
+
 
         if (movementY == 1)
         {
@@ -348,26 +358,36 @@ public class PlayerController : MonoBehaviour
 
     public void DropItem()
     {
+        //Checks if the game is not paused
         if (!manager.isPaused)
         {
+            //Checks if the player can drop an item and the selected slot has an item count greater than 0
             if (canDropItem && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
+                //Marks the item as dropped
                 inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().item.isDropped = true;
+
+                //Checks if the selected item is an egg
                 if (inventoryManager.selectedItemName == "Egg")
                 {
+                    //Spawns a egg prefab
                     GameObject dropped = manager.eggPrefab;
                     StartCoroutine(activateTrigger(dropped));
-
                 }
+                //Checks if the selected item is a sword
                 else if (inventoryManager.selectedItemName == "Sword")
                 {
+                    //Spawns a sword prefab
                     GameObject dropped = manager.swordPrefab;
                     StartCoroutine(activateTrigger(dropped));
                 }
+                //Removes the item that is currently selected from the inventory
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                //Prevents the player from dropping another item for a short period of time
                 canDropItem = false;
                 Invoke("canDropItemCooldown", .125f);
             }
+            //Checks if the selected item is still available
             inventoryManager.CheckSelectedItem();
         }
     }

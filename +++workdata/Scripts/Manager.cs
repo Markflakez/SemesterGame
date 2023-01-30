@@ -36,7 +36,7 @@ public class Manager : MonoBehaviour
     public AudioClip buttonClick;
 
     public GameObject[] buildings;
-    private GameObject closestBuilding;
+    public GameObject closestBuilding;
 
     public Light2D worldTime;
 
@@ -69,7 +69,7 @@ public class Manager : MonoBehaviour
 
     public NPCdialog[] npcArray;
 
-    public float distanceNPC;
+    public float distanceNPC = 300;
     public GameObject eggPrefab;
     public GameObject swordPrefab;
 
@@ -136,7 +136,7 @@ public class Manager : MonoBehaviour
 
     public bool saved = true;
 
-    public float closestDistanceBuilding;
+    public float closestDistanceBuilding = 300;
 
     public GameObject AvatarIcon;
 
@@ -156,6 +156,8 @@ public class Manager : MonoBehaviour
 
     public bool canThrowEgg = true;
 
+
+    public float closestDistanceNPC;
 
     public bool backgroundburning = true;
 
@@ -239,7 +241,7 @@ public class Manager : MonoBehaviour
     private void Awake()
     {
         sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "PlayerHouse")
+        if (sceneName != "MainMenu" && sceneName != "LoadGame")
         {
             file = PlayerPrefs.GetInt("CurrentFile");
         }
@@ -318,10 +320,12 @@ public class Manager : MonoBehaviour
         if(sceneName == "InGame")
         {
             player.GetComponent<PlayerController>().idleState = 0;
+            player.GetComponent<TileSoundPlayer>().enabled = true;
         }
         else
         {
             player.GetComponent<PlayerController>().idleState = 2;
+            player.GetComponent<TileSoundPlayer>().enabled = false;
         }
         player.GetComponent<PlayerController>().anim.SetFloat("idleState", player.GetComponent<PlayerController>().idleState);
     }
@@ -557,6 +561,7 @@ public class Manager : MonoBehaviour
         PlayerPrefs.DeleteKey("PLAYER_HUNGER-" + file);
         PlayerPrefs.DeleteKey("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file);
         PlayerPrefs.DeleteKey("FILETIME-" + file);
+        PlayerPrefs.DeleteKey("SAVE_SCENE" + file);
 
         int i = 1;
         string[] keysDropped = { "droppedItem", "droppedItemPosX", "droppedItemPosY" };
@@ -620,7 +625,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
-            inputActions.FindAction("Interact").performed += ctx => EnterBuilding();
+            inputActions.FindAction("Interact").performed += ctx => Interact();
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
@@ -633,40 +638,8 @@ public class Manager : MonoBehaviour
     }
 
 
-    public void EnterBuilding()
+    public void Interact()
     {
-        closestBuilding = null;
-        closestDistanceBuilding = Mathf.Infinity;
-
-        Building[] buildings = FindObjectsOfType<Building>();
-
-        // Iterate through the list of buildings
-        foreach (Building building in buildings)
-        {
-            float distance = Vector2.Distance(player.transform.position, building.transform.position);
-            if (distance < closestDistanceBuilding)
-            {
-                closestBuilding = building.gameObject;
-                closestDistanceBuilding = distance;
-            }
-        }
-
-        closestNPC = null;
-        float closestDistance = Mathf.Infinity;
-
-        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
-
-        // Iterate through the list of NPCs
-        foreach (NPCdialog npc in npcArray)
-        {
-            distanceNPC = Vector2.Distance(player.transform.position, npc.transform.position);
-            if (distanceNPC < closestDistance)
-            {
-                closestNPC = npc.gameObject;
-                closestDistance = distanceNPC;
-            }
-        }
-
         if (closestDistanceBuilding < 1f)
         {
             closestBuilding.GetComponent<Building>().StartCoroutine("Enter");
@@ -681,28 +654,37 @@ public class Manager : MonoBehaviour
 
     public void EscapeInput()
     {
+        //Checks if the current scene is not "LoadGame" or "MainMenu"
         if (SceneManager.GetActiveScene().name != "LoadGame" && SceneManager.GetActiveScene().name != "MainMenu")
         {
+            //Checks if neither inventory or dialog box is active
             if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
             {
+                //Checks if the game is not paused
                 if (!isPaused)
                 {
+                    //Hides all panels, pause the game, and activates the pause menu
                     HideAllPanels();
                     PauseGame();
                     pauseMenu.SetActive(true);
                 }
                 else
                 {
+                    //Hides all panels and pause the game
                     HideAllPanels();
                     PauseGame();
                 }
             }
+            //Checks if the inventory is active
             else if (inventoryMain.activeSelf)
             {
+                //Opens the inventory
                 OpenInventory();
             }
+            //Checks if the dialog box is active
             else if (dialogBox.activeSelf)
             {
+                //Closes the chat
                 player.gameObject.GetComponent<Dialog>().CloseChat();
             }
         }
