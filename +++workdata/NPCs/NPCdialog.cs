@@ -51,7 +51,7 @@ public class NPCdialog : MonoBehaviour
 
     private void RandomSentence()
     {
-        if (dialogText.text == "")
+        if (dialogText.text == "" && randomSentencees.Length > 0)
         {
             dialogText.text = "";
             dialogText.text = randomSentencees[Random.Range(0, randomSentencees.Length)];

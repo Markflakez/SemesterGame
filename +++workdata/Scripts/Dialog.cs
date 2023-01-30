@@ -30,15 +30,12 @@ public class Dialog : MonoBehaviour
     public TextMeshProUGUI nameText;
 
     public Sprite playerIcon;
-
-    public float closestDistance;
     private int runThrough;
 
-    public GameObject[] npcArray;
     public float range;
     public Vector2 checkPos;
 
-    private GameObject closestNPC;
+    
 
 
     public TextMeshProUGUI text;
@@ -47,7 +44,7 @@ public class Dialog : MonoBehaviour
     private Color32 nameTextColor;
 
     private int index;
-    public float typingSpeed;
+    public float typingSpeed = 0.1f;
 
     public bool canTalk = true;
 
@@ -68,12 +65,6 @@ public class Dialog : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        middlePoint = new GameObject();
-        quarterPoint = new GameObject();
-    }
-
 
     //Summary
     //Wenn der IEnumerator aufgerufen wird, wird ein Tippsound gespielt,
@@ -82,6 +73,8 @@ public class Dialog : MonoBehaviour
     //Wenn der Dialogtext dem Text aus dem jetzigen Index des Arrays entspricht, wird der NextButton aktiviert und der Tippsound gestoppt.
     IEnumerator Type()
     {
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
+
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 3;
@@ -121,6 +114,7 @@ public class Dialog : MonoBehaviour
                 manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
             }
             manager.GetComponent<Manager>().playerChatAvatar.enabled = false;
+            quarterPoint = new GameObject();
             quarterPoint.transform.position = (middlePoint.transform.position + closestNPC.transform.position) / 2;
 
             vcam.Follow = quarterPoint.transform;
@@ -170,6 +164,7 @@ public class Dialog : MonoBehaviour
     //Außerdem wird der instantiierte Mittelpunkt als Referenz für die Kamera gelöscht.
     public void CloseChat()
     {
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 
         vcam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
@@ -208,6 +203,7 @@ public class Dialog : MonoBehaviour
     //Falls Text im Dialogfeld ist wird er gelöscht und die Koroutine Type wird aufgerufen.
     public void NextDialog()
     {
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
         continueButton.SetActive(false);
         if (closestNPC.GetComponent<NPCdialog>().npcIndex < closestNPC.GetComponent<NPCdialog>().dialog.Length - 1)
         {
@@ -235,6 +231,7 @@ public class Dialog : MonoBehaviour
     public void OpenChat()
     {
         Manager managerr = manager.GetComponent<Manager>();
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
         if (canTalk)
         {
             // Find all objects in the scene with the NPCScript script attached
@@ -271,6 +268,7 @@ public class Dialog : MonoBehaviour
 
     private void CinemachineZoomIn()
     {
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
         float finalSize = 4;
         float duration = 2;
 
@@ -278,6 +276,8 @@ public class Dialog : MonoBehaviour
 
         DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens);
 
+
+        middlePoint = new GameObject();
         middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestNPC.transform.position) / 2;
 
 
@@ -285,6 +285,7 @@ public class Dialog : MonoBehaviour
     }
     private void CinemachineZoomOut()
     {
+        GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
         float finalSize = 5;
         float duration = (float)1.5;
 
@@ -296,28 +297,5 @@ public class Dialog : MonoBehaviour
 
 
         manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = manager.GetComponent<Manager>().player.transform;
-    }
-
-
-    public void CheckClosestNPC()
-    {
-        closestNPC = null;
-        closestDistance = Mathf.Infinity;
-
-        foreach (GameObject obj in npcArray)
-        {
-            float distance = Vector2.Distance(transform.position, obj.transform.position);
-            if (distance < closestDistance)
-            {
-                closestNPC = obj;
-                closestDistance = distance;
-            }
-        }
-
-        if (closestDistance < 3f)
-        {
-            OpenChat();
-        }
-
     }
 }

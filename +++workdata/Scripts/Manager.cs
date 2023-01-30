@@ -28,6 +28,9 @@ public class Manager : MonoBehaviour
 
     public EventSystem eventSystem;
 
+    [HideInInspector]
+    public Vector3 spawnPos;
+
     public AudioClip buttonSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
@@ -62,7 +65,11 @@ public class Manager : MonoBehaviour
     public InventoryManager inventoryManager;
 
 
+    public bool canEnter = true;
 
+    public NPCdialog[] npcArray;
+
+    public float distanceNPC;
     public GameObject eggPrefab;
     public GameObject swordPrefab;
 
@@ -128,8 +135,8 @@ public class Manager : MonoBehaviour
     public TextMeshProUGUI itemhealthBoost;
 
     public bool saved = true;
-    
 
+    public float closestDistanceBuilding;
 
     public GameObject AvatarIcon;
 
@@ -218,8 +225,8 @@ public class Manager : MonoBehaviour
     public Image florusChatAvatar;
     public Image pascalChatAvatar;
 
-    public bool canEnter;
-
+    public GameObject closestNPC;
+    public float closestDistance;
 
     private GameObject spawnItem;
 
@@ -304,6 +311,21 @@ public class Manager : MonoBehaviour
 
     }
 
+    public void SpawnPos()
+    {
+        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
+        playerCamera.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
+        if(sceneName == "InGame")
+        {
+            player.GetComponent<PlayerController>().idleState = 0;
+        }
+        else
+        {
+            player.GetComponent<PlayerController>().idleState = 2;
+        }
+        player.GetComponent<PlayerController>().anim.SetFloat("idleState", player.GetComponent<PlayerController>().idleState);
+    }
+
     public IEnumerator PlayIntroSequence()
     {
         PauseGame();
@@ -338,7 +360,7 @@ public class Manager : MonoBehaviour
             PauseGame();
             inputName.SetActive(false);
             float currentUIAlpha = 0;
-            DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, .5f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
+            DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, 1f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
 
         }
     }
@@ -511,8 +533,15 @@ public class Manager : MonoBehaviour
         }
         if (sceneSwitch)
         {
-            //The SaveFile selected by pressing one of the buttons is set as the active SaveFile, so that the selected SaveFile is loaded in the GameScene
-            SceneManager.LoadScene("PlayerHouse");
+            if(PlayerPrefs.HasKey("SAVE_SCENE" + file) && PlayerPrefs.GetString("SAVE_SCENE" + file) != "PlayerHouse")
+            {
+                StartCoroutine(LOAD_SCENE());
+            }
+            else
+            {
+                SceneManager.LoadScene("PlayerHouse");
+            }
+            
         }
         ButtonAnimation(button);
     }
@@ -591,7 +620,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
-            inputActions.FindAction("Interact").performed += ctx => { player.GetComponent<Dialog>().CheckClosestNPC(); EnterBuilding(); };
+            inputActions.FindAction("Interact").performed += ctx => EnterBuilding();
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
@@ -607,29 +636,52 @@ public class Manager : MonoBehaviour
     public void EnterBuilding()
     {
         closestBuilding = null;
-        float closestDistance;
-        closestDistance = Mathf.Infinity;
+        closestDistanceBuilding = Mathf.Infinity;
 
-        foreach (GameObject obj in buildings)
+        Building[] buildings = FindObjectsOfType<Building>();
+
+        // Iterate through the list of buildings
+        foreach (Building building in buildings)
         {
-            float distance = Vector2.Distance(player.transform.position, obj.transform.position);
-            if (distance < closestDistance)
+            float distance = Vector2.Distance(player.transform.position, building.transform.position);
+            if (distance < closestDistanceBuilding)
             {
-                closestBuilding = obj;
-                closestDistance = distance;
+                closestBuilding = building.gameObject;
+                closestDistanceBuilding = distance;
             }
         }
 
-        if (closestDistance < 3f)
+        closestNPC = null;
+        float closestDistance = Mathf.Infinity;
+
+        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
+
+        // Iterate through the list of NPCs
+        foreach (NPCdialog npc in npcArray)
         {
-            closestBuilding.GetComponent<EnterBuilding>().StartCoroutine("Enter");
+            distanceNPC = Vector2.Distance(player.transform.position, npc.transform.position);
+            if (distanceNPC < closestDistance)
+            {
+                closestNPC = npc.gameObject;
+                closestDistance = distanceNPC;
+            }
+        }
+
+        if (closestDistanceBuilding < 1f)
+        {
+            closestBuilding.GetComponent<Building>().StartCoroutine("Enter");
+        }
+        else if (closestNPC != null)
+        {
+            Debug.Log(closestNPC.gameObject.name);
+            player.GetComponent<Dialog>().OpenChat();
         }
     }
 
 
     public void EscapeInput()
     {
-        if (SceneManager.GetActiveScene().name == "PlayerHouse")
+        if (SceneManager.GetActiveScene().name != "LoadGame" && SceneManager.GetActiveScene().name != "MainMenu")
         {
             if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
             {
@@ -1138,7 +1190,40 @@ public class Manager : MonoBehaviour
         //worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
     }
 
+    public IEnumerator LOAD_SCENE()
+    {
+        string buildingScene = PlayerPrefs.GetString("SAVE_SCENE" + file);
+        SceneManager.LoadScene("PlayerHouse");
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("PlayerHouse");
+        while (!asyncUnload.isDone)
+        {
+            yield return null;
+        }
 
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildingScene.ToString(), LoadSceneMode.Additive);
+        sceneName = buildingScene;
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+            playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
+        }
+
+        SceneManager.MoveGameObjectToScene(player, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(playerCamera, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(gameSettings.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(postProcessingVolume.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(eventSystem.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SpawnPos();
+        playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
+        playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
+    }
+
+    public void SAVE_SCENE()
+    {
+        PlayerPrefs.SetString("SAVE_SCENE" + file, SceneManager.GetActiveScene().name);
+    }
 
 
 
@@ -1235,6 +1320,7 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_HEALTH();
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
+            SAVE_SCENE();
             SAVE_TIME();
             sceneSwitch = false;
         }

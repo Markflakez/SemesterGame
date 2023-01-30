@@ -86,6 +86,8 @@ public class PlayerController : MonoBehaviour
 
     private NPCMovement yes;
 
+    public bool buildingInRange;
+
     public bool isMoving;
     public float idleState = 2;
     public AudioSource stepSoundPlayer;
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Access
-    Animator anim;
+    public Animator anim;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     TrailRenderer tr;
@@ -199,6 +201,7 @@ public class PlayerController : MonoBehaviour
 
 
         bool allValuesLower = false;
+
         foreach (NPCdialog script in FindObjectsOfType<NPCdialog>())
         {
             if (script.distance < 3)
@@ -207,12 +210,27 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
+        
+        float maxDistance = 2f;
+        Building[] objectsWithScript = FindObjectsOfType<Building>();
+        foreach (Building obj in objectsWithScript)
+        {
+            if (obj != this)
+            {
+                float distance = Vector3.Distance(gameObject.transform.position, obj.transform.position);
+                if (distance <= maxDistance)
+                {
+                    buildingInRange = true;
+                }
+            }
+        }
 
-        if (allValuesLower)
+
+        if (buildingInRange)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
         }
-        else
+        else if(!buildingInRange)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;  
         }
