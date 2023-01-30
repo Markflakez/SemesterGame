@@ -1,5 +1,133 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2430147133018411551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 389934423604571679}
+  - component: {fileID: 555769070101386425}
+  m_Layer: 0
+  m_Name: InGame-Sound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &389934423604571679
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2430147133018411551}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5673940073981796499}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &555769070101386425
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2430147133018411551}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5673940073981796497
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,8 +158,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 831878946301756817}
+  - {fileID: 389934423604571679}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5673940073981796498
 MonoBehaviour:
@@ -45,18 +174,140 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfbd940533e21348bf74c692049d16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveMenu: {fileID: 0}
-  pauseMenu: {fileID: 0}
   settingsMenu: {fileID: 0}
   quitMenu: {fileID: 0}
   mainMenuQ: {fileID: 0}
   fullscreen: {fileID: 0}
   fps: {fileID: 0}
-  creditsMenu: {fileID: 0}
+  uiSound: {fileID: 6163733735074078388}
+  eventSystem: {fileID: 0}
+  buttonSound: {fileID: 8300000, guid: 1d83bc08900180f4884e8ae956222a0f, type: 3}
+  buttonHover: {fileID: 8300000, guid: 86a7ff53d505bf343a00f08862d453d3, type: 3}
+  buttonClick: {fileID: 8300000, guid: 9916cfe43f37d2d42aaebf95d405b6d7, type: 3}
+  buildings:
+  - {fileID: 0}
+  worldTime: {fileID: 0}
+  mainCanvas: {fileID: 0}
+  file: 0
   saveFile1: {fileID: 0}
   saveFile2: {fileID: 0}
   saveFile3: {fileID: 0}
+  creditsMenu: {fileID: 0}
+  creditsButton: {fileID: 0}
+  pauseMenu: {fileID: 0}
+  questLog: {fileID: 0}
+  questText: {fileID: 0}
+  questAvatar: {fileID: 0}
+  questHeaderText: {fileID: 0}
+  inventoryManager: {fileID: 0}
+  eggPrefab: {fileID: 4399909138544334394, guid: 8c0f3a76132af80429236143e85df36d, type: 3}
+  swordPrefab: {fileID: 4089146579518464098, guid: 77a060f509a77284287b5feb6963f4d3, type: 3}
+  egg: {fileID: 11400000, guid: 088d0707b26c82245a6de55046564388, type: 2}
+  sword: {fileID: 11400000, guid: 26fc736a11c95864a98859ad20c1c746, type: 2}
   optionsCanvas: {fileID: 0}
+  backDrop: {fileID: 0}
+  inventoryMain: {fileID: 0}
+  inventoryHotbar: {fileID: 0}
+  inventoryHotbarBackBoard: {fileID: 0}
+  mainMenuBackBoard: {fileID: 0}
+  graphicsPanel: {fileID: 0}
+  controlsPanel: {fileID: 0}
+  audioPanel: {fileID: 0}
+  brain: {fileID: 0}
+  buttonDelay: 0.1
+  gameSettings: {fileID: 0}
+  dialogBox: {fileID: 0}
+  eggHealthRadiation: {fileID: 0}
+  player: {fileID: 0}
+  sceneSwitch: 0
+  postProcessingVolume: {fileID: 0}
+  colorAdjustments: {fileID: 0}
+  chromaticAberration: {fileID: 0}
+  uiPanel: {fileID: 0}
+  eggFront: {fileID: 0}
+  eggLeft: {fileID: 0}
+  eggRight: {fileID: 0}
+  eggBack: {fileID: 0}
+  QuestPanel1: {fileID: 0}
+  QuestPanel2: {fileID: 0}
+  QuestPanel3: {fileID: 0}
+  blackCanvas: {fileID: 0}
+  mainInventoryBG2: {fileID: 0}
+  uiFontColor: {r: 0.8039216, g: 0.7882353, b: 0.7411765, a: 1}
+  uiFontColorDisabled: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  uiFontColorBrown: {r: 0.16078432, g: 0.07058824, b: 0.05490196, a: 1}
+  radiationColor: {r: 0.6156863, g: 0.15686275, b: 0.6117647, a: 1}
+  invisibleSprite: {fileID: 21300000, guid: d0c9599508943c147a37b5b749572f9d, type: 3}
+  itemHovered: {fileID: 0}
+  itemNameHovered: {fileID: 0}
+  itemAttackDamage: {fileID: 0}
+  itemhealthBoost: {fileID: 0}
+  saved: 1
+  AvatarIcon: {fileID: 0}
+  sceneName: 
+  inputActions: {fileID: -944628639613478452, guid: fa0165a5a2d9fa34490df087b530ca96, type: 3}
+  blackCircle: {fileID: 0}
+  items:
+  - {fileID: 11400000, guid: 088d0707b26c82245a6de55046564388, type: 2}
+  - {fileID: 11400000, guid: 26fc736a11c95864a98859ad20c1c746, type: 2}
+  isPaused: 0
+  itemIndicators: {fileID: 0}
+  eggIndicator: {fileID: 0}
+  canThrowEgg: 1
+  backgroundburning: 1
+  inGameSound: {fileID: 555769070101386425}
+  cough: {fileID: 8300000, guid: 06dec455c2639fc4a8a267162917a585, type: 3}
+  piano: {fileID: 8300000, guid: 9918af2e52a4787478f788dc5f400bfb, type: 3}
+  eggThrowSound: {fileID: 8300000, guid: 512ba04e2e6668a4194baca54771a81d, type: 3}
+  swordSwingSound: {fileID: 8300000, guid: f18f86b23bd6e4f4581f0814284c48dc, type: 3}
+  eggSplash: {fileID: 8300000, guid: 9cda3280f908690418c6cb0544199296, type: 3}
+  itemPickUp: {fileID: 8300000, guid: 191590d26e542a94bba13cd85defd663, type: 3}
+  dashSound: {fileID: 8300000, guid: 826aed3b213d68545b68bbec1a9b149a, type: 3}
+  hurtSound1: {fileID: 8300000, guid: 60cdc92de1cdb31408b19c4832aefa39, type: 3}
+  hurtSound2: {fileID: 8300000, guid: ad8362890853e7448ba7bddda26ec07a, type: 3}
+  hurtSound3: {fileID: 8300000, guid: 22732957bfcf42a46a055cf5fa9cc82d, type: 3}
+  ghoulHitSound: {fileID: 8300000, guid: c51a70bfb537c1d4c9c4bfacb3c8fada, type: 3}
+  ghoulDeathSound: {fileID: 8300000, guid: 1c77b8b7809468048a3aa1e56cfe5d36, type: 3}
+  eggGroundHit: {fileID: 8300000, guid: 01167d7c37dce9f449354723b44c5cbd, type: 3}
+  eggEnemyHit: {fileID: 8300000, guid: e1ea00f5077a3e54aa30dd2c5b3b8aed, type: 3}
+  saveButton: {fileID: 0}
+  escControl: {fileID: 0}
+  attackControl: {fileID: 0}
+  interactControl: {fileID: 0}
+  useItemControl: {fileID: 0}
+  dropItemControl: {fileID: 0}
+  chalkCheckmark: {fileID: 0}
+  candlesCheckmark: {fileID: 0}
+  goatSkullCheckmark: {fileID: 0}
+  goldenEggCheckmark: {fileID: 0}
+  itemList: {fileID: 0}
+  barIndicators: {fileID: 0}
+  playerCamera: {fileID: 0}
+  infoText: {fileID: 0}
+  graphicsButton: {fileID: 0}
+  controlsButton: {fileID: 0}
+  audioButton: {fileID: 0}
+  healthPopup: {fileID: 0}
+  eggsPopup: {fileID: 0}
+  radiationPopup: {fileID: 0}
+  Task1: {fileID: 0}
+  Task2: {fileID: 0}
+  Task3: {fileID: 0}
+  ItemReward1: {fileID: 0}
+  ItemReward2: {fileID: 0}
+  ItemReward3: {fileID: 0}
+  TaskCheck1: {fileID: 0}
+  TaskCheck2: {fileID: 0}
+  TaskCheck3: {fileID: 0}
+  inputName: {fileID: 0}
+  playerChatAvatar: {fileID: 0}
+  laurelChatAvatar: {fileID: 0}
+  morganChatAvatar: {fileID: 0}
+  florusChatAvatar: {fileID: 0}
+  pascalChatAvatar: {fileID: 0}
+  canEnter: 0
+  videoPlayer: {fileID: 0}
+  originalSlot: {fileID: 0}
 --- !u!1 &5989947974804585725
 GameObject:
   m_ObjectHideFlags: 0

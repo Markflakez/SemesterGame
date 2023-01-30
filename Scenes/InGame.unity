@@ -28266,8 +28266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90157ebac6027c34181ce35f38864d4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingScene:
-    m_Handle: 0
+  hasEntered: 0
+  buildingScene: PlayerHouse
 --- !u!4 &991321051
 Transform:
   m_ObjectHideFlags: 0
@@ -28517,8 +28517,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90157ebac6027c34181ce35f38864d4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingScene:
-    m_Handle: 0
+  hasEntered: 0
+  buildingScene: 
 --- !u!1001 &1006936767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44791,6 +44791,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 191590d26e542a94bba13cd85defd663, type: 3}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: mainCanvas
+      value: 
+      objectReference: {fileID: 248870565}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: saveButton
       value: 
       objectReference: {fileID: 1829919650}
@@ -45103,6 +45107,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: buildings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: postProcessingVolume
       value: 
       objectReference: {fileID: 1358899195}
@@ -45122,6 +45130,10 @@ PrefabInstance:
       propertyPath: uiFontColorDisabled.r
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: buildings.Array.data[0]
+      value: 
+      objectReference: {fileID: 991321048}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: inventoryHotbarBackBoard
       value: 
