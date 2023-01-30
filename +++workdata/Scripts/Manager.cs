@@ -26,12 +26,18 @@ public class Manager : MonoBehaviour
     public Toggle fps;
     public AudioSource uiSound;
 
+    public EventSystem eventSystem;
+
     public AudioClip buttonSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
+    public GameObject[] buildings;
+    private GameObject closestBuilding;
 
     public Light2D worldTime;
+
+    public Canvas mainCanvas;
 
     [HideInInspector]
     public int file;
@@ -80,7 +86,7 @@ public class Manager : MonoBehaviour
 
     public float buttonDelay = .15f;
     private GameObject saveFiles;
-    private GameSettings gameSettings;
+    public GameSettings gameSettings;
     public GameObject dialogBox;
     public EggHealthRadiation eggHealthRadiation;
     public GameObject player;
@@ -123,6 +129,7 @@ public class Manager : MonoBehaviour
 
     public bool saved = true;
     
+
 
     public GameObject AvatarIcon;
 
@@ -211,6 +218,8 @@ public class Manager : MonoBehaviour
     public Image florusChatAvatar;
     public Image pascalChatAvatar;
 
+    public bool canEnter;
+
 
     private GameObject spawnItem;
 
@@ -223,7 +232,7 @@ public class Manager : MonoBehaviour
     private void Awake()
     {
         sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "InGame")
+        if (sceneName == "PlayerHouse")
         {
             file = PlayerPrefs.GetInt("CurrentFile");
         }
@@ -249,7 +258,7 @@ public class Manager : MonoBehaviour
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
 
-        if (sceneName == "InGame")
+        if (sceneName == "PlayerHouse")
         {
             if(PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
             {
@@ -298,6 +307,7 @@ public class Manager : MonoBehaviour
     public IEnumerator PlayIntroSequence()
     {
         PauseGame();
+        videoPlayer.gameObject.SetActive(true);
         videoPlayer.enabled = true;
         videoPlayer.Play();
         yield return new WaitForSecondsRealtime(2);
@@ -319,13 +329,17 @@ public class Manager : MonoBehaviour
     {
         if (inputField.text != "" && inputName.activeSelf)
         {
+            inputActions.FindAction("Enter").Disable();
+            inputActions.FindAction("Escape").Enable();
             PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
             player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
+            videoPlayer.gameObject.SetActive(false);
+
             PauseGame();
             inputName.SetActive(false);
-            inputActions.FindAction("Escape").Enable();
             float currentUIAlpha = 0;
             DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, .5f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
+
         }
     }
 
@@ -464,7 +478,7 @@ public class Manager : MonoBehaviour
         button.gameObject.transform.DOScale(scale * 1f, buttonDelay * .5f);
         });
 
-        button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
+        button.gameObject.transform.DOShakeRotation(buttonDelay, 7, 0, 50, true);
     }
     public void LoadSaveFile(Button button)
     {
@@ -498,7 +512,7 @@ public class Manager : MonoBehaviour
         if (sceneSwitch)
         {
             //The SaveFile selected by pressing one of the buttons is set as the active SaveFile, so that the selected SaveFile is loaded in the GameScene
-            SceneManager.LoadScene("InGame");
+            SceneManager.LoadScene("PlayerHouse");
         }
         ButtonAnimation(button);
     }
@@ -569,7 +583,7 @@ public class Manager : MonoBehaviour
     private void FindInputActions()
     {
         inputActions.Enable();
-        if (sceneName == "InGame")
+        if (sceneName == "PlayerHouse")
         {
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
             inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().UseItem();
@@ -577,7 +591,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
-            inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
+            inputActions.FindAction("Interact").performed += ctx => { player.GetComponent<Dialog>().CheckClosestNPC(); EnterBuilding(); };
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
@@ -588,9 +602,34 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         }
     }
+
+
+    public void EnterBuilding()
+    {
+        closestBuilding = null;
+        float closestDistance;
+        closestDistance = Mathf.Infinity;
+
+        foreach (GameObject obj in buildings)
+        {
+            float distance = Vector2.Distance(player.transform.position, obj.transform.position);
+            if (distance < closestDistance)
+            {
+                closestBuilding = obj;
+                closestDistance = distance;
+            }
+        }
+
+        if (closestDistance < 3f)
+        {
+            closestBuilding.GetComponent<EnterBuilding>().StartCoroutine("Enter");
+        }
+    }
+
+
     public void EscapeInput()
     {
-        if (SceneManager.GetActiveScene().name == "InGame")
+        if (SceneManager.GetActiveScene().name == "PlayerHouse")
         {
             if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
             {
@@ -745,7 +784,7 @@ public class Manager : MonoBehaviour
             settingsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
-            if (sceneName == "InGame")
+            if (sceneName == "PlayerHouse")
             {
                 quitMenu.SetActive(false);
             }
@@ -761,7 +800,7 @@ public class Manager : MonoBehaviour
         }
         else if(sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "InGame")
+            if (SceneManager.GetActiveScene().name == "PlayerHouse")
             {
                 pauseMenu.SetActive(false);
             }
@@ -780,7 +819,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "InGame")
+            if (SceneManager.GetActiveScene().name == "PlayerHouse")
             {
                 pauseMenu.SetActive(false);
             }
@@ -799,7 +838,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "InGame")
+            if (SceneManager.GetActiveScene().name == "PlayerHouse")
             {
                 pauseMenu.SetActive(false);
             }
@@ -965,6 +1004,7 @@ public class Manager : MonoBehaviour
         if (!sceneSwitch)
         {
             StartCoroutine(DelaySwitchScene("QuitGame", button));
+            ButtonAnimation(button);
         }
         else if (sceneSwitch)
         {
@@ -977,10 +1017,8 @@ public class Manager : MonoBehaviour
                 HideAllPanels();
                 quitMenu.SetActive(true);
             }
-            sceneSwitch = false;
+            sceneSwitch = false;  
         }
-
-        ButtonAnimation(button);
     }
     #endregion Menus/Buttons
 
@@ -1092,12 +1130,12 @@ public class Manager : MonoBehaviour
 
     public void SAVE_TIME()
     {
-        PlayerPrefs.SetFloat("CURRENT-TIME" + file, worldTime.gameObject.GetComponent<DayNightCycle>().currentTime);
+        //PlayerPrefs.SetFloat("CURRENT-TIME" + file, worldTime.gameObject.GetComponent<DayNightCycle>().currentTime);
     }
 
     public void LOAD_TIME()
     {
-        worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
+        //worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
     }
 
 
@@ -1331,7 +1369,7 @@ public class Manager : MonoBehaviour
         LOAD_FULLSCREEN();
         LOAD_MUSIC_VOLUME();
         LOAD_SFX_VOLUME();
-        if (sceneName == "InGame")
+        if (sceneName == "PlayerHouse")
         {
             LOAD_FPS();
         }

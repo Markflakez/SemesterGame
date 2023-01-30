@@ -6,38 +6,48 @@ using UnityEngine.InputSystem;
 
 public class EnterBuilding : MonoBehaviour
 {
-    private bool isInDistance = false;
 
+    private Manager manager;
+
+    public bool hasEntered = false;
+
+    public string buildingScene;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void Enter(InputAction.CallbackContext context)
+
+
+    public IEnumerator Enter()
     {
-        if(context.performed && isInDistance)
+        if (!hasEntered)
         {
-            Debug.Log("enters building");
+            hasEntered = true;
+            Debug.Log("YE");
+            // The Application loads the Scene in the background at the same time as the current Scene.
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildingScene.ToString(), LoadSceneMode.Additive);
 
+            // Wait until the last operation fully loads to return anything
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+
+            SceneManager.LoadScene(buildingScene, LoadSceneMode.Additive);
+            SceneManager.MoveGameObjectToScene(manager.player, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.playerCamera, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.gameSettings.gameObject, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.gameObject, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.postProcessingVolume.gameObject, SceneManager.GetSceneByName(buildingScene));
+            SceneManager.MoveGameObjectToScene(manager.eventSystem.gameObject, SceneManager.GetSceneByName(buildingScene));
+
+            SceneManager.UnloadSceneAsync("InGame");
         }
-    }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        isInDistance = true;
-    }
-
-    public void OnTriggerExit2D(Collider2D collision)
-    {
-        isInDistance = false;
     }
 
 }
