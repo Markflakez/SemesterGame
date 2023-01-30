@@ -6,38 +6,26 @@ using UnityEngine.InputSystem;
 
 public class EnterBuilding : MonoBehaviour
 {
-    private bool isInDistance = false;
 
+    private Manager manager;
+
+    public string buildingScene;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Enter()
     {
-        
-    }
-
-    public void Enter(InputAction.CallbackContext context)
-    {
-        if(context.performed && isInDistance)
-        {
-            Debug.Log("enters building");
-
-        }
-    }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        isInDistance = true;
-    }
-
-    public void OnTriggerExit2D(Collider2D collision)
-    {
-        isInDistance = false;
+        SceneManager.LoadScene(buildingScene, LoadSceneMode.Additive);
+        SceneManager.MoveGameObjectToScene(manager.player, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(manager.playerCamera, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(manager.mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(manager.mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(manager.settingsMenu, SceneManager.GetSceneByName(buildingScene));
+        SceneManager.MoveGameObjectToScene(manager.settingsMenu, SceneManager.GetSceneByName(buildingScene));
     }
 
 }

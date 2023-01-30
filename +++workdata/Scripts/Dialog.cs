@@ -31,7 +31,7 @@ public class Dialog : MonoBehaviour
 
     public Sprite playerIcon;
 
-    private float closestDistance = Mathf.Infinity;
+    public float closestDistance;
     private int runThrough;
 
     public GameObject[] npcArray;

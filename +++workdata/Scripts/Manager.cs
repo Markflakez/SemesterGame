@@ -30,8 +30,12 @@ public class Manager : MonoBehaviour
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
+    public GameObject[] buildings;
+    private GameObject closestBuilding;
 
     public Light2D worldTime;
+
+    public Canvas mainCanvas;
 
     [HideInInspector]
     public int file;
@@ -124,6 +128,7 @@ public class Manager : MonoBehaviour
     public bool saved = true;
     
 
+
     public GameObject AvatarIcon;
 
     public string sceneName;
@@ -210,6 +215,8 @@ public class Manager : MonoBehaviour
     public Image morganChatAvatar;
     public Image florusChatAvatar;
     public Image pascalChatAvatar;
+
+    public bool canEnter;
 
 
     private GameObject spawnItem;
@@ -298,6 +305,7 @@ public class Manager : MonoBehaviour
     public IEnumerator PlayIntroSequence()
     {
         PauseGame();
+        videoPlayer.gameObject.SetActive(true);
         videoPlayer.enabled = true;
         videoPlayer.Play();
         yield return new WaitForSecondsRealtime(2);
@@ -319,13 +327,17 @@ public class Manager : MonoBehaviour
     {
         if (inputField.text != "" && inputName.activeSelf)
         {
+            inputActions.FindAction("Enter").Disable();
+            inputActions.FindAction("Escape").Enable();
             PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
             player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
+            videoPlayer.gameObject.SetActive(false);
+
             PauseGame();
             inputName.SetActive(false);
-            inputActions.FindAction("Escape").Enable();
             float currentUIAlpha = 0;
             DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, .5f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
+
         }
     }
 
@@ -464,7 +476,7 @@ public class Manager : MonoBehaviour
         button.gameObject.transform.DOScale(scale * 1f, buttonDelay * .5f);
         });
 
-        button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 10, 90, true);
+        button.gameObject.transform.DOShakeRotation(buttonDelay, 7, 0, 50, true);
     }
     public void LoadSaveFile(Button button)
     {
@@ -578,6 +590,7 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Interact").performed += ctx => player.GetComponent<Dialog>().CheckClosestNPC();
+            inputActions.FindAction("Interact").performed += ctx => EnterBuilding();
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
@@ -588,6 +601,31 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
         }
     }
+
+
+    public void EnterBuilding()
+    {
+        closestBuilding = null;
+        float closestDistance;
+        closestDistance = Mathf.Infinity;
+
+        foreach (GameObject obj in buildings)
+        {
+            float distance = Vector2.Distance(transform.position, obj.transform.position);
+            if (distance < closestDistance)
+            {
+                closestBuilding = obj;
+                closestDistance = distance;
+            }
+        }
+
+        if (closestDistance < 3f && player.GetComponent<Dialog>().closestDistance > 3)
+        {
+            closestBuilding.GetComponent<EnterBuilding>().Enter();
+        }
+    }
+
+
     public void EscapeInput()
     {
         if (SceneManager.GetActiveScene().name == "InGame")
@@ -965,6 +1003,7 @@ public class Manager : MonoBehaviour
         if (!sceneSwitch)
         {
             StartCoroutine(DelaySwitchScene("QuitGame", button));
+            ButtonAnimation(button);
         }
         else if (sceneSwitch)
         {
@@ -977,10 +1016,8 @@ public class Manager : MonoBehaviour
                 HideAllPanels();
                 quitMenu.SetActive(true);
             }
-            sceneSwitch = false;
+            sceneSwitch = false;  
         }
-
-        ButtonAnimation(button);
     }
     #endregion Menus/Buttons
 

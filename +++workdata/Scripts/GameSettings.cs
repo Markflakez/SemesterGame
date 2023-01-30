@@ -123,7 +123,10 @@ public class GameSettings : MonoBehaviour
     }
     public void FPSToggle()
     {
-        fpsDisplay.enabled = !fpsDisplay.enabled;
+        if (SceneManager.GetActiveScene().name == "InGame")
+        {
+            fpsDisplay.enabled = !fpsDisplay.enabled;
+        }
     }
     public void SetRefreshRate(int RefreshRateIndexIndex)
     {

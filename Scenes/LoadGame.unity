@@ -1336,6 +1336,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 9916cfe43f37d2d42aaebf95d405b6d7, type: 3}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: buttonDelay
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: buttonHover
       value: 
       objectReference: {fileID: 8300000, guid: 86a7ff53d505bf343a00f08862d453d3, type: 3}
