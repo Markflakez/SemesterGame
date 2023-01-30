@@ -190,16 +190,27 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("idleState", idleState);
     }
 
-    #region Movement
-    public void Movement(Vector2 directions)
+    public void CheckClosestNPC()
     {
-        movementX = directions.x;
-        movementY = directions.y;
+        manager.closestNPC = null;
+        manager.closestDistanceNPC = Mathf.Infinity;
 
-        manager.saved = false;
-        manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
 
+        // Iterate through the list of NPCs
+        foreach (NPCdialog npc in npcArray)
+        {
+            manager.distanceNPC = Vector2.Distance(manager.player.transform.position, npc.transform.position);
+            if (manager.distanceNPC < 3)
+            {
+                manager.closestNPC = npc.gameObject;
+                manager.closestDistanceNPC = manager.distanceNPC;
+            }
+        }
+    }
 
+    public void CheckClosestBuilding()
+    {
         manager.closestBuilding = null;
         manager.closestDistanceBuilding = Mathf.Infinity;
 
@@ -216,26 +227,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
-        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
-
-        // Iterate through the list of NPCs
-        foreach (NPCdialog npc in npcArray)
-        {
-            manager.distanceNPC = Vector2.Distance(manager.player.transform.position, npc.transform.position);
-            if (manager.distanceNPC < 3)
-            {
-                manager.closestNPC = npc.gameObject;
-                manager.closestDistanceNPC = manager.distanceNPC;
-            }
-        }
-
-        if (manager.closestDistanceBuilding < 1 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
+        if (manager.closestDistanceBuilding < 2 && manager.closestDistanceBuilding < manager.closestDistanceNPC)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.cyan;
         }
 
-        else if(manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
+        else if (manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.yellow;
         }
@@ -243,7 +240,20 @@ public class PlayerController : MonoBehaviour
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;
         }
+    }
 
+    #region Movement
+    public void Movement(Vector2 directions)
+    {
+        movementX = directions.x;
+        movementY = directions.y;
+
+        manager.saved = false;
+        manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+
+        CheckClosestNPC();
+        CheckClosestBuilding();
 
         if (movementY == 1)
         {

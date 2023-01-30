@@ -1117,6 +1117,7 @@ GameObject:
   - component: {fileID: 830419450}
   - component: {fileID: 830419452}
   - component: {fileID: 830419451}
+  - component: {fileID: 830419453}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1189,6 +1190,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830419449}
   m_CullTransparentMesh: 1
+--- !u!225 &830419453
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830419449}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &926627354 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7306405023611453278, guid: 63b8c2dfcab607743beb6b16afd5a704, type: 3}
@@ -1779,7 +1792,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 479152875}
         m_TargetAssemblyTypeName: Manager, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: LoadGameScene
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1276806508}
@@ -2879,6 +2892,10 @@ PrefabInstance:
       propertyPath: fire
       value: 
       objectReference: {fileID: 28683866}
+    - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
+      propertyPath: uiPanel
+      value: 
+      objectReference: {fileID: 830419450}
     - target: {fileID: 5673940073981796498, guid: 0e94c50a640159b47952300a36140a55, type: 3}
       propertyPath: uiSound
       value: 

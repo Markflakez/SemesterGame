@@ -269,8 +269,8 @@ public class Dialog : MonoBehaviour
     private void CinemachineZoomIn()
     {
         GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
-        float finalSize = 4;
-        float duration = 2;
+        float finalSize = 3;
+        float duration = 1;
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 

@@ -28,14 +28,17 @@ public class Manager : MonoBehaviour
 
     public EventSystem eventSystem;
 
-    [HideInInspector]
-    public Vector3 spawnPos;
+
+    public GameObject startHouseSpawn;
+    public GameObject startHouseOutdoorSpawn;
+    public GameObject eggShopSpawn;
+
+
 
     public AudioClip buttonSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
 
-    public GameObject[] buildings;
     public GameObject closestBuilding;
 
     public Light2D worldTime;
@@ -67,7 +70,11 @@ public class Manager : MonoBehaviour
 
     public bool canEnter = true;
 
+    [HideInInspector]
     public NPCdialog[] npcArray;
+
+    [HideInInspector]
+    public GameObject[] buildings;
 
     public float distanceNPC = 300;
     public GameObject eggPrefab;
@@ -76,6 +83,7 @@ public class Manager : MonoBehaviour
     public Item egg;
     public Item sword;
 
+    public GameObject PlayerBase;
     public Canvas optionsCanvas;
 
     [Header("InGame/Inventory")]
@@ -136,7 +144,7 @@ public class Manager : MonoBehaviour
 
     public bool saved = true;
 
-    public float closestDistanceBuilding = 300;
+    public float closestDistanceBuilding;
 
     public GameObject AvatarIcon;
 
@@ -176,6 +184,8 @@ public class Manager : MonoBehaviour
     public AudioClip ghoulDeathSound;
     public AudioClip eggGroundHit;
     public AudioClip eggEnemyHit;
+    public AudioClip openDoor;
+    public AudioClip closeDoor;
 
     public Button saveButton;
 
@@ -218,6 +228,7 @@ public class Manager : MonoBehaviour
     public GameObject TaskCheck2;
     public GameObject TaskCheck3;
 
+    private Button placeHolderButton;
 
     public GameObject inputName;
 
@@ -255,7 +266,7 @@ public class Manager : MonoBehaviour
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
-        FindInputActions();
+        
     }
 
 
@@ -266,40 +277,8 @@ public class Manager : MonoBehaviour
         {
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
-
-        if (sceneName == "PlayerHouse")
-        {
-            if(PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
-            {
-                StopAllCoroutines();
-                CancelInvoke();
-                if (isPaused)
-                {
-                    PauseGame();
-                }
-                UpdateUIAlpha(1);
-                videoPlayer.gameObject.SetActive(false);
-                blackCanvas.enabled = false;
-                LOADFILE();
-            }
-            else
-            {
-                DeleteSaveFile(file);
-                inputActions.FindAction("Escape").Disable();
-                UpdateUIAlpha(0);
-
-                //SaturationFade();
-                blackCanvas.enabled = true;
-                playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
-                playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
-                
-                Button button = new GameObject().AddComponent<Button>();
-                button.name = "placeHolderButton";
-                SAVEFILE(button);
-                StartCoroutine(PlayIntroSequence());
-            }
-
-        }
+        CheckIfNewGame();
+        FindInputActions();
 
         if (sceneName == "LoadGame")
         {
@@ -313,21 +292,84 @@ public class Manager : MonoBehaviour
 
     }
 
-    public void SpawnPos()
+    private void Update()
     {
-        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
-        playerCamera.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
-        if(sceneName == "InGame")
+        if(Input.GetKeyUp(KeyCode.U))
         {
-            player.GetComponent<PlayerController>().idleState = 0;
-            player.GetComponent<TileSoundPlayer>().enabled = true;
+            PlayerPrefs.DeleteAll();
         }
-        else
+        if(Input.GetKeyUp(KeyCode.Z))
         {
-            player.GetComponent<PlayerController>().idleState = 2;
-            player.GetComponent<TileSoundPlayer>().enabled = false;
+            DeleteSaveFile(file);
+            inputActions.FindAction("Escape").Disable();
+            UpdateUIAlpha(0);
+
+            blackCanvas.enabled = true;
+            placeHolderButton = new GameObject().AddComponent<Button>();
+            placeHolderButton.name = "placeHolderButton";
+
+            player.transform.position = startHouseSpawn.transform.position;
+            playerCamera.transform.position = startHouseSpawn.transform.position;
         }
-        player.GetComponent<PlayerController>().anim.SetFloat("idleState", player.GetComponent<PlayerController>().idleState);
+    }
+
+
+    private void CheckIfNewGame()
+    {
+
+        if (sceneName == "InGame")
+        {
+            if (PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
+            {
+                LoadGame();
+            }
+            else
+            {
+                NewGame();
+            }
+
+        }
+    }
+
+    public void NewGame()
+    {
+        DeleteSaveFile(file);
+        inputActions.FindAction("Escape").Disable();
+        UpdateUIAlpha(0);
+
+        blackCanvas.enabled = true;
+        placeHolderButton = new GameObject().AddComponent<Button>();
+        placeHolderButton.name = "placeHolderButton";
+
+        player.transform.position = startHouseSpawn.transform.position;
+        playerCamera.transform.position = startHouseSpawn.transform.position;
+
+        SAVEFILE(placeHolderButton);
+        StartCoroutine(PlayIntroSequence());
+        EnableDamping();
+    }
+
+    public void LoadGame()
+    {
+        StopAllCoroutines();
+        CancelInvoke();
+        if (isPaused)
+        {
+            PauseGame();
+        }
+        UpdateUIAlpha(1);
+        videoPlayer.gameObject.SetActive(false);
+        blackCanvas.enabled = false;
+        LOADFILE();
+        EnableDamping();
+    }
+
+    private void EnableDamping()
+    {
+        CinemachineVirtualCamera vCam = playerCamera.GetComponent<CinemachineVirtualCamera>();
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_ZDamping = 1;
     }
 
     public IEnumerator PlayIntroSequence()
@@ -537,14 +579,8 @@ public class Manager : MonoBehaviour
         }
         if (sceneSwitch)
         {
-            if(PlayerPrefs.HasKey("SAVE_SCENE" + file) && PlayerPrefs.GetString("SAVE_SCENE" + file) != "PlayerHouse")
-            {
-                StartCoroutine(LOAD_SCENE());
-            }
-            else
-            {
-                SceneManager.LoadScene("PlayerHouse");
-            }
+
+            SceneManager.LoadScene("InGame");
             
         }
         ButtonAnimation(button);
@@ -617,7 +653,7 @@ public class Manager : MonoBehaviour
     private void FindInputActions()
     {
         inputActions.Enable();
-        if (sceneName == "PlayerHouse")
+        if (sceneName == "InGame")
         {
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
             inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().UseItem();
@@ -640,13 +676,12 @@ public class Manager : MonoBehaviour
 
     public void Interact()
     {
-        if (closestDistanceBuilding < 1f)
+        if (closestDistanceBuilding < 2f)
         {
             closestBuilding.GetComponent<Building>().StartCoroutine("Enter");
         }
-        else if (closestNPC != null)
+        else if (closestNPC != null && closestDistanceNPC < 3)
         {
-            Debug.Log(closestNPC.gameObject.name);
             player.GetComponent<Dialog>().OpenChat();
         }
     }
@@ -772,11 +807,11 @@ public class Manager : MonoBehaviour
         sceneSwitch = false;
     }
 
-    public void LoadGame(Button button)
+    public void LoadGameScene(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("LoadGame", button));
+            StartCoroutine(DelaySwitchScene("LoadGameScene", button));
         }
         else if (sceneSwitch)
         {
@@ -818,7 +853,7 @@ public class Manager : MonoBehaviour
             settingsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
-            if (sceneName == "PlayerHouse")
+            if (sceneName == "InGame")
             {
                 quitMenu.SetActive(false);
             }
@@ -834,7 +869,7 @@ public class Manager : MonoBehaviour
         }
         else if(sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
             }
@@ -853,7 +888,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
             }
@@ -872,7 +907,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
             }
@@ -1172,40 +1207,7 @@ public class Manager : MonoBehaviour
         //worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
     }
 
-    public IEnumerator LOAD_SCENE()
-    {
-        string buildingScene = PlayerPrefs.GetString("SAVE_SCENE" + file);
-        SceneManager.LoadScene("PlayerHouse");
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("PlayerHouse");
-        while (!asyncUnload.isDone)
-        {
-            yield return null;
-        }
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildingScene.ToString(), LoadSceneMode.Additive);
-        sceneName = buildingScene;
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-            playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
-        }
-
-        SceneManager.MoveGameObjectToScene(player, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(playerCamera, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(gameSettings.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(postProcessingVolume.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(eventSystem.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SpawnPos();
-        playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
-        playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
-    }
-
-    public void SAVE_SCENE()
-    {
-        PlayerPrefs.SetString("SAVE_SCENE" + file, SceneManager.GetActiveScene().name);
-    }
 
 
 
@@ -1302,7 +1304,6 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_HEALTH();
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
-            SAVE_SCENE();
             SAVE_TIME();
             sceneSwitch = false;
         }
@@ -1437,7 +1438,7 @@ public class Manager : MonoBehaviour
         LOAD_FULLSCREEN();
         LOAD_MUSIC_VOLUME();
         LOAD_SFX_VOLUME();
-        if (sceneName == "PlayerHouse")
+        if (sceneName == "InGame")
         {
             LOAD_FPS();
         }
