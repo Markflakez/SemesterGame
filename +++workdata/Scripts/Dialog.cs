@@ -269,8 +269,8 @@ public class Dialog : MonoBehaviour
     private void CinemachineZoomIn()
     {
         GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
-        float finalSize = 4;
-        float duration = 2;
+        float finalSize = 3;
+        float duration = 1;
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 
@@ -291,7 +291,7 @@ public class Dialog : MonoBehaviour
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
 
-        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens).SetEase(Ease.InOutSine);
+        DOTween.To(() => vcam.m_Lens.OrthographicSize, x => vcam.m_Lens.OrthographicSize = x, finalSize, duration).SetTarget(vcam.m_Lens).SetEase(Ease.InOutSine).OnComplete(() => { player.GetComponent<PlayerController>().CheckClosestBuilding(); player.GetComponent<PlayerController>().CheckClosestBuilding(); });
 
         middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestNPC.transform.position) / 2;
 

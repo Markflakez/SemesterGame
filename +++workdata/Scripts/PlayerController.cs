@@ -190,6 +190,60 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("idleState", idleState);
     }
 
+    public void CheckClosestNPC()
+    {
+        manager.closestNPC = null;
+        manager.closestDistanceNPC = Mathf.Infinity;
+
+        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
+
+        // Iterate through the list of NPCs
+        foreach (NPCdialog npc in npcArray)
+        {
+            manager.distanceNPC = Vector2.Distance(manager.player.transform.position, npc.transform.position);
+            if (manager.distanceNPC < 3)
+            {
+                manager.closestNPC = npc.gameObject;
+                manager.closestDistanceNPC = manager.distanceNPC;
+            }
+        }
+    }
+
+    public void CheckClosestBuilding()
+    {
+        manager.closestBuilding = null;
+        manager.closestDistanceBuilding = Mathf.Infinity;
+
+        Building[] buildings = FindObjectsOfType<Building>();
+
+        // Iterate through the list of buildings
+        foreach (Building building in buildings)
+        {
+            float distance = Vector2.Distance(manager.player.transform.position, building.transform.position);
+            if (distance < manager.closestDistanceBuilding)
+            {
+                manager.closestBuilding = building.gameObject;
+                manager.closestDistanceBuilding = distance;
+            }
+        }
+
+        if (manager.closestDistanceBuilding < 2 && manager.closestDistanceBuilding < manager.closestDistanceNPC && manager.playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.cyan;
+        }
+
+        else if (manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding && manager.playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.yellow;
+        }
+        else
+        {
+            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;
+        }
+    }
+
+
+
     #region Movement
     public void Movement(Vector2 directions)
     {
@@ -197,43 +251,14 @@ public class PlayerController : MonoBehaviour
         movementY = directions.y;
 
         manager.saved = false;
-        manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+        if (!manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("textBlinking"))
+            manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().Play("textBlinking");
 
 
-        bool allValuesLower = false;
 
-        foreach (NPCdialog script in FindObjectsOfType<NPCdialog>())
-        {
-            if (script.distance < 3)
-            {
-                allValuesLower = true;
-                break;
-            }
-        }
-        
-        float maxDistance = 2f;
-        Building[] objectsWithScript = FindObjectsOfType<Building>();
-        foreach (Building obj in objectsWithScript)
-        {
-            if (obj != this)
-            {
-                float distance = Vector3.Distance(gameObject.transform.position, obj.transform.position);
-                if (distance <= maxDistance)
-                {
-                    buildingInRange = true;
-                }
-            }
-        }
-
-
-        if (buildingInRange)
-        {
-            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-        }
-        else if(!buildingInRange)
-        {
-            manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = manager.uiFontColorDisabled;  
-        }
+        CheckClosestNPC();
+        CheckClosestBuilding();
 
         if (movementY == 1)
         {
@@ -348,26 +373,36 @@ public class PlayerController : MonoBehaviour
 
     public void DropItem()
     {
+        //Checks if the game is not paused
         if (!manager.isPaused)
         {
+            //Checks if the player can drop an item and the selected slot has an item count greater than 0
             if (canDropItem && inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().count > 0)
             {
+                //Marks the item as dropped
                 inventoryManager.inventorySlots[inventoryManager.selectedSlot].GetComponentInChildren<InventoryItem>().item.isDropped = true;
+
+                //Checks if the selected item is an egg
                 if (inventoryManager.selectedItemName == "Egg")
                 {
+                    //Spawns a egg prefab
                     GameObject dropped = manager.eggPrefab;
                     StartCoroutine(activateTrigger(dropped));
-
                 }
+                //Checks if the selected item is a sword
                 else if (inventoryManager.selectedItemName == "Sword")
                 {
+                    //Spawns a sword prefab
                     GameObject dropped = manager.swordPrefab;
                     StartCoroutine(activateTrigger(dropped));
                 }
+                //Removes the item that is currently selected from the inventory
                 inventoryManager.RemoveItem(manager.items[inventoryManager.selectedSlot]);
+                //Prevents the player from dropping another item for a short period of time
                 canDropItem = false;
                 Invoke("canDropItemCooldown", .125f);
             }
+            //Checks if the selected item is still available
             inventoryManager.CheckSelectedItem();
         }
     }

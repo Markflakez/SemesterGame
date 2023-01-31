@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player");
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
-        eggHealthRadiation = GameObject.Find("Bars").GetComponent<EggHealthRadiation>();
+        eggHealthRadiation = GameObject.Find("Manager").gameObject.GetComponent<Manager>().eggHealthRadiation;
 
         colliderPosObj = new GameObject();
         colliderPosObj.transform.parent = transform;
@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
 
             if (distance < attackRange && !attackCooldown)
             {
-                Attack();
+                StartCoroutine(Attack());
             }
 
             if (enemyAI.reachedDestination && !hasBeenAttacked)
@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
         enemyAI.maxSpeed = walKSpeed;
     }
 
-    private void Attack()
+    private IEnumerator Attack()
     {
         if(player.transform.position.x > gameObject.transform.position.x)
         {
@@ -141,7 +141,12 @@ public class Enemy : MonoBehaviour
 
         anim.Play("GhoulAttack");
         eggHealthRadiation.Damage(25);
-        Invoke("CanAttack", 2);
+        while(enemyAI.reachedDestination)
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(1);
+        CanAttack();
     }
 
     private void CanAttack()

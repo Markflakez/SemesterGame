@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5567440636418380241}
   - component: {fileID: 5567440636418380243}
   m_Layer: 0
-  m_Name: ENTERBUILDING
+  m_Name: SwitchBuilding
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 39
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5567440636418380243
 MonoBehaviour:
@@ -45,4 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasEntered: 0
+  spawnNextScene: {x: 0, y: 0, z: 0}
   buildingScene: PlayerHouse
+  currentScene: 

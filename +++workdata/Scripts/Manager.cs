@@ -17,149 +17,9 @@ using UnityEngine.Rendering;
 
 public class Manager : MonoBehaviour
 {
-    [Header("Main Menu/InGame")]
-
-    public GameObject settingsMenu;
-    public GameObject quitMenu;
-    public GameObject mainMenuQ;
-    public Toggle fullscreen;
-    public Toggle fps;
-    public AudioSource uiSound;
-
-    public EventSystem eventSystem;
-
-    [HideInInspector]
-    public Vector3 spawnPos;
-
     public AudioClip buttonSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
-
-    public GameObject[] buildings;
-    private GameObject closestBuilding;
-
-    public Light2D worldTime;
-
-    public Canvas mainCanvas;
-
-    [HideInInspector]
-    public int file;
-
-    private string activeSceneName;
-
-    //All three Files for saving/loading gameStates
-    public GameObject saveFile1;
-    public GameObject saveFile2;
-    public GameObject saveFile3;
-
-    [Header("MainMenu")]
-    public GameObject creditsMenu;
-    public GameObject creditsButton;
-
-    [Header("InGame")]
-    public GameObject pauseMenu;
-    public GameObject questLog;
-    public TextMeshProUGUI questText;
-    public GameObject questAvatar;
-    public TextMeshProUGUI questHeaderText;
-    public InventoryManager inventoryManager;
-
-
-    public bool canEnter = true;
-
-    public NPCdialog[] npcArray;
-
-    public float distanceNPC;
-    public GameObject eggPrefab;
-    public GameObject swordPrefab;
-
-    public Item egg;
-    public Item sword;
-
-    public Canvas optionsCanvas;
-
-    [Header("InGame/Inventory")]
-    public GameObject backDrop;
-    public GameObject inventoryMain;
-    public GameObject inventoryHotbar;
-    public GameObject inventoryHotbarBackBoard;
-    public GameObject mainMenuBackBoard;
-
-    public GameObject graphicsPanel;
-    public GameObject controlsPanel;
-    public GameObject audioPanel;
-
-    public CinemachineBrain brain;
-
-    public float buttonDelay = .15f;
-    private GameObject saveFiles;
-    public GameSettings gameSettings;
-    public GameObject dialogBox;
-    public EggHealthRadiation eggHealthRadiation;
-    public GameObject player;
-    private TextMeshProUGUI savedTimeDate;
-    private TMP_InputField fileName;
-
-    public bool sceneSwitch = false;
-    private bool delaySwitchScene = false;
-
-    private Vector2 playerPos;
-
-    public Volume postProcessingVolume;
-    public ColorAdjustments colorAdjustments;
-    public ChromaticAberration chromaticAberration;
-    public RectTransform uiPanel;
-
-    public GameObject eggFront;
-    public GameObject eggLeft;
-    public GameObject eggRight;
-    public GameObject eggBack;
-
-    public GameObject QuestPanel1;
-    public GameObject QuestPanel2;
-    public GameObject QuestPanel3;
-
-    public Image blackCanvas;
-
-    public RectTransform mainInventoryBG2;
-
-    public Color uiFontColor;
-    public Color uiFontColorDisabled;
-    public Color uiFontColorBrown;
-    public Color radiationColor;
-
-    public Sprite invisibleSprite;
-    public Image itemHovered;
-    public TextMeshProUGUI itemNameHovered;
-    public TextMeshProUGUI itemAttackDamage;
-    public TextMeshProUGUI itemhealthBoost;
-
-    public bool saved = true;
-
-    public float closestDistanceBuilding;
-
-    public GameObject AvatarIcon;
-
-    public string sceneName;
-
-    public InputActionAsset inputActions;
-
-
-    public GameObject blackCircle;
-
-    public Item[] items;
-    private Item currentItem;
-
-    public bool isPaused = false;
-    public GameObject itemIndicators;
-    public GameObject eggIndicator;
-
-    public bool canThrowEgg = true;
-
-
-    public bool backgroundburning = true;
-
-    public AudioSource inGameSound;
     public AudioClip cough;
     public AudioClip piano;
     public AudioClip eggThrowSound;
@@ -174,14 +34,147 @@ public class Manager : MonoBehaviour
     public AudioClip ghoulDeathSound;
     public AudioClip eggGroundHit;
     public AudioClip eggEnemyHit;
+    public AudioClip openDoor;
+    public AudioClip closeDoor;
+
+
+    public AudioSource uiSound;
+    public AudioSource inGameSound;
 
     public Button saveButton;
-
-    public TextMeshProUGUI escControl;
+    public Canvas mainCanvas;
+    public Canvas optionsCanvas;
+    public EventSystem eventSystem;
+    public Image blackCanvas;
+    public Image itemHovered;
+    public RectTransform mainInventoryBG2;
+    public RectTransform uiPanel;
+    public Sprite invisibleSprite;
     public TextMeshProUGUI attackControl;
-    public TextMeshProUGUI interactControl;
-    public TextMeshProUGUI useItemControl;
     public TextMeshProUGUI dropItemControl;
+    public TextMeshProUGUI useItemControl;
+    public TextMeshProUGUI escControl;
+    public TextMeshProUGUI interactControl;
+    public TextMeshProUGUI itemAttackDamage;
+    public TextMeshProUGUI itemhealthBoost;
+    public TextMeshProUGUI itemNameHovered;
+    public TextMeshProUGUI questHeaderText;
+    public TextMeshProUGUI questText;
+    public TextMeshProUGUI savedTimeDate;
+    public Toggle fullscreen;
+    public Toggle fps;
+    public TMP_InputField fileName;
+
+    public GameObject AvatarIcon;
+    public GameObject blackCircle;
+    public GameObject backDrop;
+    public GameObject closestBuilding;
+    public GameObject creditsButton;
+    public GameObject creditsMenu;
+    public GameObject dialogBox;
+    public GameObject eggBack;
+    public GameObject eggFront;
+    public GameObject eggIndicator;
+    public GameObject eggLeft;
+    public GameObject eggPrefab;
+    public GameObject eggRight;
+    public GameObject eggShopSpawn;
+    public GameObject inventoryHotbar;
+    public GameObject inventoryHotbarBackBoard;
+    public GameObject inventoryMain;
+    public GameObject itemIndicators;
+    public GameObject mainMenuBackBoard;
+    public GameObject mainMenuQ;
+    public GameObject pauseMenu;
+    public GameObject player;
+    public GameObject QuestPanel1;
+    public GameObject QuestPanel2;
+    public GameObject QuestPanel3;
+    public GameObject questAvatar;
+    public GameObject questLog;
+    public GameObject quitMenu;
+    public GameObject saveFile1;
+    public GameObject saveFile2;
+    public GameObject saveFile3;
+    public GameObject saveFiles;
+    public GameObject settingsMenu;
+    public GameObject startHouseOutdoorSpawn;
+    public GameObject startHouseSpawn;
+    public GameObject swordPrefab;
+    public GameObject PlayerBase;
+    public GameObject graphicsPanel;
+    public GameObject middleElements;
+
+    public ChromaticAberration chromaticAberration;
+    public ColorAdjustments colorAdjustments;
+    public Color radiationColor;
+    public Color uiFontColor;
+    public Color uiFontColorBrown;
+    public Color uiFontColorDisabled;
+
+    public InventoryManager inventoryManager;
+
+    public Item egg;
+    public Item sword;
+    public Item[] items;
+    public Item currentItem;
+
+    public GameObject worldTime;
+    public GameObject lightWhileBuilding;
+
+    public NPCdialog[] npcArray;
+    public GameObject[] buildings;
+
+    [HideInInspector]
+    public int file;
+
+    private string activeSceneName;
+
+
+
+    public bool canEnter = true;
+
+    public float distanceNPC = 300;
+
+    public GameObject controlsPanel;
+    public GameObject audioPanel;
+
+    public CinemachineBrain brain;
+
+    public float buttonDelay = .15f;
+    public GameSettings gameSettings;
+
+    public EggHealthRadiation eggHealthRadiation;
+
+
+    public bool sceneSwitch = false;
+    private bool delaySwitchScene = false;
+
+    private Vector2 playerPos;
+
+    public Volume postProcessingVolume;
+
+    public bool saved = true;
+
+    public float closestDistanceBuilding;
+
+
+    public string sceneName;
+
+    public InputActionAsset inputActions;
+
+
+
+    public bool isPaused = false;
+
+
+    public bool canThrowEgg = true;
+
+
+    public float closestDistanceNPC;
+
+    public bool backgroundburning = true;
+
 
     public GameObject chalkCheckmark;
     public GameObject candlesCheckmark;
@@ -216,6 +209,7 @@ public class Manager : MonoBehaviour
     public GameObject TaskCheck2;
     public GameObject TaskCheck3;
 
+    private Button placeHolderButton;
 
     public GameObject inputName;
 
@@ -236,10 +230,12 @@ public class Manager : MonoBehaviour
     public Transform originalSlot;
 
 
+    public int progress;
+
     private void Awake()
     {
         sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName == "PlayerHouse")
+        if (sceneName != "MainMenu" && sceneName != "LoadGame")
         {
             file = PlayerPrefs.GetInt("CurrentFile");
         }
@@ -253,7 +249,7 @@ public class Manager : MonoBehaviour
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
-        FindInputActions();
+        
     }
 
 
@@ -264,40 +260,8 @@ public class Manager : MonoBehaviour
         {
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
+        CheckIfNewGame();
 
-        if (sceneName == "PlayerHouse")
-        {
-            if(PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
-            {
-                StopAllCoroutines();
-                CancelInvoke();
-                if (isPaused)
-                {
-                    PauseGame();
-                }
-                UpdateUIAlpha(1);
-                videoPlayer.gameObject.SetActive(false);
-                blackCanvas.enabled = false;
-                LOADFILE();
-            }
-            else
-            {
-                DeleteSaveFile(file);
-                inputActions.FindAction("Escape").Disable();
-                UpdateUIAlpha(0);
-
-                //SaturationFade();
-                blackCanvas.enabled = true;
-                playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 5;
-                playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
-                
-                Button button = new GameObject().AddComponent<Button>();
-                button.name = "placeHolderButton";
-                SAVEFILE(button);
-                StartCoroutine(PlayIntroSequence());
-            }
-
-        }
 
         if (sceneName == "LoadGame")
         {
@@ -311,57 +275,91 @@ public class Manager : MonoBehaviour
 
     }
 
-    public void SpawnPos()
+    private void CheckIfNewGame()
     {
-        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
-        playerCamera.transform.position = new Vector3(PlayerPrefs.GetFloat("PosX" + file), PlayerPrefs.GetFloat("PosY" + file), 0);
-        if(sceneName == "InGame")
+
+        if (sceneName == "InGame")
         {
-            player.GetComponent<PlayerController>().idleState = 0;
+            if (PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
+            {
+                LoadGame();
+            }
+            else
+            {
+                playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 0, 200);
+                FindInputActions();
+                NewGame();
+            }
+
         }
-        else
-        {
-            player.GetComponent<PlayerController>().idleState = 2;
-        }
-        player.GetComponent<PlayerController>().anim.SetFloat("idleState", player.GetComponent<PlayerController>().idleState);
+    }
+
+    public void NewGame()
+    {
+        DeleteSaveFile(file);
+        UpdateUIAlpha(0);
+
+        blackCanvas.enabled = true;
+        placeHolderButton = new GameObject().AddComponent<Button>();
+        placeHolderButton.name = "placeHolderButton";
+
+        player.transform.position = startHouseSpawn.transform.position;
+        playerCamera.transform.position = startHouseSpawn.transform.position;
+
+        SAVEFILE(placeHolderButton);
+        StartCoroutine(PlayIntroSequence());
+        EnableDamping();
+    }
+
+    public void LoadGame()
+    {
+        StopAllCoroutines();
+        CancelInvoke();
+        UpdateUIAlpha(1);
+        videoPlayer.gameObject.SetActive(false);
+        inputName.SetActive(false);
+        blackCanvas.enabled = false;
+        middleElements.SetActive(true);
+        LOADFILE();
+        EnableDamping();
+        FindInputActions();
+    }
+
+    private void EnableDamping()
+    {
+        CinemachineVirtualCamera vCam = playerCamera.GetComponent<CinemachineVirtualCamera>();
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+        vCam.GetCinemachineComponent<CinemachineTransposer>().m_ZDamping = 1;
     }
 
     public IEnumerator PlayIntroSequence()
     {
-        PauseGame();
         videoPlayer.gameObject.SetActive(true);
         videoPlayer.enabled = true;
         videoPlayer.Play();
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(8);
+        playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 0, -10);
         inputName.SetActive(true);
-        yield return new WaitForSecondsRealtime(12);
-        videoPlayer.transform.position = new Vector3(9999, 0, 0);
-
-
-
-        blackCanvas.DOColor(Color.clear, 5f).SetEase(Ease.Linear);
-        yield return new WaitForSecondsRealtime(2);
-        
-        yield return new WaitForSecondsRealtime(7);
-        blackCanvas.enabled = false;
-
+        inputName.GetComponentInChildren<TMP_InputField>().Select();
+        videoPlayer.gameObject.transform.position = new Vector3(9999, 0, 0);
     }
 
     public void OnEnterName(TMP_InputField inputField)
     {
         if (inputField.text != "" && inputName.activeSelf)
         {
+            progress = 1;
             inputActions.FindAction("Enter").Disable();
-            inputActions.FindAction("Escape").Enable();
+            blackCanvas.gameObject.SetActive(true);
+            inputName.SetActive(false);
             PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
             player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
             videoPlayer.gameObject.SetActive(false);
-
-            PauseGame();
-            inputName.SetActive(false);
             float currentUIAlpha = 0;
             DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, 1f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
-
+            FindInputActions();
+            blackCanvas.DOColor(Color.clear, 3f).SetEase(Ease.Linear).OnComplete(() => blackCanvas.gameObject.SetActive(false));
         }
     }
 
@@ -533,14 +531,8 @@ public class Manager : MonoBehaviour
         }
         if (sceneSwitch)
         {
-            if(PlayerPrefs.HasKey("SAVE_SCENE" + file) && PlayerPrefs.GetString("SAVE_SCENE" + file) != "PlayerHouse")
-            {
-                StartCoroutine(LOAD_SCENE());
-            }
-            else
-            {
-                SceneManager.LoadScene("PlayerHouse");
-            }
+
+            SceneManager.LoadScene("InGame");
             
         }
         ButtonAnimation(button);
@@ -557,6 +549,8 @@ public class Manager : MonoBehaviour
         PlayerPrefs.DeleteKey("PLAYER_HUNGER-" + file);
         PlayerPrefs.DeleteKey("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file);
         PlayerPrefs.DeleteKey("FILETIME-" + file);
+        PlayerPrefs.DeleteKey("SAVE_SCENE" + file);
+        PlayerPrefs.DeleteKey("Progress" + file);
 
         int i = 1;
         string[] keysDropped = { "droppedItem", "droppedItemPosX", "droppedItemPosY" };
@@ -611,69 +605,40 @@ public class Manager : MonoBehaviour
 
     private void FindInputActions()
     {
-        inputActions.Enable();
-        if (sceneName == "PlayerHouse")
+        
+
+        if (progress == 0)
         {
+            inputActions.FindAction("Enter").Enable();
+            inputActions.FindAction("Enter").performed += ctx => OnEnterName(inputName.GetComponentInChildren<TMP_InputField>());
+        }
+        else
+        {
+            inputActions.Enable();
+            inputActions.FindAction("Enter").Disable();
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
             inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().UseItem();
             inputActions.FindAction("DropItem").performed += ctx => player.GetComponent<PlayerController>().DropItem();
             inputActions.FindAction("Dash").performed += ctx => player.GetComponent<PlayerController>().StartCoroutine(player.GetComponent<PlayerController>().Dash());
             inputActions.FindAction("Move").performed += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
             inputActions.FindAction("Move").canceled += ctx => player.GetComponent<PlayerController>().Movement(ctx.ReadValue<Vector2>());
-            inputActions.FindAction("Interact").performed += ctx => EnterBuilding();
+            inputActions.FindAction("Interact").performed += ctx => Interact();
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
-            inputActions.FindAction("Enter").performed += ctx => OnEnterName(inputName.GetComponentInChildren<TMP_InputField>());
         }
-        else
-        {
-            inputActions.FindAction("Escape").performed += ctx => EscapeInput();
-        }
+        
     }
 
 
-    public void EnterBuilding()
+    public void Interact()
     {
-        closestBuilding = null;
-        closestDistanceBuilding = Mathf.Infinity;
-
-        Building[] buildings = FindObjectsOfType<Building>();
-
-        // Iterate through the list of buildings
-        foreach (Building building in buildings)
-        {
-            float distance = Vector2.Distance(player.transform.position, building.transform.position);
-            if (distance < closestDistanceBuilding)
-            {
-                closestBuilding = building.gameObject;
-                closestDistanceBuilding = distance;
-            }
-        }
-
-        closestNPC = null;
-        float closestDistance = Mathf.Infinity;
-
-        NPCdialog[] npcArray = FindObjectsOfType<NPCdialog>();
-
-        // Iterate through the list of NPCs
-        foreach (NPCdialog npc in npcArray)
-        {
-            distanceNPC = Vector2.Distance(player.transform.position, npc.transform.position);
-            if (distanceNPC < closestDistance)
-            {
-                closestNPC = npc.gameObject;
-                closestDistance = distanceNPC;
-            }
-        }
-
-        if (closestDistanceBuilding < 1f)
+        if (closestDistanceBuilding < 2f && playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
             closestBuilding.GetComponent<Building>().StartCoroutine("Enter");
         }
-        else if (closestNPC != null)
+        else if (closestNPC != null && closestDistanceNPC < 3 && playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
-            Debug.Log(closestNPC.gameObject.name);
             player.GetComponent<Dialog>().OpenChat();
         }
     }
@@ -681,28 +646,37 @@ public class Manager : MonoBehaviour
 
     public void EscapeInput()
     {
+        //Checks if the current scene is not "LoadGame" or "MainMenu"
         if (SceneManager.GetActiveScene().name != "LoadGame" && SceneManager.GetActiveScene().name != "MainMenu")
         {
+            //Checks if neither inventory or dialog box is active
             if (!inventoryMain.activeSelf && !dialogBox.activeSelf)
             {
+                //Checks if the game is not paused
                 if (!isPaused)
                 {
+                    //Hides all panels, pause the game, and activates the pause menu
                     HideAllPanels();
                     PauseGame();
                     pauseMenu.SetActive(true);
                 }
                 else
                 {
+                    //Hides all panels and pause the game
                     HideAllPanels();
                     PauseGame();
                 }
             }
+            //Checks if the inventory is active
             else if (inventoryMain.activeSelf)
             {
+                //Opens the inventory
                 OpenInventory();
             }
+            //Checks if the dialog box is active
             else if (dialogBox.activeSelf)
             {
+                //Closes the chat
                 player.gameObject.GetComponent<Dialog>().CloseChat();
             }
         }
@@ -790,11 +764,11 @@ public class Manager : MonoBehaviour
         sceneSwitch = false;
     }
 
-    public void LoadGame(Button button)
+    public void LoadGameScene(Button button)
     {
         if (!sceneSwitch)
         {
-            StartCoroutine(DelaySwitchScene("LoadGame", button));
+            StartCoroutine(DelaySwitchScene("LoadGameScene", button));
         }
         else if (sceneSwitch)
         {
@@ -836,7 +810,7 @@ public class Manager : MonoBehaviour
             settingsMenu.SetActive(false);
             mainMenuQ.SetActive(false);
 
-            if (sceneName == "PlayerHouse")
+            if (sceneName == "InGame")
             {
                 quitMenu.SetActive(false);
             }
@@ -852,9 +826,12 @@ public class Manager : MonoBehaviour
         }
         else if(sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
+                graphicsPanel.SetActive(true);
+                audioPanel.SetActive(false);
+                controlsPanel.SetActive(false);
             }
 
             settingsMenu.SetActive(true);
@@ -871,7 +848,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
             }
@@ -890,7 +867,7 @@ public class Manager : MonoBehaviour
         }
         else if (sceneSwitch)
         {
-            if (SceneManager.GetActiveScene().name == "PlayerHouse")
+            if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
             }
@@ -1095,7 +1072,9 @@ public class Manager : MonoBehaviour
         LOAD_PLAYER_RADIATION();
         LOAD_PLAYER_HUNGER();
         LOAD_TIME();
+        LOAD_PROGRESS();
         player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
+        FindInputActions();
     }
 
     public void LOAD_WORLDSPACEITEMS()
@@ -1190,40 +1169,7 @@ public class Manager : MonoBehaviour
         //worldTime.gameObject.GetComponent<DayNightCycle>().currentTime = PlayerPrefs.GetFloat("CURRENT-TIME" + file);
     }
 
-    public IEnumerator LOAD_SCENE()
-    {
-        string buildingScene = PlayerPrefs.GetString("SAVE_SCENE" + file);
-        SceneManager.LoadScene("PlayerHouse");
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("PlayerHouse");
-        while (!asyncUnload.isDone)
-        {
-            yield return null;
-        }
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildingScene.ToString(), LoadSceneMode.Additive);
-        sceneName = buildingScene;
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-            playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = false;
-        }
-
-        SceneManager.MoveGameObjectToScene(player, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(playerCamera, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(mainCanvas.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(gameSettings.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(postProcessingVolume.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SceneManager.MoveGameObjectToScene(eventSystem.gameObject, SceneManager.GetSceneByName(buildingScene));
-        SpawnPos();
-        playerCamera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
-        playerCamera.GetComponent<CinemachineVirtualCamera>().enabled = true;
-    }
-
-    public void SAVE_SCENE()
-    {
-        PlayerPrefs.SetString("SAVE_SCENE" + file, SceneManager.GetActiveScene().name);
-    }
 
 
 
@@ -1313,6 +1259,8 @@ public class Manager : MonoBehaviour
 
             DateTime currentDate = DateTime.Today;
             PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+            saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().Play("default");
+
 
             SAVE_INVENTORY();
             SAVE_WORLDSPACE_ITEMS();
@@ -1320,8 +1268,8 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_HEALTH();
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
-            SAVE_SCENE();
             SAVE_TIME();
+            SAVE_PROGRESS();
             sceneSwitch = false;
         }
     }
@@ -1351,6 +1299,23 @@ public class Manager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    void SAVE_PROGRESS()
+    {
+        if (progress > 0)
+        {
+            PlayerPrefs.SetInt("PROGRESS" + file, progress);
+        }
+    }
+
+    void LOAD_PROGRESS()
+    {
+        progress = PlayerPrefs.GetInt("PROGRESS" + file);
+        if(progress == 0)
+        {
+            progress = 1;
+        }
+        FindInputActions();
+    }
 
     void SAVE_PLAYER_LOCATION()
     {
@@ -1455,7 +1420,7 @@ public class Manager : MonoBehaviour
         LOAD_FULLSCREEN();
         LOAD_MUSIC_VOLUME();
         LOAD_SFX_VOLUME();
-        if (sceneName == "PlayerHouse")
+        if (sceneName == "InGame")
         {
             LOAD_FPS();
         }

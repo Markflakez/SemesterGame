@@ -431,10 +431,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.65}
+  m_Offset: {x: 0, y: 0.64787686}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -445,7 +445,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.5}
+  m_Size: {x: 1, y: 1.3089275}
   m_EdgeRadius: 0
 --- !u!114 &4059293074362316269
 MonoBehaviour:
@@ -459,6 +459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aab865d1901aef47bb5d66d81bf4c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 0
   npcName: Richardt
   randomInt: 0
   dialog:
@@ -475,8 +476,6 @@ MonoBehaviour:
   - player
   - npc
   - player
-  npcSprite: {fileID: 786098734, guid: b45cf14ace82f3243a2019f737ebfd89, type: 3}
-  eIcon: {fileID: 0}
   manager: {fileID: 0}
   dialogText: {fileID: 752320831033244836}
   randomSentencees: []

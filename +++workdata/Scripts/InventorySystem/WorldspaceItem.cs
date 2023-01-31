@@ -8,11 +8,11 @@ public class WorldspaceItem : MonoBehaviour
     [SerializeField] private BoxCollider2D bc;
 
     public Item item;
-    private InventoryManager inventoryManager;
+    private Manager manager;
 
     private void Awake()
     {
-        inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
     private void Start()
@@ -24,7 +24,7 @@ public class WorldspaceItem : MonoBehaviour
     {
         if(collision.gameObject.name == "Player")
         {
-            inventoryManager.AddItem(item);
+            manager.inventoryManager.AddItem(item);
             Invoke("DestroyItself", .01f);
         }
         return;
