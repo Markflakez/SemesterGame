@@ -227,12 +227,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (manager.closestDistanceBuilding < 2 && manager.closestDistanceBuilding < manager.closestDistanceNPC)
+        if (manager.closestDistanceBuilding < 2 && manager.closestDistanceBuilding < manager.closestDistanceNPC && manager.playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.cyan;
         }
 
-        else if (manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding)
+        else if (manager.closestDistanceNPC < 3 && manager.closestDistanceNPC < manager.closestDistanceBuilding && manager.playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
             manager.interactControl.GetComponentInChildren<TextMeshProUGUI>().color = Color.yellow;
         }
@@ -242,6 +242,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
     #region Movement
     public void Movement(Vector2 directions)
     {
@@ -249,7 +251,10 @@ public class PlayerController : MonoBehaviour
         movementY = directions.y;
 
         manager.saved = false;
-        manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+        if (!manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("textBlinking"))
+            manager.saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().Play("textBlinking");
+
 
 
         CheckClosestNPC();

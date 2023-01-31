@@ -56,6 +56,10 @@ public class NPCdialog : MonoBehaviour
             dialogText.text = "";
             dialogText.text = randomSentencees[Random.Range(0, randomSentencees.Length)];
         }
+        else
+        {
+            dialogBox.SetActive(false);
+        }
     }
 
 

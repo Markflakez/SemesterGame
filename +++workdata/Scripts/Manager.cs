@@ -17,159 +17,9 @@ using UnityEngine.Rendering;
 
 public class Manager : MonoBehaviour
 {
-    [Header("Main Menu/InGame")]
-
-    public GameObject settingsMenu;
-    public GameObject quitMenu;
-    public GameObject mainMenuQ;
-    public Toggle fullscreen;
-    public Toggle fps;
-    public AudioSource uiSound;
-
-    public EventSystem eventSystem;
-
-
-    public GameObject startHouseSpawn;
-    public GameObject startHouseOutdoorSpawn;
-    public GameObject eggShopSpawn;
-
-
-
     public AudioClip buttonSound;
     public AudioClip buttonHover;
     public AudioClip buttonClick;
-
-    public GameObject closestBuilding;
-
-    public Light2D worldTime;
-
-    public Canvas mainCanvas;
-
-    [HideInInspector]
-    public int file;
-
-    private string activeSceneName;
-
-    //All three Files for saving/loading gameStates
-    public GameObject saveFile1;
-    public GameObject saveFile2;
-    public GameObject saveFile3;
-
-    [Header("MainMenu")]
-    public GameObject creditsMenu;
-    public GameObject creditsButton;
-
-    [Header("InGame")]
-    public GameObject pauseMenu;
-    public GameObject questLog;
-    public TextMeshProUGUI questText;
-    public GameObject questAvatar;
-    public TextMeshProUGUI questHeaderText;
-    public InventoryManager inventoryManager;
-
-
-    public bool canEnter = true;
-
-    [HideInInspector]
-    public NPCdialog[] npcArray;
-
-    [HideInInspector]
-    public GameObject[] buildings;
-
-    public float distanceNPC = 300;
-    public GameObject eggPrefab;
-    public GameObject swordPrefab;
-
-    public Item egg;
-    public Item sword;
-
-    public GameObject PlayerBase;
-    public Canvas optionsCanvas;
-
-    [Header("InGame/Inventory")]
-    public GameObject backDrop;
-    public GameObject inventoryMain;
-    public GameObject inventoryHotbar;
-    public GameObject inventoryHotbarBackBoard;
-    public GameObject mainMenuBackBoard;
-
-    public GameObject graphicsPanel;
-    public GameObject controlsPanel;
-    public GameObject audioPanel;
-
-    public CinemachineBrain brain;
-
-    public float buttonDelay = .15f;
-    private GameObject saveFiles;
-    public GameSettings gameSettings;
-    public GameObject dialogBox;
-    public EggHealthRadiation eggHealthRadiation;
-    public GameObject player;
-    private TextMeshProUGUI savedTimeDate;
-    private TMP_InputField fileName;
-
-    public bool sceneSwitch = false;
-    private bool delaySwitchScene = false;
-
-    private Vector2 playerPos;
-
-    public Volume postProcessingVolume;
-    public ColorAdjustments colorAdjustments;
-    public ChromaticAberration chromaticAberration;
-    public RectTransform uiPanel;
-
-    public GameObject eggFront;
-    public GameObject eggLeft;
-    public GameObject eggRight;
-    public GameObject eggBack;
-
-    public GameObject QuestPanel1;
-    public GameObject QuestPanel2;
-    public GameObject QuestPanel3;
-
-    public Image blackCanvas;
-
-    public RectTransform mainInventoryBG2;
-
-    public Color uiFontColor;
-    public Color uiFontColorDisabled;
-    public Color uiFontColorBrown;
-    public Color radiationColor;
-
-    public Sprite invisibleSprite;
-    public Image itemHovered;
-    public TextMeshProUGUI itemNameHovered;
-    public TextMeshProUGUI itemAttackDamage;
-    public TextMeshProUGUI itemhealthBoost;
-
-    public bool saved = true;
-
-    public float closestDistanceBuilding;
-
-    public GameObject AvatarIcon;
-
-    public string sceneName;
-
-    public InputActionAsset inputActions;
-
-
-    public GameObject blackCircle;
-
-    public Item[] items;
-    private Item currentItem;
-
-    public bool isPaused = false;
-    public GameObject itemIndicators;
-    public GameObject eggIndicator;
-
-    public bool canThrowEgg = true;
-
-
-    public float closestDistanceNPC;
-
-    public bool backgroundburning = true;
-
-    public AudioSource inGameSound;
     public AudioClip cough;
     public AudioClip piano;
     public AudioClip eggThrowSound;
@@ -187,13 +37,144 @@ public class Manager : MonoBehaviour
     public AudioClip openDoor;
     public AudioClip closeDoor;
 
-    public Button saveButton;
 
-    public TextMeshProUGUI escControl;
+    public AudioSource uiSound;
+    public AudioSource inGameSound;
+
+    public Button saveButton;
+    public Canvas mainCanvas;
+    public Canvas optionsCanvas;
+    public EventSystem eventSystem;
+    public Image blackCanvas;
+    public Image itemHovered;
+    public RectTransform mainInventoryBG2;
+    public RectTransform uiPanel;
+    public Sprite invisibleSprite;
     public TextMeshProUGUI attackControl;
-    public TextMeshProUGUI interactControl;
-    public TextMeshProUGUI useItemControl;
     public TextMeshProUGUI dropItemControl;
+    public TextMeshProUGUI useItemControl;
+    public TextMeshProUGUI escControl;
+    public TextMeshProUGUI interactControl;
+    public TextMeshProUGUI itemAttackDamage;
+    public TextMeshProUGUI itemhealthBoost;
+    public TextMeshProUGUI itemNameHovered;
+    public TextMeshProUGUI questHeaderText;
+    public TextMeshProUGUI questText;
+    public TextMeshProUGUI savedTimeDate;
+    public Toggle fullscreen;
+    public Toggle fps;
+    public TMP_InputField fileName;
+
+    public GameObject AvatarIcon;
+    public GameObject blackCircle;
+    public GameObject backDrop;
+    public GameObject closestBuilding;
+    public GameObject creditsButton;
+    public GameObject creditsMenu;
+    public GameObject dialogBox;
+    public GameObject eggBack;
+    public GameObject eggFront;
+    public GameObject eggIndicator;
+    public GameObject eggLeft;
+    public GameObject eggPrefab;
+    public GameObject eggRight;
+    public GameObject eggShopSpawn;
+    public GameObject inventoryHotbar;
+    public GameObject inventoryHotbarBackBoard;
+    public GameObject inventoryMain;
+    public GameObject itemIndicators;
+    public GameObject mainMenuBackBoard;
+    public GameObject mainMenuQ;
+    public GameObject pauseMenu;
+    public GameObject player;
+    public GameObject QuestPanel1;
+    public GameObject QuestPanel2;
+    public GameObject QuestPanel3;
+    public GameObject questAvatar;
+    public GameObject questLog;
+    public GameObject quitMenu;
+    public GameObject saveFile1;
+    public GameObject saveFile2;
+    public GameObject saveFile3;
+    public GameObject saveFiles;
+    public GameObject settingsMenu;
+    public GameObject startHouseOutdoorSpawn;
+    public GameObject startHouseSpawn;
+    public GameObject swordPrefab;
+    public GameObject PlayerBase;
+    public GameObject graphicsPanel;
+    public GameObject middleElements;
+
+    public ChromaticAberration chromaticAberration;
+    public ColorAdjustments colorAdjustments;
+    public Color radiationColor;
+    public Color uiFontColor;
+    public Color uiFontColorBrown;
+    public Color uiFontColorDisabled;
+
+    public InventoryManager inventoryManager;
+
+    public Item egg;
+    public Item sword;
+    public Item[] items;
+    public Item currentItem;
+
+    public GameObject worldTime;
+    public GameObject lightWhileBuilding;
+
+    public NPCdialog[] npcArray;
+    public GameObject[] buildings;
+
+    [HideInInspector]
+    public int file;
+
+    private string activeSceneName;
+
+
+
+    public bool canEnter = true;
+
+    public float distanceNPC = 300;
+
+    public GameObject controlsPanel;
+    public GameObject audioPanel;
+
+    public CinemachineBrain brain;
+
+    public float buttonDelay = .15f;
+    public GameSettings gameSettings;
+
+    public EggHealthRadiation eggHealthRadiation;
+
+
+    public bool sceneSwitch = false;
+    private bool delaySwitchScene = false;
+
+    private Vector2 playerPos;
+
+    public Volume postProcessingVolume;
+
+    public bool saved = true;
+
+    public float closestDistanceBuilding;
+
+
+    public string sceneName;
+
+    public InputActionAsset inputActions;
+
+
+
+    public bool isPaused = false;
+
+
+    public bool canThrowEgg = true;
+
+
+    public float closestDistanceNPC;
+
+    public bool backgroundburning = true;
+
 
     public GameObject chalkCheckmark;
     public GameObject candlesCheckmark;
@@ -249,6 +230,8 @@ public class Manager : MonoBehaviour
     public Transform originalSlot;
 
 
+    public int progress;
+
     private void Awake()
     {
         sceneName = SceneManager.GetActiveScene().name;
@@ -278,7 +261,7 @@ public class Manager : MonoBehaviour
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
         CheckIfNewGame();
-        FindInputActions();
+
 
         if (sceneName == "LoadGame")
         {
@@ -292,28 +275,6 @@ public class Manager : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyUp(KeyCode.U))
-        {
-            PlayerPrefs.DeleteAll();
-        }
-        if(Input.GetKeyUp(KeyCode.Z))
-        {
-            DeleteSaveFile(file);
-            inputActions.FindAction("Escape").Disable();
-            UpdateUIAlpha(0);
-
-            blackCanvas.enabled = true;
-            placeHolderButton = new GameObject().AddComponent<Button>();
-            placeHolderButton.name = "placeHolderButton";
-
-            player.transform.position = startHouseSpawn.transform.position;
-            playerCamera.transform.position = startHouseSpawn.transform.position;
-        }
-    }
-
-
     private void CheckIfNewGame()
     {
 
@@ -325,6 +286,8 @@ public class Manager : MonoBehaviour
             }
             else
             {
+                playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 0, 200);
+                FindInputActions();
                 NewGame();
             }
 
@@ -334,7 +297,6 @@ public class Manager : MonoBehaviour
     public void NewGame()
     {
         DeleteSaveFile(file);
-        inputActions.FindAction("Escape").Disable();
         UpdateUIAlpha(0);
 
         blackCanvas.enabled = true;
@@ -353,15 +315,14 @@ public class Manager : MonoBehaviour
     {
         StopAllCoroutines();
         CancelInvoke();
-        if (isPaused)
-        {
-            PauseGame();
-        }
         UpdateUIAlpha(1);
         videoPlayer.gameObject.SetActive(false);
+        inputName.SetActive(false);
         blackCanvas.enabled = false;
+        middleElements.SetActive(true);
         LOADFILE();
         EnableDamping();
+        FindInputActions();
     }
 
     private void EnableDamping()
@@ -374,40 +335,31 @@ public class Manager : MonoBehaviour
 
     public IEnumerator PlayIntroSequence()
     {
-        PauseGame();
         videoPlayer.gameObject.SetActive(true);
         videoPlayer.enabled = true;
         videoPlayer.Play();
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(8);
+        playerCamera.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 0, -10);
         inputName.SetActive(true);
-        yield return new WaitForSecondsRealtime(12);
-        videoPlayer.transform.position = new Vector3(9999, 0, 0);
-
-
-
-        blackCanvas.DOColor(Color.clear, 5f).SetEase(Ease.Linear);
-        yield return new WaitForSecondsRealtime(2);
-        
-        yield return new WaitForSecondsRealtime(7);
-        blackCanvas.enabled = false;
-
+        inputName.GetComponentInChildren<TMP_InputField>().Select();
+        videoPlayer.gameObject.transform.position = new Vector3(9999, 0, 0);
     }
 
     public void OnEnterName(TMP_InputField inputField)
     {
         if (inputField.text != "" && inputName.activeSelf)
         {
+            progress = 1;
             inputActions.FindAction("Enter").Disable();
-            inputActions.FindAction("Escape").Enable();
+            blackCanvas.gameObject.SetActive(true);
+            inputName.SetActive(false);
             PlayerPrefs.SetString("PLAYER-NAME", inputField.text.ToString());
             player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
             videoPlayer.gameObject.SetActive(false);
-
-            PauseGame();
-            inputName.SetActive(false);
             float currentUIAlpha = 0;
             DOTween.To(() => currentUIAlpha, x => currentUIAlpha = x, 1, 1f).OnUpdate(() => UpdateUIAlpha(currentUIAlpha));
-
+            FindInputActions();
+            blackCanvas.DOColor(Color.clear, 3f).SetEase(Ease.Linear).OnComplete(() => blackCanvas.gameObject.SetActive(false));
         }
     }
 
@@ -598,6 +550,7 @@ public class Manager : MonoBehaviour
         PlayerPrefs.DeleteKey("PLAYER_HUNGER_REMOVED_SEGMENTS-" + file);
         PlayerPrefs.DeleteKey("FILETIME-" + file);
         PlayerPrefs.DeleteKey("SAVE_SCENE" + file);
+        PlayerPrefs.DeleteKey("Progress" + file);
 
         int i = 1;
         string[] keysDropped = { "droppedItem", "droppedItemPosX", "droppedItemPosY" };
@@ -652,9 +605,17 @@ public class Manager : MonoBehaviour
 
     private void FindInputActions()
     {
-        inputActions.Enable();
-        if (sceneName == "InGame")
+        
+
+        if (progress == 0)
         {
+            inputActions.FindAction("Enter").Enable();
+            inputActions.FindAction("Enter").performed += ctx => OnEnterName(inputName.GetComponentInChildren<TMP_InputField>());
+        }
+        else
+        {
+            inputActions.Enable();
+            inputActions.FindAction("Enter").Disable();
             inputActions.FindAction("Attack").performed += ctx => player.GetComponent<PlayerController>().ItemLMB();
             inputActions.FindAction("UseItem").performed += ctx => player.GetComponent<PlayerController>().UseItem();
             inputActions.FindAction("DropItem").performed += ctx => player.GetComponent<PlayerController>().DropItem();
@@ -665,22 +626,18 @@ public class Manager : MonoBehaviour
             inputActions.FindAction("Inventory").performed += ctx => OpenInventory();
             inputActions.FindAction("SelectSlot").performed += ctx => inventoryManager.SelectSlot();
             inputActions.FindAction("Escape").performed += ctx => EscapeInput();
-            inputActions.FindAction("Enter").performed += ctx => OnEnterName(inputName.GetComponentInChildren<TMP_InputField>());
         }
-        else
-        {
-            inputActions.FindAction("Escape").performed += ctx => EscapeInput();
-        }
+        
     }
 
 
     public void Interact()
     {
-        if (closestDistanceBuilding < 2f)
+        if (closestDistanceBuilding < 2f && playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
             closestBuilding.GetComponent<Building>().StartCoroutine("Enter");
         }
-        else if (closestNPC != null && closestDistanceNPC < 3)
+        else if (closestNPC != null && closestDistanceNPC < 3 && playerCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
         {
             player.GetComponent<Dialog>().OpenChat();
         }
@@ -872,6 +829,9 @@ public class Manager : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "InGame")
             {
                 pauseMenu.SetActive(false);
+                graphicsPanel.SetActive(true);
+                audioPanel.SetActive(false);
+                controlsPanel.SetActive(false);
             }
 
             settingsMenu.SetActive(true);
@@ -1112,7 +1072,9 @@ public class Manager : MonoBehaviour
         LOAD_PLAYER_RADIATION();
         LOAD_PLAYER_HUNGER();
         LOAD_TIME();
+        LOAD_PROGRESS();
         player.GetComponent<Dialog>().playerName = PlayerPrefs.GetString("PLAYER-NAME");
+        FindInputActions();
     }
 
     public void LOAD_WORLDSPACEITEMS()
@@ -1297,6 +1259,8 @@ public class Manager : MonoBehaviour
 
             DateTime currentDate = DateTime.Today;
             PlayerPrefs.SetString("FILETIME-" + file, currentDate.ToString("dd/MM/yyyy"));
+            saveButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().gameObject.GetComponent<Animator>().Play("default");
+
 
             SAVE_INVENTORY();
             SAVE_WORLDSPACE_ITEMS();
@@ -1305,6 +1269,7 @@ public class Manager : MonoBehaviour
             SAVE_PLAYER_RADIATION();
             SAVE_PLAYER_HUNGER();
             SAVE_TIME();
+            SAVE_PROGRESS();
             sceneSwitch = false;
         }
     }
@@ -1334,6 +1299,23 @@ public class Manager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    void SAVE_PROGRESS()
+    {
+        if (progress > 0)
+        {
+            PlayerPrefs.SetInt("PROGRESS" + file, progress);
+        }
+    }
+
+    void LOAD_PROGRESS()
+    {
+        progress = PlayerPrefs.GetInt("PROGRESS" + file);
+        if(progress == 0)
+        {
+            progress = 1;
+        }
+        FindInputActions();
+    }
 
     void SAVE_PLAYER_LOCATION()
     {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using Cinemachine;
 
 public class Building : MonoBehaviour
@@ -28,26 +30,40 @@ public class Building : MonoBehaviour
             hasEntered = true;
             manager.inputActions.FindAction("Move").Disable();
 
-            if(switchTo.gameObject.name != "SStartHouseOutdoor-SPAWN")
+            if(switchTo.gameObject.name != "StartHouseOutdoor-SPAWN2")
             {
                 manager.inGameSound.PlayOneShot(manager.openDoor);
             }
             yield return new WaitForSeconds(switchDelay);
 
-            if (switchTo.gameObject.name == "StartHouseOutdoor-SPAWN")
+            if(switchTo.gameObject.name == "eggShop-SPAWN" || switchTo.gameObject.name == "StartHouse-SPAWN2")
             {
-                manager.inGameSound.PlayOneShot(manager.closeDoor);
-            }
-
-            if (switchTo.gameObject.name == "eggShop-SPAWN" || switchTo.gameObject.name == "StartHouse-SPAWN")
-            {
+                manager.worldTime.GetComponent<DayNightCycle>().enabled = false;
+                manager.worldTime.GetComponent<Light2D>().enabled = false;
+                manager.lightWhileBuilding.GetComponent<Light2D>().enabled = true;
                 manager.player.GetComponent<PlayerController>().idleState = 0;
             }
             else
             {
+                manager.worldTime.GetComponent<DayNightCycle>().enabled = true;
+                manager.worldTime.GetComponent<Light2D>().enabled = true;
+                manager.lightWhileBuilding.GetComponent<Light2D>().enabled = false;
                 manager.player.GetComponent<PlayerController>().idleState = 2;
             }
+
+
+            if (switchTo.gameObject.name == "StartHouseOutdoor-SPAWN2")
+            {
+                manager.inGameSound.PlayOneShot(manager.closeDoor);
+            }
+
             manager.player.GetComponent<PlayerController>().anim.SetFloat("idleState", manager.player.GetComponent<PlayerController>().idleState);
+
+            if (manager.progress == 1)
+            {
+                manager.progress = 2;
+                manager.middleElements.SetActive(true);
+            }
 
             CinemachineVirtualCamera vCam = manager.playerCamera.GetComponent<CinemachineVirtualCamera>();
 
