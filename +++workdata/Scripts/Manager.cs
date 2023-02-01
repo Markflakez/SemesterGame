@@ -36,17 +36,29 @@ public class Manager : MonoBehaviour
     public AudioClip eggEnemyHit;
     public AudioClip openDoor;
     public AudioClip closeDoor;
+    public AudioClip itemEquip;
+    public AudioClip bushSound;
+    public AudioClip eggMusic;
+    public AudioClip ambientSounds;
 
 
     public AudioSource uiSound;
     public AudioSource inGameSound;
+    public AudioSource ambientPlayer;
 
+    private Button placeHolderButton;
     public Button saveButton;
+
     public Canvas mainCanvas;
     public Canvas optionsCanvas;
-    public EventSystem eventSystem;
+
     public Image blackCanvas;
     public Image itemHovered;
+    public Image playerChatAvatar;
+    public Image laurelChatAvatar;
+    public Image morganChatAvatar;
+    public Image florusChatAvatar;
+    public Image pascalChatAvatar;
     public RectTransform mainInventoryBG2;
     public RectTransform uiPanel;
     public Sprite invisibleSprite;
@@ -61,6 +73,14 @@ public class Manager : MonoBehaviour
     public TextMeshProUGUI questHeaderText;
     public TextMeshProUGUI questText;
     public TextMeshProUGUI savedTimeDate;
+    public TextMeshProUGUI infoText; 
+    public TextMeshProUGUI Task1;
+    public TextMeshProUGUI Task2;
+    public TextMeshProUGUI Task3;
+    public TextMeshProUGUI ItemReward1;
+    public TextMeshProUGUI ItemReward2;
+    public TextMeshProUGUI ItemReward3;
+
     public Toggle fullscreen;
     public Toggle fps;
     public TMP_InputField fileName;
@@ -104,185 +124,141 @@ public class Manager : MonoBehaviour
     public GameObject PlayerBase;
     public GameObject graphicsPanel;
     public GameObject middleElements;
+    public GameObject controlsPanel;
+    public GameObject audioPanel;
+    public GameObject chalkCheckmark;
+    public GameObject candlesCheckmark;
+    public GameObject goatSkullCheckmark;
+    public GameObject goldenEggCheckmark;
+    public GameObject itemList;
+    public GameObject barIndicators;
+    public GameObject playerCamera;
+    public GameObject graphicsButton;
+    public GameObject controlsButton;
+    public GameObject audioButton;
+    public GameObject healthPopup;
+    public GameObject eggsPopup;
+    public GameObject radiationPopup;
+    public GameObject closestNPC;
+    public GameObject TaskCheck1;
+    public GameObject TaskCheck2;
+    public GameObject TaskCheck3;
+    public GameObject inputName; 
+    public GameObject worldTime;
+    public GameObject lightWhileBuilding;
+    private GameObject spawnItem;
 
+    public CinemachineBrain brain;
+    public GameSettings gameSettings;
+    public EggHealthRadiation eggHealthRadiation;
+    public InputActionAsset inputActions;
+    public Volume postProcessingVolume;
     public ChromaticAberration chromaticAberration;
     public ColorAdjustments colorAdjustments;
+    public EventSystem eventSystem;
+    public InventoryManager inventoryManager;
+    public VideoPlayer videoPlayer;
+
     public Color radiationColor;
     public Color uiFontColor;
     public Color uiFontColorBrown;
     public Color uiFontColorDisabled;
 
-    public InventoryManager inventoryManager;
 
     public Item egg;
     public Item sword;
     public Item[] items;
     public Item currentItem;
 
-    public GameObject worldTime;
-    public GameObject lightWhileBuilding;
+
 
     public NPCdialog[] npcArray;
     public GameObject[] buildings;
 
-    [HideInInspector]
     public int file;
-
-    private string activeSceneName;
-
-
-
-    public bool canEnter = true;
-
-    public float distanceNPC = 300;
-
-    public GameObject controlsPanel;
-    public GameObject audioPanel;
-
-    public CinemachineBrain brain;
-
-    public float buttonDelay = .15f;
-    public GameSettings gameSettings;
-
-    public EggHealthRadiation eggHealthRadiation;
-
-
-    public bool sceneSwitch = false;
-    private bool delaySwitchScene = false;
-
+    public int progress; 
     private Vector2 playerPos;
-
-    public Volume postProcessingVolume;
-
-    public bool saved = true;
-
-    public float closestDistanceBuilding;
-
-
-    public string sceneName;
-
-    public InputActionAsset inputActions;
-
-
-
-    public bool isPaused = false;
-
-
-    public bool canThrowEgg = true;
-
-
-    public float closestDistanceNPC;
-
-    public bool backgroundburning = true;
-
-
-    public GameObject chalkCheckmark;
-    public GameObject candlesCheckmark;
-    public GameObject goatSkullCheckmark;
-    public GameObject goldenEggCheckmark;
-
-    public GameObject itemList;
-
-    public GameObject barIndicators;
-    public GameObject playerCamera;
-
-    public TextMeshProUGUI infoText;
-
-    public GameObject graphicsButton;
-    public GameObject controlsButton;
-    public GameObject audioButton;
-
-    public GameObject healthPopup;
-    public GameObject eggsPopup;
-    public GameObject radiationPopup;
-
-
-    public TextMeshProUGUI Task1;
-    public TextMeshProUGUI Task2;
-    public TextMeshProUGUI Task3;
-
-    public TextMeshProUGUI ItemReward1;
-    public TextMeshProUGUI ItemReward2;
-    public TextMeshProUGUI ItemReward3;
-
-    public GameObject TaskCheck1;
-    public GameObject TaskCheck2;
-    public GameObject TaskCheck3;
-
-    private Button placeHolderButton;
-
-    public GameObject inputName;
-
-    public Image playerChatAvatar;
-    public Image laurelChatAvatar;
-    public Image morganChatAvatar;
-    public Image florusChatAvatar;
-    public Image pascalChatAvatar;
-
-    public GameObject closestNPC;
-    public float closestDistance;
-
-    private GameObject spawnItem;
-
-    public VideoPlayer videoPlayer;
-
     [HideInInspector]
     public Transform originalSlot;
 
+    public float closestDistance;
+    public float buttonDelay = .15f;
+    public float closestDistanceBuilding;
+    public float closestDistanceNPC;
+    public float distanceNPC = 300;
 
-    public int progress;
+    public bool canEnter = true;
+    public bool sceneSwitch = false;
+    private bool delaySwitchScene = false;
+    public bool saved = true;
+    public bool backgroundburning = true;
+    public bool isPaused = false;
+    public bool canThrowEgg = true;
 
+    public string sceneName;
+
+    //Awake is called when the script instance is being loaded
     private void Awake()
     {
+        //Gets the name of the current scene and store it in the sceneName variable
         sceneName = SceneManager.GetActiveScene().name;
+
+        //If the scene name is not MainMenu or LoadGame
         if (sceneName != "MainMenu" && sceneName != "LoadGame")
         {
+            //Gets the value of the "CurrentFile" key from the PlayerPrefs
             file = PlayerPrefs.GetInt("CurrentFile");
         }
-        
+
+        //Initializes the DOTween library
         DOTween.Init();
+        //Sets DOTween's default time scale to be independent of Time.timeScale
         DOTween.defaultTimeScaleIndependent = true;
-        DOTween.timeScale = 1;
-        Time.timeScale = 1;
 
         if (sceneName != "LoadGame")
         {
             gameSettings = GameObject.Find("Settings").GetComponent<GameSettings>();
         }
-        
     }
 
-
+    //Start is called when the script is enabled and first frame has begun
     private void Start()
     {
-
+        //If the application is being run in the Unity Editor
         if (Application.isEditor)
         {
+            //Sets the "CurrentFile" key in PlayerPrefs to for easy playtesting in editor
             PlayerPrefs.SetInt("CurrentFile", 1);
         }
+
+        //Calls a method that checks if the current file has saved data and if so it loads it
         CheckIfNewGame();
 
-
+        //If the scene name is LoadGame
         if (sceneName == "LoadGame")
         {
+            //Changes the buttons text to the string of the saveStates dates 
             LoadFileNames();
         }
 
+        //If the scene name is not LoadGame
         if (sceneName != "LoadGame")
         {
+            //Loads the graphic and volume settings
             LoadSettings();
         }
-
     }
 
+
+    //If a certain PlayerPrefs Key is there, all Playerprefs will be loaded, if not the scene is prepared to play the intro sequence
     private void CheckIfNewGame()
     {
-
         if (sceneName == "InGame")
         {
             if (PlayerPrefs.HasKey("PLAYER_LOCATION_X-" + file))
             {
                 LoadGame();
+                StartBarCoroutines();
             }
             else
             {
@@ -290,10 +266,10 @@ public class Manager : MonoBehaviour
                 FindInputActions();
                 NewGame();
             }
-
         }
     }
 
+    //Initializes a new SaveStateFile and starts the intro sequence
     public void NewGame()
     {
         DeleteSaveFile(file);
@@ -311,6 +287,14 @@ public class Manager : MonoBehaviour
         EnableDamping();
     }
 
+    //Starts the radiation, hunger and regenerate health
+    public void StartBarCoroutines()
+    {
+        eggHealthRadiation.StartCoroutine(eggHealthRadiation.RadiationOverTime2());
+        eggHealthRadiation.StartCoroutine(eggHealthRadiation.HungerOverTime());
+        eggHealthRadiation.StartCoroutine(eggHealthRadiation.RegerateHealth());
+    }
+
     public void LoadGame()
     {
         StopAllCoroutines();
@@ -324,7 +308,9 @@ public class Manager : MonoBehaviour
         EnableDamping();
         FindInputActions();
     }
+    
 
+    //The playerCamera damping is set back to it's original 
     private void EnableDamping()
     {
         CinemachineVirtualCamera vCam = playerCamera.GetComponent<CinemachineVirtualCamera>();
@@ -333,6 +319,7 @@ public class Manager : MonoBehaviour
         vCam.GetCinemachineComponent<CinemachineTransposer>().m_ZDamping = 1;
     }
 
+    //The intro sequence is started and after eight seconds the player can enter his name in the inputfield
     public IEnumerator PlayIntroSequence()
     {
         videoPlayer.gameObject.SetActive(true);
@@ -345,6 +332,8 @@ public class Manager : MonoBehaviour
         videoPlayer.gameObject.transform.position = new Vector3(9999, 0, 0);
     }
 
+
+    //If player has entered at least one letter and the inputfield is active, a black fadeout is started and the player can move
     public void OnEnterName(TMP_InputField inputField)
     {
         if (inputField.text != "" && inputName.activeSelf)
@@ -480,11 +469,14 @@ public class Manager : MonoBehaviour
         }
     }
 
+    //button sound is played with a random pitch to make it more versatile
     private void ButtonSound()
     {
         uiSound.PlayOneShot(buttonClick);
         uiSound.pitch = Random.Range(.8f, 1.2f);
     }
+
+    //button is scaled down and back to it's original Size with a slight shake rotation
     private void ButtonAnimation(Button button)
     {
         Vector3 scale = button.gameObject.transform.localScale;
@@ -498,7 +490,7 @@ public class Manager : MonoBehaviour
         button.gameObject.transform.DOScale(scale * 1f, buttonDelay * .5f);
         });
 
-        button.gameObject.transform.DOShakeRotation(buttonDelay, 7, 0, 50, true);
+        button.gameObject.transform.DOShakeRotation(buttonDelay, 10, 0, 50, true);
     }
     public void LoadSaveFile(Button button)
     {
@@ -537,6 +529,8 @@ public class Manager : MonoBehaviour
         }
         ButtonAnimation(button);
     }
+
+    //all PlayerPrefs from current SaveState being deleted
     public void DeleteSaveFile(int file)
     {
         PlayerPrefs.DeleteKey("PLAYER_HEALTH-" + file);
@@ -643,7 +637,7 @@ public class Manager : MonoBehaviour
         }
     }
 
-
+    //Opens or closes Menu Panels in relation if their open
     public void EscapeInput()
     {
         //Checks if the current scene is not "LoadGame" or "MainMenu"
@@ -685,6 +679,8 @@ public class Manager : MonoBehaviour
     #endregion InputAction
 
     #region Menus/Buttons
+
+    //Opens the Inventory
     public void OpenInventory()
     {
         if (!inventoryMain.activeSelf)
@@ -697,71 +693,6 @@ public class Manager : MonoBehaviour
             inventoryMain.SetActive(false);
         }
         PauseGame();
-    }
-    public void HeartPopup(Button button)
-    {
-        if (!sceneSwitch)
-        {
-            StartCoroutine(DelaySwitchScene("HeartPopup", button));
-        }
-        else if (sceneSwitch)
-        {
-            if(!healthPopup.activeSelf)
-            {
-                healthPopup.SetActive(true);
-            }
-            sceneSwitch = false;
-        }
-
-        ButtonAnimation(button);
-    }
-
-    public void EggsPopup(Button button)
-    {
-        if (!sceneSwitch)
-        {
-            StartCoroutine(DelaySwitchScene("EggsPopup", button));
-        }
-        else if (sceneSwitch)
-        {
-            if (!eggsPopup.activeSelf)
-            {
-                eggsPopup.SetActive(true);
-            }
-            sceneSwitch = false;
-        }
-
-        ButtonAnimation(button);
-    }
-
-    public void RadiationPopup(Button button)
-    {
-        if (!sceneSwitch)
-        {
-            StartCoroutine(DelaySwitchScene("RadiationPopup", button));
-        }
-        else if (sceneSwitch)
-        {
-            if (!radiationPopup.activeSelf)
-            {
-                radiationPopup.SetActive(true);
-            }
-            sceneSwitch = false;
-        }
-
-        ButtonAnimation(button);
-    }
-
-    public void HoverClosePopup(Button button)
-    {
-
-        sceneSwitch = false;
-    }
-
-    public void HoverOpenPopup(Button button)
-    {
-
-        sceneSwitch = false;
     }
 
     public void LoadGameScene(Button button)
@@ -798,6 +729,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    //Opens the PauseMenu and deactives other menus
     public void PauseMenu(Button button)
     {
         if (!sceneSwitch)
@@ -818,6 +751,8 @@ public class Manager : MonoBehaviour
         }
         ButtonAnimation(button);
     }
+
+    //Opens the SettingsMenu and deactives other menus
     public void SettingsMenu(Button button)
     {
         if (!sceneSwitch)
@@ -840,6 +775,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    //Opens the QuitMenu and deactives other menu
     public void QuitMenu(Button button)
     {
         if (!sceneSwitch)
@@ -859,6 +796,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    //Opens the CreditsMenu and deactives other menus
     public void CreditsMenu(Button button)
     {
         if (!sceneSwitch)
@@ -879,6 +818,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    //Opens the Menu that questions if you really wanna quit without saving
     public void MainMenuQMenu(Button button)
     {
         if (!sceneSwitch)
@@ -892,6 +833,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
+
+    //Unpauses Game and deactivates all Menu Panels
     public void ResumeButton(Button button)
     {
         if (!sceneSwitch)
@@ -909,6 +852,7 @@ public class Manager : MonoBehaviour
         ButtonAnimation(button);
     }
 
+    //If a button is pressed and its gameobject name equals one of the three names, certain text and sprite is changed in the QuestMenu
     public void OpenQuest(Button button)
     {
         if(button.gameObject.name == "FirstQuest")
@@ -931,7 +875,7 @@ public class Manager : MonoBehaviour
         }
     }
 
-
+    //Opens up the GraphicsPanel and decreases Size of Controls and Audiopanel headers and deactive their relatives
     public void GraphicsButton(Button button)
     {
         if (!sceneSwitch)
@@ -955,6 +899,7 @@ public class Manager : MonoBehaviour
         ButtonAnimation(button);
     }
 
+    //Opens up the AudioPanel and decreases Size of Controls and Graphicspanel headers and deactive their relatives
     public void AudioButton(Button button)
     {
         if (!sceneSwitch)
@@ -977,7 +922,8 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
-
+    
+    //Opens up the ControlPanel and decreases Size of Graphics and Audiopanel headers and deactive their relatives
     public void ControlsButton(Button button)
     {
         if (!sceneSwitch)
@@ -1000,12 +946,7 @@ public class Manager : MonoBehaviour
 
         ButtonAnimation(button);
     }
-
-    public void BackButton()
-    {
-        //Returns to the Main Menu Screen
-        SceneManager.LoadScene("MainMenu");
-    }
+    //Returns you to the MainMenu
     public void MainMenuButton(Button button)
     {
         if (!sceneSwitch)
@@ -1028,6 +969,7 @@ public class Manager : MonoBehaviour
         }
         ButtonAnimation(button);
     }
+    //Closes the application
     public void QuitGame(Button button)
     {
         if (!sceneSwitch)
@@ -1050,9 +992,6 @@ public class Manager : MonoBehaviour
         }
     }
     #endregion Menus/Buttons
-
-    
-    
     #region LOADSAVE
     public void LOADFILE()
     {
@@ -1241,7 +1180,7 @@ public class Manager : MonoBehaviour
         return null;
     }
     #endregion LOADSAVE
-
+    //Saves all Data from current SaveState in the PlayerPrefs
     public void SAVEFILE(Button button)
     {
         if (!sceneSwitch)
@@ -1351,17 +1290,6 @@ public class Manager : MonoBehaviour
     }
     #endregion SAVESAVE
 
-    
-    public void ResetSettings()
-    {
-        //Resets all the Settings to their default value
-        RESET_FPS();
-        RESET_FRAMERATE();
-        RESET_FULLSCREEN();
-        RESET_MUSIC_VOLUME();
-        RESET_SFX_VOLUME();
-        RESET_RESOLUTION();
-    }
     //Saves the respective setting
     #region SAVESETTINGS
     public void SAVE_FPS()
@@ -1412,19 +1340,6 @@ public class Manager : MonoBehaviour
         PlayerPrefs.Save();
     }
     #endregion SAVESETTINGS
-
-    private void LoadSettings()
-    {
-        LOAD_RESOLUTION();
-        LOAD_FRAMERATE();
-        LOAD_FULLSCREEN();
-        LOAD_MUSIC_VOLUME();
-        LOAD_SFX_VOLUME();
-        if (sceneName == "InGame")
-        {
-            LOAD_FPS();
-        }
-    }
     //Loads the respective setting
     #region LOADSETTINGS
     void LOAD_FPS()
@@ -1514,4 +1429,29 @@ public class Manager : MonoBehaviour
         LOAD_SFX_VOLUME();
     }
     #endregion RESETSETTINGS
+    //Loads all the graphic and audio settings
+    private void LoadSettings()
+    {
+        LOAD_RESOLUTION();
+        LOAD_FRAMERATE();
+        LOAD_FULLSCREEN();
+        LOAD_MUSIC_VOLUME();
+        LOAD_SFX_VOLUME();
+        if (sceneName == "InGame")
+        {
+            LOAD_FPS();
+        }
+    }
+
+    //Resets all the graphic and audio settingso their default value
+    public void ResetSettings()
+    {
+        RESET_FPS();
+        RESET_FRAMERATE();
+        RESET_FULLSCREEN();
+        RESET_MUSIC_VOLUME();
+        RESET_SFX_VOLUME();
+        RESET_RESOLUTION();
+    }
+
 }

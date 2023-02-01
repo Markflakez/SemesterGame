@@ -38,10 +38,21 @@ public class Building : MonoBehaviour
 
             if(switchTo.gameObject.name == "eggShop-SPAWN" || switchTo.gameObject.name == "StartHouse-SPAWN2")
             {
+                if(switchTo.gameObject.name == "eggShop-SPAWN")
+                {
+                    manager.ambientPlayer.clip = manager.eggMusic;
+                    manager.ambientPlayer.volume = .2f;
+                    manager.ambientPlayer.Play();
+                }
+                else
+                {
+                    manager.ambientPlayer.volume = 0;
+                }
                 manager.worldTime.GetComponent<DayNightCycle>().enabled = false;
                 manager.worldTime.GetComponent<Light2D>().enabled = false;
                 manager.lightWhileBuilding.GetComponent<Light2D>().enabled = true;
                 manager.player.GetComponent<PlayerController>().idleState = 0;
+               
             }
             else
             {
@@ -49,10 +60,13 @@ public class Building : MonoBehaviour
                 manager.worldTime.GetComponent<Light2D>().enabled = true;
                 manager.lightWhileBuilding.GetComponent<Light2D>().enabled = false;
                 manager.player.GetComponent<PlayerController>().idleState = 2;
+                manager.ambientPlayer.clip = manager.ambientSounds;
+                manager.ambientPlayer.volume = .3f;
+                manager.ambientPlayer.Play();
             }
 
 
-            if (switchTo.gameObject.name == "StartHouseOutdoor-SPAWN2")
+            if (switchTo.gameObject.name == "StartHouseOutdoor-SPAWN2" || switchTo.gameObject.name == "eggShopOutdoor - SPAWN")
             {
                 manager.inGameSound.PlayOneShot(manager.closeDoor);
             }
@@ -63,6 +77,7 @@ public class Building : MonoBehaviour
             {
                 manager.progress = 2;
                 manager.middleElements.SetActive(true);
+                manager.StartBarCoroutines();
             }
 
             CinemachineVirtualCamera vCam = manager.playerCamera.GetComponent<CinemachineVirtualCamera>();

@@ -359,8 +359,6 @@ GameObject:
   - component: {fileID: 1172664363}
   - component: {fileID: 5523723489648766062}
   - component: {fileID: 5523723489648766058}
-  - component: {fileID: 1172664364}
-  - component: {fileID: 8053581215198172407}
   - component: {fileID: 6429723203281250053}
   m_Layer: 0
   m_Name: Player
@@ -453,6 +451,7 @@ MonoBehaviour:
   volume: {fileID: 0}
   ghostEffect: {fileID: 1399075159163129759, guid: 51ca487f58fed1f4e905261007f2489f, type: 3}
   manager: {fileID: 0}
+  buildingInRange: 0
   isMoving: 0
   idleState: 2
   stepSoundPlayer: {fileID: 5523723488661944564}
@@ -462,6 +461,7 @@ MonoBehaviour:
   playerCurrentHealth: 100
   canMove: 0
   allowDash: 0
+  anim: {fileID: 0}
 --- !u!114 &1172664362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,10 +502,6 @@ MonoBehaviour:
   playerName: Player
   nameText: {fileID: 0}
   playerIcon: {fileID: -1190291757, guid: 56245f1780c6b814ebb86c81599e797d, type: 3}
-  closestDistance: 0
-  npcArray:
-  - {fileID: 0}
-  - {fileID: 0}
   range: 5
   checkPos: {x: 0, y: 0}
   text: {fileID: 0}
@@ -528,8 +524,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 0}
   grassTileName: Tile_Map_2_15
+  grassTileName2: 
+  grassTileName3: 
   dirtTileName: c
+  dirtTileName2: 
+  dirtTileName3: 
   stoneTileName: 
+  stoneTileName2: 
+  stoneTileName3: 
   minSpeed: 1
   maxSpeed: 2
 --- !u!212 &5523723489648766062
@@ -611,49 +613,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &1172664364
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523723489648766061}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.3
---- !u!81 &8053581215198172407
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523723489648766061}
-  m_Enabled: 1
 --- !u!82 &6429723203281250053
 AudioSource:
   m_ObjectHideFlags: 0

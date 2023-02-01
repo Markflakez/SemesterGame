@@ -35,7 +35,7 @@ public class Dialog : MonoBehaviour
     public float range;
     public Vector2 checkPos;
 
-    
+    private bool freeEggs = true;
 
 
     public TextMeshProUGUI text;
@@ -44,7 +44,7 @@ public class Dialog : MonoBehaviour
     private Color32 nameTextColor;
 
     private int index;
-    public float typingSpeed = 0.1f;
+    public float typingSpeed = 0.015f;
 
     public bool canTalk = true;
 
@@ -65,12 +65,6 @@ public class Dialog : MonoBehaviour
         }
     }
 
-
-    //Summary
-    //Wenn der IEnumerator aufgerufen wird, wird ein Tippsound gespielt,
-    //gecheckt ob der Text, welche dem jetztigen Index inspricht drei Leerzeichen enthält (wenn ja wird ihm die Eigenschaften des NPCs gegeben, wenn nicht des Spielers)
-    //Jeder einzelne Buchstabe wird in das Dialogfeld mit dem Delay (TypingSpeed) hinzugefügt.
-    //Wenn der Dialogtext dem Text aus dem jetzigen Index des Arrays entspricht, wird der NextButton aktiviert und der Tippsound gestoppt.
     IEnumerator Type()
     {
         GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
@@ -135,8 +129,6 @@ public class Dialog : MonoBehaviour
             vcam.Follow = quarterPoint.transform;
         }
 
-
-
         manager.GetComponent<Manager>().inGameSound.PlayOneShot(typeSound);
 
         foreach (char letter in closestNPC.GetComponent<NPCdialog>().dialog[closestNPC.GetComponent<NPCdialog>().npcIndex].ToCharArray())
@@ -195,6 +187,12 @@ public class Dialog : MonoBehaviour
         manager.GetComponent<Manager>().morganChatAvatar.enabled = false;
         manager.GetComponent<Manager>().playerChatAvatar.enabled = false;
         player.GetComponent<PlayerController>().canMove = true;
+        if(npcName == "Pascal" && freeEggs)
+        {
+            freeEggs = false;
+            FreeEggs();
+            manager.GetComponent<Manager>().inGameSound.PlayOneShot(manager.GetComponent<Manager>().itemEquip);
+        }
     }
 
     //Summary
@@ -210,6 +208,15 @@ public class Dialog : MonoBehaviour
             closestNPC.GetComponent<NPCdialog>().npcIndex ++;
             text.text = "";
             StartCoroutine(Type());
+        }
+    }
+
+
+    public void FreeEggs()
+    {
+        for (int i = 0; i < 14; i++)
+        {
+            manager.GetComponent<Manager>().inventoryManager.AddItem(manager.GetComponent<Manager>().egg);
         }
     }
 
@@ -265,11 +272,13 @@ public class Dialog : MonoBehaviour
         }
     }
 
-
+    //Zoom in the camera towards the closest NPC
     private void CinemachineZoomIn()
     {
         GameObject closestNPC = manager.GetComponent<Manager>().closestNPC;
+        //Final size for the camera after the zoom
         float finalSize = 3;
+        //Duration for the camera zoom
         float duration = 1;
 
         CinemachineVirtualCamera vcam = manager.GetComponent<Manager>().playerCamera.GetComponent<CinemachineVirtualCamera>();
@@ -278,6 +287,7 @@ public class Dialog : MonoBehaviour
 
 
         middlePoint = new GameObject();
+        //Sets the focus in the middle of player and closest NPC
         middlePoint.transform.position = (manager.GetComponent<Manager>().player.transform.position + closestNPC.transform.position) / 2;
 
 
